@@ -7,3 +7,5 @@ project(RayTracer)
 add_executable(raytracer
     src/main.cpp
 )
+target_link_libraries(raytracer PRIVATE config++.a)
+target_include_directories(raytracer PRIVATE include)

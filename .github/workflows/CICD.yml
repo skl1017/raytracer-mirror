@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y graphviz libcriterion-dev build-essential cmake make libuuid1 uuid-dev
+          sudo apt-get install -y libcriterion-dev build-essential cmake make libconfig++-dev
 
       - name: Compile project
         run: |
