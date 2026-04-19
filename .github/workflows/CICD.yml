@@ -29,6 +29,8 @@ jobs:
           cd build
           cmake ..
           make
+        continue-on-error: false
+
 
   # test:
   #   name: Run tests
