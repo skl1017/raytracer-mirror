@@ -1,4 +1,4 @@
-name: MyTeams CI/CD
+name: CI
 
 on:
   push:
@@ -21,37 +21,12 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcriterion-dev build-essential cmake make libconfig++-dev
+          sudo apt-get install -y build-essential cmake libsfml-dev
 
-      - name: Compile project
+      - name: Configure and build
         run: |
-          mkdir build
-          cd build
-          cmake ..
-          make
-        continue-on-error: false
-
-
-  # test:
-  #   name: Run tests
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - name: Install dependencies
-  #       run: |
-  #         sudo apt-get update
-  #         sudo apt-get install -y graphviz libcriterion-dev build-essential cmake libuuid1 uuid-dev
-
-  #     - name: Compile project
-  #       run: |
-  #         cmake
-
-      # - name: Run tests
-      #   run: |
-      #     cmake tests_run
-      #   continue-on-error: false
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build
 
   mirror:
     if: github.repository == 'skl1017/raytracer-mirror' && github.ref == 'refs/heads/main'

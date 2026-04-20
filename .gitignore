@@ -1,2 +1,5 @@
 build/
 raytracer
+output.ppm
+compile_commands.json
+.cache/
