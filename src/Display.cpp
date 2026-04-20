@@ -42,12 +42,12 @@ void Display::update()
     _window.display();
 }
 
-void Display::putRgb01(std::size_t pixelIndex, Ameth::Vector3D const &rgb)
+void Display::putRGB(std::size_t pixelIndex, Ameth::Vector3D const &rgb)
 {
-    std::size_t const colorIndex = pixelIndex * 4;
-    _pixels[colorIndex + 0] = toByteChannel(std::clamp(rgb.x, 0.0, 1.0));
-    _pixels[colorIndex + 1] = toByteChannel(std::clamp(rgb.y, 0.0, 1.0));
-    _pixels[colorIndex + 2] = toByteChannel(std::clamp(rgb.z, 0.0, 1.0));
+    std::size_t colorIndex = pixelIndex * 4;
+    _pixels[colorIndex + 0] = toByteChannel(rgb.x);
+    _pixels[colorIndex + 1] = toByteChannel(rgb.y);
+    _pixels[colorIndex + 2] = toByteChannel(rgb.z);
     _pixels[colorIndex + 3] = 255;
 }
 
@@ -81,7 +81,7 @@ void Display::toDisplaySpace(Ameth::Vector3D const &hdrLinear, std::size_t pixel
     Ameth::Vector3D c = hdrLinear;
     reinhardToneMap(c);
     applyGamma(c);
-    putRgb01(pixelIndex, c);
+    putRGB(pixelIndex, c);
 }
 
 bool Display::savePPM(const std::string &path) const

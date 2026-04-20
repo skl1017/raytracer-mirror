@@ -18,9 +18,6 @@ public:
     bool isOpen() { return _window.isOpen(); }
     void pollEvents();
     void update();
-
-    void putRgb01(std::size_t pixelIndex, Ameth::Vector3D const &rgb);
-
     static Ameth::Vector3D hdrTestSample(unsigned x, unsigned y, unsigned width, unsigned height);
     void toDisplaySpace(Ameth::Vector3D const &hdrLinear, std::size_t pixelIndex);
     bool savePPM(const std::string &path) const;
@@ -30,6 +27,7 @@ private:
 
     void reinhardToneMap(Ameth::Vector3D &color);
     void applyGamma(Ameth::Vector3D &color);
+    void putRGB(std::size_t pixelIndex, Ameth::Vector3D const &rgb);
     std::uint8_t toByteChannel(double channel);
 
     unsigned _width;
