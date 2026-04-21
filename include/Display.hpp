@@ -17,14 +17,14 @@ public:
     bool create();
     bool isOpen() { return _window.isOpen(); }
     void pollEvents();
-    void update();
-    static Ameth::Vector3D hdrTestSample(unsigned x, unsigned y, unsigned width, unsigned height);
-    void toDisplaySpace(Ameth::Vector3D const &hdrLinear, std::size_t pixelIndex);
+    void update(const std::vector<Ameth::Vector3D> hdrImage);
+    void loadHDRTestSample(std::vector<Ameth::Vector3D> &hdrImage);
     bool savePPM(const std::string &path) const;
 
 private:
     static constexpr double _gamma = 2.2;
 
+    void toDisplaySpace(const std::vector<Ameth::Vector3D> hdrImage);
     void reinhardToneMap(Ameth::Vector3D &color);
     void applyGamma(Ameth::Vector3D &color);
     void putRGB(std::size_t pixelIndex, Ameth::Vector3D const &rgb);

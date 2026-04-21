@@ -1,9 +1,11 @@
 #include "Display.hpp"
+#include "Ameth.hpp"
 
 #include <cmath>
 #include <cstddef>
 #include <fstream>
 #include <utility>
+#include <vector>
 
 Display::Display(unsigned width, unsigned height, std::string title)
     : _width(width),
@@ -34,8 +36,9 @@ void Display::pollEvents()
     }
 }
 
-void Display::update()
+void Display::update(const std::vector<Ameth::Vector3D> hdrImage)
 {
+    Display::toDisplaySpace(hdrImage);
     _texture.update(_pixels.data());
     _window.clear();
     _window.draw(_sprite);
@@ -61,13 +64,18 @@ void Display::applyGamma(Ameth::Vector3D &color)
     color = color.pow(1.0 / _gamma);
 }
 
-Ameth::Vector3D Display::hdrTestSample(unsigned x, unsigned y, unsigned width, unsigned height)
+void Display::loadHDRTestSample(std::vector<Ameth::Vector3D> &hdrImage)
 {
-    double xd = static_cast<double>(x);
-    double yd = static_cast<double>(y);
-    double widthd = static_cast<double>(width);
-    double heightd = static_cast<double>(height);
-    return Ameth::Vector3D(2.0 * xd / widthd, 2.0 * yd / heightd, 0.35);
+    for (unsigned y = 0; y < _height; ++y) {
+        for (unsigned x = 0; x < _width; ++x) {
+            std::size_t pixelIndex = std::size_t(y) * _width + x;
+            double xd = static_cast<double>(x);
+            double yd = static_cast<double>(y);
+            double widthd = static_cast<double>(_width);
+            double heightd = static_cast<double>(_height);
+            hdrImage[pixelIndex] = Ameth::Vector3D(2.0 * xd / widthd, 2.0 * yd / heightd, 0.35);
+        }
+    }
 }
 
 std::uint8_t Display::toByteChannel(double channel)
@@ -76,12 +84,17 @@ std::uint8_t Display::toByteChannel(double channel)
     return static_cast<std::uint8_t>(channel);
 }
 
-void Display::toDisplaySpace(Ameth::Vector3D const &hdrLinear, std::size_t pixelIndex)
+void Display::toDisplaySpace(const std::vector<Ameth::Vector3D> hdrImage)
 {
-    Ameth::Vector3D c = hdrLinear;
-    reinhardToneMap(c);
-    applyGamma(c);
-    putRGB(pixelIndex, c);
+    for (unsigned y = 0; y < _height; ++y) {
+        for (unsigned x = 0; x < _width; ++x) {
+            std::size_t pixelIndex = std::size_t(y) * _width + x;
+            Ameth::Vector3D c = hdrImage[pixelIndex];
+            reinhardToneMap(c);
+            applyGamma(c);
+            putRGB(pixelIndex, c);
+        }
+    }
 }
 
 bool Display::savePPM(const std::string &path) const

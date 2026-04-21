@@ -5,12 +5,14 @@
 ** main
 */
 
+#include "Ameth.hpp"
 #include "Display.hpp"
 
 #include <cstddef>
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <vector>
 
 int main()
 {
@@ -18,23 +20,19 @@ int main()
     constexpr unsigned height = 1080;
     constexpr std::string_view outputPath = "output.ppm";
 
+    std::vector<Ameth::Vector3D> hdrImage(width * height, {0.0, 0.0, 0.0});
+
     Display display(width, height, "HDR gradient (hdrTestSample)");
     if (!display.create())
         throw std::runtime_error("Failed to create SFML window or texture");
 
+    display.loadHDRTestSample(hdrImage);
     while (display.isOpen()) {
         display.pollEvents();
-        for (unsigned y = 0; y < height; ++y) {
-            for (unsigned x = 0; x < width; ++x) {
-                std::size_t const i = std::size_t(y) * width + x;
-                display.toDisplaySpace(Display::hdrTestSample(x, y, width, height), i);
-            }
-        }
-        display.update();
+        display.update(hdrImage);
     }
 
     if (!display.savePPM(std::string(outputPath)))
         throw std::runtime_error("Failed to write " + std::string(outputPath));
-
     return 0;
 }
