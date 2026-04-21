@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <functional>
 #include <string>
 #include <memory>
 #include <dlfcn.h>
@@ -14,14 +15,14 @@
 template<typename T>
 class DLLoader {
 public:
-    DLLoader(const std::string &path) : _lib(path), _handle(nullptr, close_handle) {};
+    DLLoader(const std::string &path) : _lib(path), _handle(std::unique_ptr<void, decltype(&close_handle)>(nullptr, &close_handle)) {};
 
     void open()
     {
         if (_handle)
             return;
         if (!_handle)
-            _handle = std::unique_ptr<void, decltype(&close_handle)>(dlopen(_lib.c_str(), RTLD_LAZY));
+            _handle = std::unique_ptr<void, decltype(&close_handle)>(dlopen(_lib.c_str(), RTLD_LAZY), &close_handle);
         if (!_handle)
             throw DLLoaderException();
     }
@@ -37,9 +38,13 @@ public:
         return result;
     }
 
-    std::unique_ptr<T> getInstance(std::string &create)
+    std::unique_ptr<T> getInstance(const std::string& create)
     {
-        return std::unique_ptr<T>(this->sym(create));
+        std::function<T*()> func = reinterpret_cast<T*(*)()>(this->sym(create));
+
+        if (!func)
+            throw DLLoaderException();
+        return std::unique_ptr<T>(func());
     }
 
     class DLLoaderException : public std::exception {

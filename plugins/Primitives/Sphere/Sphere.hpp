@@ -8,8 +8,9 @@
 #include <string>
 
 namespace RayTracer {
-    class Sphere : IPrimitive {
+    class Sphere : public IPrimitive {
         public:
+            Sphere() : radius(0) {}
             Sphere(Math::Point3D<double> c, double r) : center(c), radius(r) {}
             bool hits(RayTracer::Ray ray) override
             {
@@ -29,7 +30,8 @@ namespace RayTracer {
             }
             Math::Point3D<double> center;
             double radius;
+            ~Sphere() {}
         private:
-            std::string name;
+            std::string name = "Sphere";
     };
 }

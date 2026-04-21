@@ -10,11 +10,12 @@ enum PLUGIN {
     LIGHT
 };
 
-class IPrimitive {
-    public:
-        virtual std::string getName() const = 0;
-        virtual Math::Point3D<double> pointAt(double u, double v) = 0;
-        virtual bool hits(RayTracer::Ray) = 0;
-        virtual ~IPrimitive() = default;
-};
-
+namespace RayTracer {
+    class IPrimitive {
+        public:
+            virtual std::string getName() const = 0;
+            virtual Math::Point3D<double> pointAt(double u, double v) = 0;
+            virtual bool hits(RayTracer::Ray) = 0;
+            virtual ~IPrimitive() = default;
+    };
+}
