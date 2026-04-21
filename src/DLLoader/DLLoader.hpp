@@ -11,18 +11,17 @@
 #include <memory>
 #include <dlfcn.h>
 
-
 template<typename T>
 class DLLoader {
 public:
-    DLLoader(const std::string &path) : _lib(path), _handle(nullptr, dlclose) {};
+    DLLoader(const std::string &path) : _lib(path), _handle(nullptr, close_handle) {};
 
     void open()
     {
         if (_handle)
             return;
         if (!_handle)
-            _handle = std::unique_ptr<void, decltype(&dlclose)>(dlopen(_lib.c_str(), RTLD_LAZY));
+            _handle = std::unique_ptr<void, decltype(&close_handle)>(dlopen(_lib.c_str(), RTLD_LAZY));
         if (!_handle)
             throw DLLoaderException();
     }
@@ -48,6 +47,7 @@ public:
             const char *what() const noexcept override { return dlerror(); }
     };
 private:
+    static void close_handle(void *handle) { dlclose(handle); }
     std::string _lib;
-    std::unique_ptr<void, decltype(&dlclose)> _handle;
+    std::unique_ptr<void, decltype(&close_handle)> _handle;
 };

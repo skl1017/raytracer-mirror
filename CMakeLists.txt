@@ -12,7 +12,6 @@ set(RAYTRACER
     src/Camera/Camera.cpp
     src/Core/Core.cpp
     src/Display/Display.cpp
-    src/Renderer/Ray.cpp
     src/Scene/Scene.cpp
 )
 

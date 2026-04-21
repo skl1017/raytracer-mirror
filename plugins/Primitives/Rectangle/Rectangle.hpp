@@ -7,8 +7,9 @@
 
 #pragma once
 
-#include "Vector3D.hpp"
-#include "Point3D.hpp"
+#include "Math/Vector3D.hpp"
+#include "Math/Point3D.hpp"
+#include "plugins/IPrimitive.hpp"
 
 namespace RayTracer {
     class Rectangle3D : IPrimitive {
