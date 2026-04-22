@@ -1,35 +1,49 @@
-# pragma once
+/*
+** EPITECH PROJECT, 2026
+** raytracer-mirror
+** File description:
+** Sphere
+*/
 
+#pragma once
+
+#include "Math/Ameth.hpp"
 #include "plugins/IPrimitive.hpp"
-#include "Ray.hpp"
-#include "Vector3D.hpp"
-#include "Point3D.hpp"
-#include <cmath>
+
 #include <string>
 
 namespace RayTracer {
-    class Sphere : IPrimitive {
-        public:
-            Sphere(Math::Point3D<double> c, double r) : center(c), radius(r) {}
-            bool hits(RayTracer::Ray<double> ray) override
-            {
-                Math::Vector3D<double> vector(
-                    center.x - ray.origin.x,
-                    center.y - ray.origin.y,
-                    center.z - ray.origin.z
-                );
-                double length = std::sqrt(pow(vector.x, 2) + pow(vector.y, 2) + pow(vector.z, 2));
-                double distance = length - radius;
-                return (distance <= 0) ? (true) : false ;
-            }
-            std::string getName() const override { return name; }
-            Math::Point3D<double> pointAt(double u, double v)
-            {
-                return center;
-            }
-            Math::Point3D<double> center;
-            double radius;
-        private:
-            std::string name;
-    };
-}
+
+class Sphere : public IPrimitive {
+public:
+    Sphere(Ameth::Vector3D c, double r)
+        : center(c),
+          radius(r)
+    {
+    }
+
+    bool hits(Camera::Ray const &ray) override
+    {
+        Ameth::Vector3D const &dir = ray.direction;
+        Ameth::Vector3D const &o = ray.origin;
+        Ameth::Vector3D oc(o.x - center.x, o.y - center.y, o.z - center.z);
+
+        double a = dir.dot(dir);
+        double b = 2.0 * oc.dot(dir);
+        double c = oc.dot(oc) - radius * radius;
+
+        return (b * b - 4.0 * a * c) > 0.0;
+    }
+
+    std::string getName() const override { return name; }
+
+    Ameth::Vector3D pointAt(double /*u*/, double /*v*/) override { return center; }
+
+    Ameth::Vector3D center;
+    double radius{};
+
+private:
+    std::string name{"sphere"};
+};
+
+} // namespace RayTracer
