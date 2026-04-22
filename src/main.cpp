@@ -13,10 +13,10 @@
 
 int main()
 {
-   DLLoader<RayTracer::IPrimitive> loader("libs/Primitives/libsphere.so");
-   loader.open();
-   std::function<PLUGIN()> getLibType = reinterpret_cast<PLUGIN(*)()>(loader.sym("getLibType"));
+   DLLoader<RayTracer::IPrimitive> loader;
+   loader.open("libs/Primitives/libsphere.so");
+   std::function<PLUGIN()> getLibType = reinterpret_cast<PLUGIN(*)()>(loader.sym("libs/Primitives/libsphere.so", "getLibType"));
    std::cout << "Type: " << getLibType() << std::endl;
-   auto sphere = loader.getInstance("create");
+   auto sphere = loader.getInstance("libs/Primitives/libsphere.so", "create");
    std::cout << "Name: " << sphere->getName() << std::endl;
 }

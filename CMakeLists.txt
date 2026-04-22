@@ -9,10 +9,10 @@ option(DEBUG "Compile with -g3" OFF)
 include_directories(${PROJECT_SOURCE_DIR}/shared/)
 
 set(RAYTRACER
-    src/Camera/Camera.cpp
-    src/Core/Core.cpp
-    src/Display/Display.cpp
-    src/Scene/Scene.cpp
+    ${PROJECT_SOURCE_DIR}/src/Camera/Camera.cpp
+    ${PROJECT_SOURCE_DIR}/src/Core/Core.cpp
+    ${PROJECT_SOURCE_DIR}/src/Display/Display.cpp
+    ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
 )
 
 add_executable(raytracer ${RAYTRACER} src/main.cpp)
@@ -33,3 +33,4 @@ if(DEBUG)
 endif()
 
 add_subdirectory(plugins)
+add_subdirectory(tests)

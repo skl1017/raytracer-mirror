@@ -11,36 +11,36 @@
 #include <string>
 #include <memory>
 #include <dlfcn.h>
+#include <map>
 
 template<typename T>
 class DLLoader {
 public:
-    DLLoader(const std::string &path) : _lib(path), _handle(std::unique_ptr<void, decltype(&close_handle)>(nullptr, &close_handle)) {};
+    DLLoader() {}
 
-    void open()
+    void open(const std::string &path)
     {
-        if (_handle)
+        if (_libs.contains(path))
             return;
-        if (!_handle)
-            _handle = std::unique_ptr<void, decltype(&close_handle)>(dlopen(_lib.c_str(), RTLD_LAZY), &close_handle);
-        if (!_handle)
+        _libs.emplace(path, std::unique_ptr<void, decltype(&close_handle)>(dlopen(path.c_str(), RTLD_LAZY), &close_handle));
+        if (!_libs.at(path))
             throw DLLoaderException();
     }
 
-    void *sym(const std::string &symbol) const
+    void *sym(const std::string &path, const std::string &symbol) const
     {
-        if (!_handle)
+        if (!_libs.contains(path))
             return nullptr;
 
-        void *result = dlsym(_handle.get(), symbol.c_str());
+        void *result = dlsym(_libs.at(path).get(), symbol.c_str());
         if (!result)
             throw DLLoaderException();
         return result;
     }
 
-    std::unique_ptr<T> getInstance(const std::string& create)
+    std::unique_ptr<T> getInstance(const std::string &path, const std::string& create)
     {
-        std::function<T*()> func = reinterpret_cast<T*(*)()>(this->sym(create));
+        std::function<T*()> func = reinterpret_cast<T*(*)()>(this->sym(path, create));
 
         if (!func)
             throw DLLoaderException();
@@ -53,6 +53,5 @@ public:
     };
 private:
     static void close_handle(void *handle) { dlclose(handle); }
-    std::string _lib;
-    std::unique_ptr<void, decltype(&close_handle)> _handle;
+    std::map<std::string, std::unique_ptr<void, decltype(&close_handle)>> _libs;
 };
