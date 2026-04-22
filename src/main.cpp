@@ -5,10 +5,9 @@
 ** main
 */
 
-#include "DLLoader/DLLoader.hpp"
+#include "PluginsManager/DLLoader.hpp"
 #include "plugins/IPrimitive.hpp"
 #include <functional>
-#include <iterator>
 #include <memory>
 #include <iostream>
 
