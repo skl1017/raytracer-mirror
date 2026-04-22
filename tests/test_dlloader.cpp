@@ -1,0 +1,46 @@
+/*
+** EPITECH PROJECT, 2026
+** raytracer-mirror
+** File description:
+** test DLLoader
+*/
+
+#include <cassert>
+#include <criterion/criterion.h>
+#include <criterion/internal/assert.h>
+#include <criterion/internal/test.h>
+#include "PluginsManager/DLLoader.hpp"
+#include "Primitives/Sphere/Sphere.hpp"
+#include "plugins/IPrimitive.hpp"
+
+Test(DLLoader, load_one_lib)
+{
+    DLLoader<RayTracer::IPrimitive> loader;
+
+    loader.open("libs/Primitives/librectangle.so");
+    std::function<PLUGIN()> getLibType = reinterpret_cast<PLUGIN(*)()>(loader.sym("libs/Primitives/librectangle.so", "getLibType"));
+    cr_assert_eq(PRIMITIVE, getLibType());
+};
+
+Test(DLLoader, load_different_lib)
+{
+    DLLoader<RayTracer::IPrimitive> loader;
+
+    loader.open("libs/Primitives/librectangle.so");
+    loader.open("libs/Primitives/libsphere.so");
+    auto sphere = loader.getInstance("libs/Primitives/libsphere.so", "create");
+    auto rectangle = loader.getInstance("libs/Primitives/librectangle.so", "create");
+    cr_assert_eq(sphere->getName(), "Sphere");
+    cr_assert_eq(rectangle->getName(), "Rectangle");
+}
+
+Test(DLLoader, load_same_lib)
+{
+    DLLoader<RayTracer::IPrimitive> loader;
+
+    loader.open("libs/Primitives/librectangle.so");
+    auto rectangle = loader.getInstance("libs/Primitives/librectangle.so", "create");
+    loader.open("libs/Primitives/librectangle.so");
+    auto rectangle_two = loader.getInstance("libs/Primitives/librectangle.so", "create");
+    cr_assert_eq(rectangle->getName(), "Rectangle");
+}
