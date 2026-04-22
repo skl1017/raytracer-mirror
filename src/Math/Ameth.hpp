@@ -118,9 +118,4 @@ public:
     }
 };
 
-inline Vector3D operator*(double s, Vector3D const &v)
-{
-    return v * s;
-}
-
 } // namespace Ameth

@@ -7,8 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(DEBUG "Compile with -g3" OFF)
-
 include_directories(${PROJECT_SOURCE_DIR}/shared/)
 
 set(SFML_STATIC_LIBRARIES OFF)
@@ -22,7 +20,6 @@ set(RAYTRACER
     src/Camera/Camera.cpp
     src/Core/Core.cpp
     src/Display/Display.cpp
-    src/Renderer/Ray.cpp
     src/Renderer/Renderer.cpp
     src/Scene/Scene.cpp
 )
@@ -31,6 +28,8 @@ add_executable(raytracer ${RAYTRACER} src/main.cpp)
 
 target_include_directories(raytracer PRIVATE
     ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/shared
+    ${PROJECT_SOURCE_DIR}/plugins
 )
 
 target_compile_options(raytracer PRIVATE

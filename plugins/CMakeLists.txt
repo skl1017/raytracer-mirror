@@ -5,7 +5,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(LIBRARY_OUTPUT_PATH ../lib)
 
-include_directories(${PROJECT_SOURCE_DIR}/shared/)
+include_directories(
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+    ${CMAKE_SOURCE_DIR}/src
+)
 
 # === Sphere ===
 
