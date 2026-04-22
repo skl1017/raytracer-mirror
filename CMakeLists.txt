@@ -9,19 +9,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${PROJECT_SOURCE_DIR}/shared/)
 
-set(SFML_STATIC_LIBRARIES OFF)
-find_package(SFML 2 COMPONENTS graphics window system QUIET)
-if(NOT SFML_FOUND)
-    set(SFML_STATIC_LIBRARIES ON)
-    find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
-endif()
-
 set(RAYTRACER
-    src/Camera/Camera.cpp
-    src/Core/Core.cpp
-    src/Display/Display.cpp
-    src/Renderer/Renderer.cpp
-    src/Scene/Scene.cpp
+    ${PROJECT_SOURCE_DIR}/src/Camera/Camera.cpp
+    ${PROJECT_SOURCE_DIR}/src/Core/Core.cpp
+    ${PROJECT_SOURCE_DIR}/src/Display/Display.cpp
+    ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
 )
 
 add_executable(raytracer ${RAYTRACER} src/main.cpp)
@@ -38,8 +30,10 @@ target_compile_options(raytracer PRIVATE
     -Wpedantic
 )
 
-target_link_libraries(raytracer PRIVATE
-    sfml-graphics
+find_package(SFML 2.5 COMPONENTS graphics window system audio REQUIRED)
+
+target_link_libraries(raytracer
+    sfml-graphics sfml-window sfml-system sfml-audio
     config++.a
 )
 
@@ -48,5 +42,4 @@ if(DEBUG)
 endif()
 
 add_subdirectory(plugins)
-
-target_link_libraries(raytracer PRIVATE sphere)
+add_subdirectory(tests)

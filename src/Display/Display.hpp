@@ -7,9 +7,12 @@
 
 #pragma once
 
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
-#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <string>

@@ -16,6 +16,7 @@ namespace RayTracer {
 
 class Sphere : public IPrimitive {
 public:
+    Sphere() {}
     Sphere(Ameth::Vector3D c, double r)
         : center(c),
           radius(r)
@@ -43,7 +44,7 @@ public:
     double radius{};
 
 private:
-    std::string name{"sphere"};
+    std::string name{"Sphere"};
 };
 
 } // namespace RayTracer
