@@ -1,8 +1,16 @@
-# pragma once
-#include <string>
-#include "Math/Point3D.hpp"
+/*
+** EPITECH PROJECT, 2026
+** raytracer-mirror
+** File description:
+** IPrimitive
+*/
 
-#include "RayTracer/Ray.hpp"
+#pragma once
+
+#include <string>
+
+#include "Camera/Camera.hpp"
+#include "Math/Ameth.hpp"
 
 enum PLUGIN {
     PRIMITIVE,
@@ -10,12 +18,10 @@ enum PLUGIN {
     LIGHT
 };
 
-namespace RayTracer {
-    class IPrimitive {
-        public:
-            virtual std::string getName() const = 0;
-            virtual Math::Point3D<double> pointAt(double u, double v) = 0;
-            virtual bool hits(RayTracer::Ray) = 0;
-            virtual ~IPrimitive() = default;
-    };
-}
+class IPrimitive {
+public:
+    virtual std::string getName() const = 0;
+    virtual Ameth::Vector3D pointAt(double u, double v) = 0;
+    virtual bool hits(Camera::Ray const &ray) = 0;
+    virtual ~IPrimitive() = default;
+};

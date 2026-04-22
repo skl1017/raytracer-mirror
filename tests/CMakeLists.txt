@@ -22,4 +22,10 @@ target_compile_options(test_binary PRIVATE
     -g3
 )
 
-target_link_libraries(test_binary PRIVATE criterion)
+find_package(SFML 2.5 COMPONENTS graphics window system audio REQUIRED)
+
+target_link_libraries(test_binary
+    sfml-graphics sfml-window sfml-system sfml-audio
+    config++.a
+    criterion
+)

@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.13)
-project(raytracer)
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+cmake_minimum_required(VERSION 3.20)
 
-option(DEBUG "Compile with -g3" OFF)
+project(raytracer LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${PROJECT_SOURCE_DIR}/shared/)
 
@@ -19,14 +20,22 @@ add_executable(raytracer ${RAYTRACER} src/main.cpp)
 
 target_include_directories(raytracer PRIVATE
     ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/shared
+    ${PROJECT_SOURCE_DIR}/plugins
 )
 
 target_compile_options(raytracer PRIVATE
     -Wall
     -Wextra
+    -Wpedantic
 )
 
-target_link_libraries(raytracer PRIVATE config++.a)
+find_package(SFML 2.5 COMPONENTS graphics window system audio REQUIRED)
+
+target_link_libraries(raytracer
+    sfml-graphics sfml-window sfml-system sfml-audio
+    config++.a
+)
 
 if(DEBUG)
     target_compile_options(raytracer PRIVATE -g3)

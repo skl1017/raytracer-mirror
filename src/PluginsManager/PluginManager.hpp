@@ -11,6 +11,6 @@
 #include "plugins/IPrimitive.hpp"
 
 struct PluginManager {
-    DLLoader<RayTracer::IPrimitive> primitiveLoader;
+    DLLoader<IPrimitive> primitiveLoader;
 };
 
