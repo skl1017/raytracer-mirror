@@ -40,7 +40,6 @@ target_compile_options(raytracer PRIVATE
 
 target_link_libraries(raytracer PRIVATE
     sfml-graphics
-    config++.a
 )
 
 if(DEBUG)
@@ -48,3 +47,5 @@ if(DEBUG)
 endif()
 
 add_subdirectory(plugins)
+
+target_link_libraries(raytracer PRIVATE sphere)
