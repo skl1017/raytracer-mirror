@@ -40,6 +40,7 @@ target_compile_options(raytracer PRIVATE
 
 target_link_libraries(raytracer PRIVATE
     sfml-graphics
+    config++.a
 )
 
 if(DEBUG)
