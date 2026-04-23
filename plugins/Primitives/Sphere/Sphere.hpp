@@ -10,40 +10,28 @@
 #include "Math/Ameth.hpp"
 #include "plugins/IPrimitive.hpp"
 
+#include <optional>
 #include <string>
+#include <utility>
 
 namespace RayTracer {
 
 class Sphere : public IPrimitive {
 public:
-    Sphere(Ameth::Vector3D c, double r)
-        : center(c),
-          radius(r)
-    {
-    }
+    Sphere(Ameth::Vector3D c, double r);
 
-    bool hits(Camera::Ray const &ray) override
-    {
-        Ameth::Vector3D const &dir = ray.direction;
-        Ameth::Vector3D const &o = ray.origin;
-        Ameth::Vector3D oc(o.x - center.x, o.y - center.y, o.z - center.z);
-
-        double a = dir.dot(dir);
-        double b = 2.0 * oc.dot(dir);
-        double c = oc.dot(oc) - radius * radius;
-
-        return (b * b - 4.0 * a * c) > 0.0;
-    }
-
-    std::string getName() const override { return name; }
-
-    Ameth::Vector3D pointAt(double /*u*/, double /*v*/) override { return center; }
+    bool hits(Camera::Ray const &ray) override;
+    std::string getName() const override;
+    Ameth::Vector3D pointAt(double u, double v) override;
 
     Ameth::Vector3D center;
     double radius{};
 
 private:
+    std::optional<std::pair<double, double>> lineSphereIntersect(Ameth::Vector3D const &origin, Ameth::Vector3D const &dir) const;
+    bool isForwardSurfaceHit(double t0, double t1) const;
+
     std::string name{"sphere"};
 };
 
-} // namespace RayTracer
+}

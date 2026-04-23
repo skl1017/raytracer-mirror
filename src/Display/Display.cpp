@@ -70,8 +70,10 @@ void Display::applyGamma(Ameth::Vector3D &color)
     color = color.pow(1.0 / _gamma);
 }
 
-void Display::loadHDRTestSample(std::vector<Ameth::Vector3D> &hdrImage)
+std::vector<Ameth::Vector3D> Display::loadHDRTestSample(double height, double width)
 {
+    std::vector<Ameth::Vector3D> hdrImage(height * width, {0.0, 0.0, 0.0});
+
     for (unsigned y = 0; y < _height; ++y) {
         for (unsigned x = 0; x < _width; ++x) {
             std::size_t pixelIndex = std::size_t(y) * _width + x;
@@ -82,6 +84,7 @@ void Display::loadHDRTestSample(std::vector<Ameth::Vector3D> &hdrImage)
             hdrImage[pixelIndex] = Ameth::Vector3D(2.0 * xd / widthd, 2.0 * yd / heightd, 0.35);
         }
     }
+    return hdrImage;
 }
 
 std::uint8_t Display::toByteChannel(double channel)
