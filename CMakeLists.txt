@@ -13,6 +13,10 @@ set(RAYTRACER
     ${PROJECT_SOURCE_DIR}/src/Camera/Camera.cpp
     ${PROJECT_SOURCE_DIR}/src/Display/Display.cpp
     ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
+    ${PROJECT_SOURCE_DIR}/src/Core/Core.cpp
+    ${PROJECT_SOURCE_DIR}/src/Parser/Parser.cpp
+    ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
+
     ${PROJECT_SOURCE_DIR}/src/PluginFactory/PluginFactory.cpp
 
 )
