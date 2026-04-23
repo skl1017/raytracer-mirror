@@ -14,7 +14,6 @@ namespace RayTracer
     extern "C"
     {
         void registerPlugin(PluginFactory &factory){
-            std::cout << "im called" << std::endl;
             PluginFactory::primtiveCreateFunction f = [](const RayTracer::PluginFactory::primitivePayload &p)
             {
                 auto spherePayload = std::get<PluginFactory::sphere_payload_t>(p);
