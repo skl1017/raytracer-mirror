@@ -53,7 +53,7 @@ namespace RayTracer
     Scene Parser::loadFile(const std::string &file)
     {
         libconfig::Config c = libconfig::Config();
-        c.readFile(file);
+        c.readFile(file.c_str());
 
         auto primitives = _parserGetPrimitives(c.lookup("primitives"));
         return Scene(std::move(primitives));
@@ -64,7 +64,7 @@ namespace RayTracer
         double x;
         try {
             x = s.lookup(key);
-        } catch (const libconfig::SettingTypeException e){
+        } catch (const libconfig::SettingTypeException &e){
             x = int(s.lookup(key));
         }
 
