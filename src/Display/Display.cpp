@@ -6,6 +6,7 @@
 */
 
 #include "Display/Display.hpp"
+#include "Math/Ameth.hpp"
 
 #include <cmath>
 #include <cstddef>
@@ -42,7 +43,7 @@ void Display::pollEvents()
     }
 }
 
-void Display::update(const std::vector<Ameth::Vector3D> hdrImage)
+void Display::update(const std::vector<Ameth::Color> hdrImage)
 {
     Display::toDisplaySpace(hdrImage);
     _texture.update(_pixels.data());
@@ -51,27 +52,29 @@ void Display::update(const std::vector<Ameth::Vector3D> hdrImage)
     _window.display();
 }
 
-void Display::putRGB(std::size_t pixelIndex, Ameth::Vector3D const &rgb)
+void Display::putRGB(std::size_t pixelIndex, const Ameth::Color &color)
 {
     std::size_t colorIndex = pixelIndex * 4;
-    _pixels[colorIndex + 0] = toByteChannel(rgb.x);
-    _pixels[colorIndex + 1] = toByteChannel(rgb.y);
-    _pixels[colorIndex + 2] = toByteChannel(rgb.z);
+    _pixels[colorIndex + 0] = toByteChannel(color.r);
+    _pixels[colorIndex + 1] = toByteChannel(color.g);
+    _pixels[colorIndex + 2] = toByteChannel(color.b);
     _pixels[colorIndex + 3] = 255;
 }
 
-void Display::reinhardToneMap(Ameth::Vector3D &color)
+void Display::reinhardToneMap(Ameth::Color &color)
 {
     color /= (color + 1.0);
 }
 
-void Display::applyGamma(Ameth::Vector3D &color)
+void Display::applyGamma(Ameth::Color &color)
 {
     color = color.pow(1.0 / _gamma);
 }
 
-void Display::loadHDRTestSample(std::vector<Ameth::Vector3D> &hdrImage)
+std::vector<Ameth::Color> Display::loadHDRTestSample(double height, double width)
 {
+    std::vector<Ameth::Color> hdrImage(height * width, {0.0, 0.0, 0.0});
+
     for (unsigned y = 0; y < _height; ++y) {
         for (unsigned x = 0; x < _width; ++x) {
             std::size_t pixelIndex = std::size_t(y) * _width + x;
@@ -79,9 +82,10 @@ void Display::loadHDRTestSample(std::vector<Ameth::Vector3D> &hdrImage)
             double yd = static_cast<double>(y);
             double widthd = static_cast<double>(_width);
             double heightd = static_cast<double>(_height);
-            hdrImage[pixelIndex] = Ameth::Vector3D(2.0 * xd / widthd, 2.0 * yd / heightd, 0.35);
+            hdrImage[pixelIndex] = Ameth::Color(2.0 * xd / widthd, 2.0 * yd / heightd, 0.35);
         }
     }
+    return hdrImage;
 }
 
 std::uint8_t Display::toByteChannel(double channel)
@@ -90,15 +94,15 @@ std::uint8_t Display::toByteChannel(double channel)
     return static_cast<std::uint8_t>(channel);
 }
 
-void Display::toDisplaySpace(const std::vector<Ameth::Vector3D> hdrImage)
+void Display::toDisplaySpace(const std::vector<Ameth::Color> hdrImage)
 {
     for (unsigned y = 0; y < _height; ++y) {
         for (unsigned x = 0; x < _width; ++x) {
             std::size_t pixelIndex = std::size_t(y) * _width + x;
-            Ameth::Vector3D c = hdrImage[pixelIndex];
-            reinhardToneMap(c);
-            applyGamma(c);
-            putRGB(pixelIndex, c);
+            Ameth::Color color = hdrImage[pixelIndex];
+            reinhardToneMap(color);
+            applyGamma(color);
+            putRGB(pixelIndex, color);
         }
     }
 }
