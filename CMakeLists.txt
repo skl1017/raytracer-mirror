@@ -35,6 +35,7 @@ find_package(SFML 2.5 COMPONENTS graphics window system audio REQUIRED)
 target_link_libraries(raytracer
     sfml-graphics sfml-window sfml-system sfml-audio
     config++.a
+    sphere
 )
 
 if(DEBUG)

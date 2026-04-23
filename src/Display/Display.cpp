@@ -6,6 +6,7 @@
 */
 
 #include "Display/Display.hpp"
+#include "Math/Ameth.hpp"
 
 #include <cmath>
 #include <cstddef>
@@ -70,8 +71,10 @@ void Display::applyGamma(Ameth::Color &color)
     color = color.pow(1.0 / _gamma);
 }
 
-void Display::loadHDRTestSample(std::vector<Ameth::Color> &hdrImage)
+std::vector<Ameth::Color> Display::loadHDRTestSample(double height, double width)
 {
+    std::vector<Ameth::Color> hdrImage(height * width, {0.0, 0.0, 0.0});
+
     for (unsigned y = 0; y < _height; ++y) {
         for (unsigned x = 0; x < _width; ++x) {
             std::size_t pixelIndex = std::size_t(y) * _width + x;
@@ -82,6 +85,7 @@ void Display::loadHDRTestSample(std::vector<Ameth::Color> &hdrImage)
             hdrImage[pixelIndex] = Ameth::Color(2.0 * xd / widthd, 2.0 * yd / heightd, 0.35);
         }
     }
+    return hdrImage;
 }
 
 std::uint8_t Display::toByteChannel(double channel)
