@@ -11,12 +11,15 @@ include_directories(${PROJECT_SOURCE_DIR}/shared/)
 
 set(RAYTRACER
     ${PROJECT_SOURCE_DIR}/src/Camera/Camera.cpp
-    ${PROJECT_SOURCE_DIR}/src/Core/Core.cpp
     ${PROJECT_SOURCE_DIR}/src/Display/Display.cpp
     ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
+    ${PROJECT_SOURCE_DIR}/src/PluginFactory/PluginFactory.cpp
+
 )
 
 add_executable(raytracer ${RAYTRACER} src/main.cpp)
+
+target_link_options(raytracer PRIVATE -Wl,--export-dynamic)
 
 target_include_directories(raytracer PRIVATE
     ${PROJECT_SOURCE_DIR}/src

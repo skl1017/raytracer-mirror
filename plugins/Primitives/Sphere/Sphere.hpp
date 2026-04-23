@@ -9,7 +9,6 @@
 
 #include "Math/Ameth.hpp"
 #include "plugins/IPrimitive.hpp"
-
 #include <string>
 
 namespace RayTracer {
@@ -46,5 +45,6 @@ public:
 private:
     std::string name{"Sphere"};
 };
+
 
 } // namespace RayTracer

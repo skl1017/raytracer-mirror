@@ -1,12 +1,34 @@
+/*
+** EPITECH PROJECT, 2026
+** raytracer-mirror
+** File description:
+** Sphere
+*/
+
 #include "Sphere.hpp"
 #include "plugins/IPrimitive.hpp"
-
-extern "C" IPrimitive *create()
+#include "PluginFactory/PluginFactory.hpp"
+#include <iostream>
+namespace RayTracer
 {
-    return new RayTracer::Sphere();
+    extern "C"
+    {
+        void registerPlugin(PluginFactory &factory){
+            std::cout << "im called" << std::endl;
+            PluginFactory::primtiveCreateFunction f = [](const RayTracer::PluginFactory::primitivePayload &p)
+            {
+                auto spherePayload = std::get<PluginFactory::sphere_payload_t>(p);
+                return std::make_unique<Sphere>(spherePayload.position, spherePayload.r);
+            };
+            factory.add("sphere", f);
+            return;
+        }
+
+        PLUGIN getLibType()
+        {
+            return PRIMITIVE;
+        }
+    }
 }
 
-extern "C" PLUGIN getLibType()
-{
-    return PRIMITIVE;
-}
+
