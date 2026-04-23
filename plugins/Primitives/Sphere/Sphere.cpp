@@ -12,17 +12,17 @@
 
 namespace RayTracer {
 
-Sphere::Sphere(Ameth::Vector3D c, double r)
+Sphere::Sphere(Ameth::Vec3D c, double r)
     : center(c),
       radius(r)
 {
 }
 
-std::optional<std::pair<double, double>> Sphere::lineSphereIntersect(Ameth::Vector3D const &origin, Ameth::Vector3D const &dir) const
+std::optional<std::pair<double, double>> Sphere::lineSphereIntersect(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {
     if (dir.length() < 1e-12)
         return std::nullopt;
-    Ameth::Vector3D const originToCenter = origin - center;
+    Ameth::Vec3D const originToCenter = origin - center;
     double const quadA = dir.dot(dir);
     double const quadB = 2.0 * originToCenter.dot(dir);
     double const quadC = originToCenter.dot(originToCenter) - radius * radius;
@@ -58,7 +58,7 @@ std::string Sphere::getName() const
     return name;
 }
 
-Ameth::Vector3D Sphere::pointAt(double /*u*/, double /*v*/)
+Ameth::Vec3D Sphere::pointAt(double /*u*/, double /*v*/)
 {
     return center;
 }

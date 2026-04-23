@@ -24,8 +24,8 @@ int main()
     constexpr unsigned WIDTH = 1920;
     constexpr unsigned HEIGHT = 1080;
 
-    Camera cam(Ameth::Vector3D(0.0, 200, -350), Ameth::Quaternion::identity(), fovV, WIDTH, HEIGHT);
-    RayTracer::Sphere sphere(Ameth::Vector3D(0.0, 200.0, 0.0), 39.9);
+    Camera cam(Ameth::Vec3D(0.0, 200, -350), Ameth::Quaternion::identity(), fovV, WIDTH, HEIGHT);
+    RayTracer::Sphere sphere(Ameth::Vec3D(0.0, 200.0, 0.0), 39.9);
 
     for (unsigned x = 0; x < WIDTH; ++x) {
         for (unsigned y = 0; y < HEIGHT; ++y) {
@@ -34,9 +34,9 @@ int main()
             Camera::Ray r = cam.ray(u, v);
             std::size_t i = y * WIDTH + x;
             if (sphere.hits(r)) {
-                cam.getHDRImage()[i] = Ameth::Vector3D(1.0, 0.0, 0.0);
+                cam.getHDRImage()[i] = Ameth::Color(1.0, 0.0, 0.0);
             } else {
-                cam.getHDRImage()[i] = Ameth::Vector3D(0.0, 0.0, 1.0);
+                cam.getHDRImage()[i] = Ameth::Color(0.0, 0.0, 1.0);
             }
         }
     }
@@ -45,7 +45,7 @@ int main()
     if (!display.create())
         throw std::runtime_error("Failed to create SFML window or texture");
 
-    //std::vector<Ameth::Vector3D> hdrImage = display.loadHDRTestSample(WIDTH, HEIGHT);
+    //std::vector<Ameth::Vec3D> hdrImage = display.loadHDRTestSample(WIDTH, HEIGHT);
     while (display.isOpen()) {
         display.pollEvents();
         //display.update(hdrImage);

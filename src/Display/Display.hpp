@@ -7,9 +7,12 @@
 
 #pragma once
 
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
-#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <string>
@@ -24,17 +27,17 @@ public:
     bool create();
     bool isOpen() { return _window.isOpen(); }
     void pollEvents();
-    void update(const std::vector<Ameth::Vector3D> hdrImage);
-    std::vector<Ameth::Vector3D> loadHDRTestSample(double height, double width);
+    void update(const std::vector<Ameth::Color> hdrImage);
+    std::vector<Ameth::Color> loadHDRTestSample(double height, double width);
     bool savePPM(const std::string &path) const;
 
 private:
     static constexpr double _gamma = 2.2;
 
-    void toDisplaySpace(const std::vector<Ameth::Vector3D> hdrImage);
-    void reinhardToneMap(Ameth::Vector3D &color);
-    void applyGamma(Ameth::Vector3D &color);
-    void putRGB(std::size_t pixelIndex, Ameth::Vector3D const &rgb);
+    void toDisplaySpace(const std::vector<Ameth::Color> hdrImage);
+    void reinhardToneMap(Ameth::Color &color);
+    void applyGamma(Ameth::Color &color);
+    void putRGB(std::size_t pixelIndex, const Ameth::Color &color);
     std::uint8_t toByteChannel(double channel);
 
     unsigned _width;
