@@ -20,8 +20,8 @@
 //                return Math::Point3D<double>(u, v, 0);
 //            };
 //            Math::Point3D<double> origin;
-//            Ameth::Vector3D bottom_side;
-//            Ameth::Vector3D left_side;
+//            Ameth::Vec3D bottom_side;
+//            Ameth::Vec3D left_side;
 //            bool hits(RayTracer::Ray ray) override
 //            {
 //                return true;

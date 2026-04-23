@@ -24,10 +24,10 @@ int main()
     constexpr double pinholeZ = 1000.0;
 
     Camera cam(LENGTH, WIDTH,
-        Ameth::Vector3D(static_cast<double>(LENGTH), 0.0, 0.0),
-        Ameth::Vector3D(0.0, static_cast<double>(WIDTH), 0.0),
+        Ameth::Vec3D(static_cast<double>(LENGTH), 0.0, 0.0),
+        Ameth::Vec3D(0.0, static_cast<double>(WIDTH), 0.0),
         pinholeZ);
-    RayTracer::Sphere sphere(Ameth::Vector3D(0.0, 200.0, -40.0), 39.9);
+    RayTracer::Sphere sphere(Ameth::Vec3D(0.0, 200.0, -40.0), 39.9);
 
     for (unsigned x = 0; x < LENGTH; ++x) {
         for (unsigned y = 0; y < WIDTH; ++y) {
@@ -36,9 +36,9 @@ int main()
             Camera::Ray r = cam.ray(u, v);
             std::size_t i = y * LENGTH + x;
             if (sphere.hits(r)) {
-                cam.getHDRImage()[i] = Ameth::Vector3D(1.0, 0.0, 0.0);
+                cam.getHDRImage()[i] = Ameth::Color(1.0, 0.0, 0.0);
             } else {
-                cam.getHDRImage()[i] = Ameth::Vector3D(0.0, 0.0, 1.0);
+                cam.getHDRImage()[i] = Ameth::Color(0.0, 0.0, 1.0);
             }
         }
     }
