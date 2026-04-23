@@ -17,7 +17,7 @@ namespace RayTracer {
 class Sphere : public IPrimitive {
 public:
     Sphere() {}
-    Sphere(Ameth::Vector3D c, double r)
+    Sphere(Ameth::Vec3D c, double r)
         : center(c),
           radius(r)
     {
@@ -25,9 +25,9 @@ public:
 
     bool hits(Camera::Ray const &ray) override
     {
-        Ameth::Vector3D const &dir = ray.direction;
-        Ameth::Vector3D const &o = ray.origin;
-        Ameth::Vector3D oc(o.x - center.x, o.y - center.y, o.z - center.z);
+        Ameth::Vec3D const &dir = ray.direction;
+        Ameth::Vec3D const &o = ray.origin;
+        Ameth::Vec3D oc(o.x - center.x, o.y - center.y, o.z - center.z);
 
         double a = dir.dot(dir);
         double b = 2.0 * oc.dot(dir);
@@ -38,9 +38,9 @@ public:
 
     std::string getName() const override { return name; }
 
-    Ameth::Vector3D pointAt(double /*u*/, double /*v*/) override { return center; }
+    Ameth::Vec3D pointAt(double /*u*/, double /*v*/) override { return center; }
 
-    Ameth::Vector3D center;
+    Ameth::Vec3D center;
     double radius{};
 
 private:
