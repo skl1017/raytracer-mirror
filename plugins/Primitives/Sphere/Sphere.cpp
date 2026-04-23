@@ -68,7 +68,7 @@ Ameth::Vec3D Sphere::pointAt(double /*u*/, double /*v*/)
 extern "C"
 {
     void registerPlugin(PluginFactory &factory){
-        PluginFactory::primtiveCreateFunction f = [](const RayTracer::PluginFactory::primitivePayload &p)
+        PluginFactory::iPrimitiveCreateFunction f = [](const RayTracer::PluginFactory::primitivePayload &p)
         {
             auto spherePayload = std::get<PluginFactory::sphere_payload_t>(p);
             return std::make_unique<Sphere>(spherePayload.position, spherePayload.r);

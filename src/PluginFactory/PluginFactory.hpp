@@ -44,10 +44,10 @@ namespace RayTracer
                 sphere_payload_t,
                 plane_payload_t>;
 
-            using primtiveCreateFunction = std::function<std::unique_ptr<IPrimitive> (const primitivePayload& p)>;
+            using iPrimitiveCreateFunction = std::function<std::unique_ptr<IPrimitive> (const primitivePayload& p)>;
 
 
-            void add(const std::string &, primtiveCreateFunction);
+            void add(const std::string &, iPrimitiveCreateFunction);
             std::unique_ptr<IPrimitive> createPrimitive(const std::string &, const primitivePayload &);
 
 
@@ -64,7 +64,7 @@ namespace RayTracer
 
 
             private:
-                std::map<std::string, primtiveCreateFunction> _fPrimitives;
+                std::map<std::string, iPrimitiveCreateFunction> _fPrimitives;
     };
 
 }
