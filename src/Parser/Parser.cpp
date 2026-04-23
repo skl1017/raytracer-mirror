@@ -23,7 +23,7 @@ namespace RayTracer
         for (auto &s: spheres)
         {
 
-            auto position = Ameth::Vector3D(
+            auto position = Ameth::Vec3D(
                 _parseDouble(s, "x"),
                 _parseDouble(s, "y"),
                 _parseDouble(s, "z")

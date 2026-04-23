@@ -24,12 +24,12 @@ namespace RayTracer
 
             typedef struct primitive_payload_base_s
             {
-                Ameth::Vector3D color;
+                Ameth::Vec3D color;
             } primitive_payload_base_t;
 
             typedef struct sphere_payload_s : primitive_payload_base_t
             {
-                Ameth::Vector3D position;
+                Ameth::Vec3D position;
                 double r;
             } sphere_payload_t;
 

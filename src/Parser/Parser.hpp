@@ -22,28 +22,6 @@ namespace RayTracer
     class Parser
     {
         public:
-            typedef struct primitive_payload_base_s
-            {
-                Ameth::Vector3D color;
-            } primitive_payload_base_t;
-
-            typedef struct sphere_payload_s : primitive_payload_base_t
-            {
-                Ameth::Vector3D position;
-                double r;
-            } sphere_payload_t;
-
-            typedef struct plane_payload_s : primitive_payload_base_t
-            {
-                char axis;
-                double position;
-            } plane_payload_t;
-
-            using primitivePayload = std::variant<
-                primitive_payload_base_t,
-                sphere_payload_t,
-                plane_payload_t>;
-
             using RegisterPluginFn = void(*)(RayTracer::PluginFactory&);
 
 
