@@ -12,6 +12,7 @@
 #include <memory>
 #include <dlfcn.h>
 #include <map>
+#include <iostream>
 
 template<typename T>
 class DLLoader {
@@ -29,8 +30,9 @@ public:
 
     void *sym(const std::string &path, const std::string &symbol) const
     {
-        if (!_libs.contains(path))
-            return nullptr;
+        if (!_libs.contains(path)){
+            throw DLLoaderException();
+        }
 
         void *result = dlsym(_libs.at(path).get(), symbol.c_str());
         if (!result)
