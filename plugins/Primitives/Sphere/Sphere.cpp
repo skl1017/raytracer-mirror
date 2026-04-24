@@ -6,19 +6,23 @@
 */
 
 #include "Sphere.hpp"
+#include "plugins/IPrimitive.hpp"
 
+#include <algorithm>
 #include <cmath>
+#include <numbers>
 #include <utility>
 
 namespace RayTracer {
 
-Sphere::Sphere(Ameth::Vec3D c, double r)
+Sphere::Sphere(Ameth::Vec3D c, double r, std::shared_ptr<IMaterial> material)
     : center(c),
-      radius(r)
+      radius(std::max(0.0, r)),
+      _material(std::move(material))
 {
 }
 
-std::optional<std::pair<double, double>> Sphere::lineSphereIntersect(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
+std::optional<std::pair<double, double>> Sphere::lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {
     if (dir.length() < 1e-12)
         return std::nullopt;
@@ -35,22 +39,16 @@ std::optional<std::pair<double, double>> Sphere::lineSphereIntersect(Ameth::Vec3
     return std::make_pair(tMinusSqrt, tPlusSqrt);
 }
 
-bool Sphere::isForwardSurfaceHit(double t0, double t1) const
+void Sphere::fillHitRecord(Camera::Ray const &ray, double t, Camera::HitRecord &rec) const
 {
-    double tFirst = -1.0;
-    if (t0 > 0.0)
-        tFirst = t0;
-    if (t1 > 0.0 && (tFirst < 0.0 || t1 < tFirst))
-        tFirst = t1;
-    return tFirst > 0.0;
-}
-
-bool Sphere::hits(Camera::Ray const &ray)
-{
-    std::optional<std::pair<double, double>> intersects = lineSphereIntersect(ray.origin, ray.direction);
-    if (!intersects)
-        return false;
-    return isForwardSurfaceHit(intersects->first, intersects->second);
+    rec.t = t;
+    rec.point = ray.at(t);
+    rec.normal = (rec.point - center) * (1.0 / radius);
+    rec.normal = rec.normal.normalized();
+    double const x = 0.5 + std::atan2(rec.normal.x, rec.normal.z) / (2.0 * std::numbers::pi);
+    rec.u = x - std::floor(x);
+    rec.v = 0.5 - std::asin(std::clamp(rec.normal.y, -1.0, 1.0)) / std::numbers::pi;
+    rec.material = _material;
 }
 
 std::string Sphere::getName() const
@@ -58,9 +56,21 @@ std::string Sphere::getName() const
     return name;
 }
 
-Ameth::Vec3D Sphere::pointAt(double /*u*/, double /*v*/)
+Ameth::Vec3D Sphere::pointAt(double u, double v) const
 {
+    (void)u;
+    (void)v;
     return center;
 }
 
 } // namespace RayTracer
+
+extern "C" IPrimitive *create()
+{
+    return new RayTracer::Sphere(Ameth::Vec3D(0.0, 0.0, 0.0), 1.0, nullptr);
+}
+
+extern "C" PLUGIN getLibType()
+{
+    return PRIMITIVE;
+}

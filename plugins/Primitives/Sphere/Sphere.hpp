@@ -8,30 +8,32 @@
 #pragma once
 
 #include "Math/Ameth.hpp"
-#include "plugins/IPrimitive.hpp"
+#include "plugins/IMaterial.hpp"
+#include "plugins/APrimitive.hpp"
 
+#include <memory>
 #include <optional>
 #include <string>
 #include <utility>
 
 namespace RayTracer {
 
-class Sphere : public IPrimitive {
+class Sphere : public APrimitive {
 public:
-    Sphere(Ameth::Vec3D c, double r);
+    Sphere(Ameth::Vec3D c, double r, std::shared_ptr<IMaterial> material = nullptr);
 
-    bool hits(Camera::Ray const &ray) override;
     std::string getName() const override;
-    Ameth::Vec3D pointAt(double u, double v) override;
+    Ameth::Vec3D pointAt(double u, double v) const override;
 
     Ameth::Vec3D center;
     double radius{};
 
-private:
-    std::optional<std::pair<double, double>> lineSphereIntersect(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const;
-    bool isForwardSurfaceHit(double t0, double t1) const;
+protected:
+    void fillHitRecord(Camera::Ray const &ray, double t, Camera::HitRecord &rec) const override;
+    std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const;
 
+    std::shared_ptr<IMaterial> _material;
     std::string name{"Sphere"};
 };
 
-}
+} // namespace RayTracer

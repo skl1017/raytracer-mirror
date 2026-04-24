@@ -8,8 +8,10 @@
 #pragma once
 
 #include "Math/Ameth.hpp"
+#include "plugins/IMaterial.hpp"
 
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 class Camera {
@@ -17,6 +19,16 @@ public:
     struct Ray {
         Ameth::Vec3D origin{};
         Ameth::Vec3D direction{};
+        Ameth::Vec3D at(double t) const { return origin + direction * t; }
+    };
+
+    struct HitRecord {
+        double t{};
+        Ameth::Vec3D point{};
+        Ameth::Vec3D normal{};
+        double u{};
+        double v{};
+        std::shared_ptr<IMaterial> material{};
     };
 
     Camera(Ameth::Vec3D pos, Ameth::Quaternion rot, double fov, unsigned width, unsigned height);
