@@ -5,4 +5,12 @@
 ** Scene
 */
 
+#include "Scene.hpp"
 
+namespace RayTracer
+{
+    Scene::Scene(std::vector<std::unique_ptr<IPrimitive>> primitives):_primitives(std::move(primitives))
+    {
+
+    }
+}

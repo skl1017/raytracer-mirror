@@ -6,7 +6,9 @@
 */
 
 #include "Sphere.hpp"
-
+#include "plugins/IPrimitive.hpp"
+#include "PluginFactory/PluginFactory.hpp"
+#include <iostream>
 #include <cmath>
 #include <utility>
 
@@ -62,5 +64,24 @@ Ameth::Vec3D Sphere::pointAt(double /*u*/, double /*v*/)
 {
     return center;
 }
+
+extern "C"
+{
+    void registerPlugin(PluginFactory &factory){
+        PluginFactory::iPrimitiveCreateFunction f = [](const RayTracer::PluginFactory::primitivePayload &p)
+        {
+            auto spherePayload = std::get<PluginFactory::sphere_payload_t>(p);
+            return std::make_unique<Sphere>(spherePayload.position, spherePayload.r);
+        };
+        factory.add("sphere", f);
+        return;
+    }
+
+    PLUGIN getLibType()
+    {
+        return PRIMITIVE;
+    }
+}
+
 
 } // namespace RayTracer
