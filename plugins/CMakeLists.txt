@@ -25,4 +25,3 @@ target_include_directories(sphere PRIVATE
 set_target_properties(sphere PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
 )
-
