@@ -23,13 +23,11 @@ add_subdirectory(plugins)
 set(RAYTRACER
     ${PROJECT_SOURCE_DIR}/src/Camera/Camera.cpp
     ${PROJECT_SOURCE_DIR}/src/Display/Display.cpp
+    ${PROJECT_SOURCE_DIR}/src/Renderer/Renderer.cpp
     ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
     ${PROJECT_SOURCE_DIR}/src/Core/Core.cpp
     ${PROJECT_SOURCE_DIR}/src/Parser/Parser.cpp
-    ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
-
     ${PROJECT_SOURCE_DIR}/src/PluginFactory/PluginFactory.cpp
-
 )
 
 add_executable(raytracer ${RAYTRACER} src/main.cpp)
@@ -59,5 +57,4 @@ if(DEBUG)
     target_compile_options(raytracer PRIVATE -g3)
 endif()
 
-add_subdirectory(plugins)
 add_subdirectory(tests)

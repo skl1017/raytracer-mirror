@@ -10,6 +10,7 @@
 #include "PluginFactory/PluginFactory.hpp"
 #include <algorithm>
 #include <cmath>
+#include <memory>
 #include <numbers>
 #include <utility>
 
@@ -64,15 +65,14 @@ Ameth::Vec3D Sphere::pointAt(double u, double v) const
 }
 } // namespace RayTracer
 
-extern "C" void registerPlugin(PluginFactory &factory)
+extern "C" void registerPlugin(RayTracer::PluginFactory &factory)
 {
-    PluginFactory::iPrimitiveCreateFunction f = [](const RayTracer::PluginFactory::primitivePayload &p)
-    {
-        auto spherePayload = std::get<PluginFactory::sphere_payload_t>(p);
-        return std::make_unique<Sphere>(spherePayload.position, spherePayload.r);
+    RayTracer::PluginFactory::iPrimitiveCreateFunction const f
+        = [](RayTracer::PluginFactory::primitivePayload const &p) -> std::unique_ptr<IPrimitive> {
+        auto const spherePayload = std::get<RayTracer::PluginFactory::sphere_payload_t>(p);
+        return std::make_unique<RayTracer::Sphere>(spherePayload.position, spherePayload.r, nullptr);
     };
     factory.add("sphere", f);
-    return;
 }
 
 extern "C" IPrimitive *create()
