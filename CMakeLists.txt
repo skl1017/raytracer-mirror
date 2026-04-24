@@ -21,14 +21,20 @@ endif()
 add_subdirectory(plugins)
 
 set(RAYTRACER
-    src/Camera/Camera.cpp
-    src/Core/Core.cpp
-    src/Display/Display.cpp
-    src/Renderer/Renderer.cpp
-    src/Scene/Scene.cpp
+    ${PROJECT_SOURCE_DIR}/src/Camera/Camera.cpp
+    ${PROJECT_SOURCE_DIR}/src/Display/Display.cpp
+    ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
+    ${PROJECT_SOURCE_DIR}/src/Core/Core.cpp
+    ${PROJECT_SOURCE_DIR}/src/Parser/Parser.cpp
+    ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
+
+    ${PROJECT_SOURCE_DIR}/src/PluginFactory/PluginFactory.cpp
+
 )
 
 add_executable(raytracer ${RAYTRACER} src/main.cpp)
+
+target_link_options(raytracer PRIVATE -Wl,--export-dynamic)
 
 target_include_directories(raytracer PRIVATE
     ${PROJECT_SOURCE_DIR}/src
@@ -52,3 +58,6 @@ target_link_libraries(raytracer PRIVATE
 if(DEBUG)
     target_compile_options(raytracer PRIVATE -g3)
 endif()
+
+add_subdirectory(plugins)
+add_subdirectory(tests)
