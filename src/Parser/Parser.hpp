@@ -33,6 +33,7 @@ namespace RayTracer
             double _parseDouble(libconfig::Setting &s, const std::string &);
             std::vector<std::unique_ptr<IPrimitive>> _parserGetPrimitives(libconfig::Setting &s);
             void _parserGetSpheres(libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&);
+            void _parserGetPlanes(libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&);
 
     };
 }

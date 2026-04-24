@@ -44,3 +44,19 @@ target_include_directories(rectangle PRIVATE
 set_target_properties(rectangle PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/libs/Primitives
 )
+
+# === Plane ===
+
+set(PLANE
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Plane/Plane.cpp
+)
+
+add_library("plane" SHARED ${PLANE})
+
+target_include_directories(plane PRIVATE
+    ${CMAKE_SOURCE_DIR}/Plane
+)
+
+set_target_properties(plane PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/libs/Primitives
+)

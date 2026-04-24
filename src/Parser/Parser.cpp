@@ -38,6 +38,33 @@ namespace RayTracer
 
     }
 
+    void Parser::_parserGetPlanes(libconfig::Setting &planes, std::vector<std::unique_ptr<IPrimitive>>& primitivesList)
+    {
+        _pluginManager.primitiveLoader.open("libs/Primitives/libplane.so");
+        auto reg = reinterpret_cast<RegisterPluginFn>(_pluginManager.primitiveLoader.sym(
+                "libs/Primitives/libplane.so", "registerPlugin"
+            ));
+        reg(_pluginFactory);
+
+        for (auto &s: planes)
+        {
+            auto &colorToParse = s.lookup("color");
+            auto color = Ameth::Color(
+                _parseDouble(colorToParse, "r"),
+                _parseDouble(colorToParse, "g"),
+                _parseDouble(colorToParse, "b")
+
+            );
+            std::string axis = s.lookup("axis");
+            auto position = _parseDouble(s, "position");
+
+            PluginFactory::plane_payload_t planePayload = {
+                color, axis[0], position
+            };
+            primitivesList.push_back(_pluginFactory.createPrimitive("plane", planePayload));
+        }
+    }
+
     std::vector<std::unique_ptr<IPrimitive>> Parser::_parserGetPrimitives(libconfig::Setting &p)
     {
         std::vector<std::unique_ptr<IPrimitive>> primitives;
@@ -45,6 +72,10 @@ namespace RayTracer
         if (p.exists("spheres")){
             auto &spheres = p.lookup("spheres");
             _parserGetSpheres(spheres, primitives);
+        }
+        if (p.exists("planes")){
+            auto &planes = p.lookup("planes");
+            _parserGetPlanes(planes, primitives);
         }
         return primitives;
     }
