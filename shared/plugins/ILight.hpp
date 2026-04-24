@@ -7,3 +7,11 @@
 
 #pragma once
 
+#include "Ameth.hpp"
+#include "Camera/Camera.hpp"
+
+class ILight
+{
+public:
+    virtual Ameth::Color getIllumination() = 0;
+};
