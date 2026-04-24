@@ -14,12 +14,12 @@
 
 class APrimitive : public IPrimitive {
 public:
-    bool hit(Camera::Ray const &ray, Camera::HitRecord &rec) const final
+    bool hit(Ray const &ray, Ray::HitRecord &rec) const final
     {
         auto ts = lineTValues(ray.origin, ray.direction);
         if (!ts)
             return false;
-        auto tHit = firstForwardHit(*ts);
+        auto tHit = firstForwardHit(ts);
         if (!tHit)
             return false;
         fillHitRecord(ray, *tHit, rec);
@@ -41,5 +41,5 @@ protected:
         return tHit;
     }
     virtual std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const = 0;
-    virtual void fillHitRecord(Camera::Ray const &ray, double t, Camera::HitRecord &rec) const = 0;
+    virtual void fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const = 0;
 };

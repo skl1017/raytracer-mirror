@@ -39,7 +39,7 @@ std::optional<std::pair<double, double>> Sphere::lineTValues(Ameth::Vec3D const 
     return std::make_pair(tMinusSqrt, tPlusSqrt);
 }
 
-void Sphere::fillHitRecord(Camera::Ray const &ray, double t, Camera::HitRecord &rec) const
+void Sphere::fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const
 {
     rec.t = t;
     rec.point = ray.at(t);

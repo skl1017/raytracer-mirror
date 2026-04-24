@@ -73,7 +73,7 @@ Ameth::Quaternion Camera::getGlobalOrientation() const
     return _orientation;
 }
 
-Camera::Ray Camera::ray(double u, double v) const
+Ray Camera::ray(double u, double v) const
 {
     double x = (2.0 * u - 1.0) * _aspect * _tanHalfVfov;
     double y = (1.0 - 2.0 * v) * _tanHalfVfov;

@@ -8,6 +8,7 @@
 #include "Camera/Camera.hpp"
 #include "Display/Display.hpp"
 #include "Math/Ameth.hpp"
+#include "Renderer/Renderer.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
 
 #include <cmath>
@@ -31,12 +32,11 @@ int main()
         for (unsigned y = 0; y < HEIGHT; ++y) {
             double const su = (static_cast<double>(x) + 0.5) / static_cast<double>(WIDTH);
             double const sv = (static_cast<double>(y) + 0.5) / static_cast<double>(HEIGHT);
-            Camera::Ray const r = cam.ray(su, sv);
+            Ray const r = cam.ray(su, sv);
             std::size_t const i = y * WIDTH + x;
-            Camera::HitRecord rec{};
+            Ray::HitRecord rec{};
             if (sphere.hit(r, rec)) {
-                Ameth::Vec3D const &n = rec.normal;
-                cam.getHDRImage()[i] = Ameth::Color(0.5 * (n.x + 1.0), 0.5 * (n.y + 1.0), 0.5 * (n.z + 1.0));
+                cam.getHDRImage()[i] = Renderer::normalToColor(rec.normal);
             } else {
                 cam.getHDRImage()[i] = Ameth::Color(0.0, 0.0, 0.2);
             }

@@ -29,7 +29,7 @@ public:
     double radius{};
 
 protected:
-    void fillHitRecord(Camera::Ray const &ray, double t, Camera::HitRecord &rec) const override;
+    void fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const override;
     std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const;
 
     std::shared_ptr<IMaterial> _material;
