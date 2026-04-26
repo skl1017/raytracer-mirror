@@ -26,12 +26,9 @@ Test(DLLoader, load_different_lib)
 {
     DLLoader<IPrimitive> loader;
 
-   // loader.open("libs/Primitives/librectangle.so");
     loader.open("libs/Primitives/libsphere.so");
     auto sphere = loader.getInstance("libs/Primitives/libsphere.so", "create");
-    //auto rectangle = loader.getInstance("libs/Primitives/librectangle.so", "create");
     cr_assert_eq(sphere->getName(), "Sphere");
-    //cr_assert_eq(rectangle->getName(), "Rectangle");
 }
 
 Test(DLLoader, load_same_lib)
