@@ -7,7 +7,9 @@
 
 #pragma once
 #include "plugins/IPrimitive.hpp"
+
 #include <memory>
+#include <vector>
 namespace RayTracer
 {
     class Scene {

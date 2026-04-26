@@ -8,17 +8,13 @@
 #pragma once
 
 #include "Math/Ameth.hpp"
+#include "Ray/Ray.hpp"
 
 #include <cstddef>
 #include <vector>
 
 class Camera {
 public:
-    struct Ray {
-        Ameth::Vec3D origin{};
-        Ameth::Vec3D direction{};
-    };
-
     Camera(Ameth::Vec3D pos, Ameth::Quaternion rot, double fov, unsigned width, unsigned height);
 
     Ray ray(double u, double v) const;
