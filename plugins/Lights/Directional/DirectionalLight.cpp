@@ -28,7 +28,7 @@ extern "C" {
                 return std::make_unique<RayTracer::DirectionalLight>(payload.direction, payload.color);
             };
 
-        factory.add("pointLight", f);
+        factory.add("directionLight", f);
     }
 
     ILight *create()
