@@ -15,6 +15,7 @@
 #include "plugins/IPrimitive.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
 #include "PluginsManager/PluginManager.hpp"
+#include "shared/plugins/ILight.hpp"
 
 namespace RayTracer
 {
@@ -39,6 +40,17 @@ namespace RayTracer
                 double position;
             } plane_payload_t;
 
+            typedef struct pointlight_paylod_s
+            {
+                Ameth::Vec3D pos;
+                Ameth::Color color;
+            } pointlight_paylod_t;
+            
+
+            using lightPayload = std::variant<
+                pointlight_paylod_t
+                >;
+
             using primitivePayload = std::variant<
                 primitive_payload_base_t,
                 sphere_payload_t,
@@ -46,8 +58,11 @@ namespace RayTracer
 
             using iPrimitiveCreateFunction = std::function<std::unique_ptr<IPrimitive> (const primitivePayload& p)>;
 
+            using iLightCreateFunction = std::function<std::unique_ptr<ILight> (const lightPayload& p)>;
+
 
             void add(const std::string &, iPrimitiveCreateFunction);
+            void add(const std::string &, iLightCreateFunction);
             std::unique_ptr<IPrimitive> createPrimitive(const std::string &, const primitivePayload &);
 
 
@@ -65,6 +80,7 @@ namespace RayTracer
 
             private:
                 std::map<std::string, iPrimitiveCreateFunction> _fPrimitives;
+                std::map<std::string, iLightCreateFunction> _fLight;
     };
 
 }

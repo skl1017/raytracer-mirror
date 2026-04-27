@@ -14,6 +14,13 @@ namespace RayTracer
         _fPrimitives[primitive] = func;
         return;
     }
+
+    void PluginFactory::add(const std::string &primitive, iLightCreateFunction func)
+    {
+        _fLight[primitive] = func;
+        return;
+    }
+
     std::unique_ptr<IPrimitive> PluginFactory::createPrimitive(const std::string &name, const primitivePayload &p)
     {
         auto func = _fPrimitives.find(name);
