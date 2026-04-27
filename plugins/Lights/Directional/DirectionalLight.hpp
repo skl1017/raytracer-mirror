@@ -8,6 +8,7 @@
 #pragma once
 #include "plugins/ILight.hpp"
 
+namespace RayTracer {
 class DirectionalLight : public ILight
 {
 public:
@@ -19,3 +20,4 @@ protected:
     Ameth::Vec3D _direction;
     Ameth::Color _LightColor;
 };
+}
