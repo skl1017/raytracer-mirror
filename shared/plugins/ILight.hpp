@@ -7,11 +7,12 @@
 
 #pragma once
 
-#include "Ameth.hpp"
+#include "Math/Ameth.hpp"
 #include "Camera/Camera.hpp"
+#include "Ray/Ray.hpp"
 
 class ILight
 {
 public:
-    virtual Ameth::Color getIllumination() = 0;
+    virtual Ameth::Color getIllumination(Ray::HitRecord &hitRecord) = 0;
 };
