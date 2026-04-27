@@ -6,9 +6,11 @@
 */
 
 #include "PointLight.hpp"
+#include "PluginFactory/PluginFactory.hpp"
 #include <iostream>
+#include <memory>
 
-Ameth::Color PointLight::getIllumination(Ray::HitRecord &hitRecord)
+Ameth::Color RayTracer::PointLight::getIllumination(Ray::HitRecord &hitRecord)
 {
     Ameth::Color illumination = _LightColor;
     Ameth::Vec3D incidentLight = (_position - hitRecord.point).normalized();
@@ -19,4 +21,28 @@ Ameth::Color PointLight::getIllumination(Ray::HitRecord &hitRecord)
     
     illumination *= intensity;
     return illumination;
+}
+
+extern "C" {
+    void registerPlugin(RayTracer::PluginFactory &factory)
+    {
+        RayTracer::PluginFactory::iLightCreateFunction const f = 
+            [](RayTracer::PluginFactory::lightPayload const &p) -> std::unique_ptr<ILight> {
+                auto const payload = std::get<RayTracer::PluginFactory::pointlight_paylod_t>(p);
+                return std::make_unique<RayTracer::PointLight>(payload.pos, payload.color);
+            };
+
+        factory.add("pointLight", f);
+    }
+
+    ILight *create()
+    {
+        return new RayTracer::PointLight(Ameth::Vec3D(0, 0, 0), Ameth::Color(0, 0, 0));
+    }
+
+    PLUGIN getLibType()
+    {
+        return LIGHT;
+    }
+
 }

@@ -8,14 +8,17 @@
 #pragma once
 #include "plugins/ILight.hpp"
 
-class PointLight : public ILight
-{
+namespace RayTracer {
+
+    class PointLight : public ILight
+    {
 public:
     PointLight(Ameth::Vec3D position, Ameth::Color lightColor) :
-        _position(position), _LightColor(lightColor) {};
+    _position(position), _LightColor(lightColor) {};
     ~PointLight() = default;
     Ameth::Color getIllumination(Ray::HitRecord &hitRecord) override;
-protected:
+    protected:
     Ameth::Vec3D _position;
     Ameth::Color _LightColor;
 };
+}
