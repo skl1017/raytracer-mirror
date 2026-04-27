@@ -17,8 +17,6 @@ Ameth::Color PointLight::getIllumination(Ray::HitRecord &hitRecord)
     double angle = hitRecord.normal.dot(incidentLight);
     double intensity = ambient + std::max(0.0, angle);
     
-    illumination.r *= intensity;
-    illumination.g *= intensity;
-    illumination.b *= intensity;
+    illumination *= intensity;
     return illumination;
 }
