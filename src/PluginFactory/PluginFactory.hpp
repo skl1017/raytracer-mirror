@@ -15,7 +15,7 @@
 #include "plugins/IPrimitive.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
 #include "PluginsManager/PluginManager.hpp"
-#include "shared/plugins/ILight.hpp"
+#include "plugins/ILight.hpp"
 
 namespace RayTracer
 {
@@ -40,15 +40,22 @@ namespace RayTracer
                 double position;
             } plane_payload_t;
 
-            typedef struct pointlight_paylod_s
+            typedef struct pointlight_payload_s
             {
                 Ameth::Vec3D pos;
                 Ameth::Color color;
-            } pointlight_paylod_t;
-            
+            } pointlight_payload_t;
+
+            typedef struct directionlight_payload_s
+            {
+                Ameth::Vec3D direction;
+                Ameth::Color color;
+            } directionlight_payload_t;
+
 
             using lightPayload = std::variant<
-                pointlight_paylod_t
+                pointlight_payload_t,
+                directionlight_payload_t
                 >;
 
             using primitivePayload = std::variant<
