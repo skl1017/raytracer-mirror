@@ -42,6 +42,26 @@ target_include_directories(pointLight PRIVATE
 set_target_properties(pointLight PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Lights)
 
+# === Plane ===
+
+set(PLANE
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Plane/Plane.cpp
+)
+
+add_library("plane" SHARED ${PLANE})
+
+target_include_directories(plane PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Plane
+)
+
+
+set_target_properties(plane PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/libs/Primitives
+)
+
 # === DirectionaLight ===
 
 set (DIRECTIONALLIGHT
@@ -57,3 +77,5 @@ target_include_directories(directionalLight PRIVATE
 
 set_target_properties(directionalLight PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Lights)
+
+
