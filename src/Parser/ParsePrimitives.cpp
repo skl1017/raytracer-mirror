@@ -46,7 +46,7 @@ namespace RayTracer
             PluginFactory::plane_payload_t planePayload = {
                 color, axis[0], position
             };
-            primitivesList.push_back(pluginFactory.createPrimitive("plane", planePayload));
+            primitivesList.push_back(pluginFactory.create("plane", planePayload));
         }
     }
 
@@ -71,7 +71,7 @@ namespace RayTracer
             PluginFactory::sphere_payload_t spherePayload = {
                 {{0, 0, 0}}, position, r
             };
-            primitivesList.push_back(pluginFactory.createPrimitive("sphere", spherePayload));
+            primitivesList.push_back(pluginFactory.create("sphere", spherePayload));
         }
     }
 }
