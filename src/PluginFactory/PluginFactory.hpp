@@ -40,16 +40,20 @@ namespace RayTracer
                 double position;
             } plane_payload_t;
 
-            typedef struct pointlight_payload_s
+            typedef struct light_payload_s
+            {
+                Ameth::Color color;
+
+            } light_payload_base_t;
+
+            typedef struct pointlight_payload_s: light_payload_base_t
             {
                 Ameth::Vec3D pos;
-                Ameth::Color color;
             } pointlight_payload_t;
 
-            typedef struct directionlight_payload_s
+            typedef struct directionlight_payload_s: light_payload_base_t
             {
                 Ameth::Vec3D direction;
-                Ameth::Color color;
             } directionlight_payload_t;
 
 
