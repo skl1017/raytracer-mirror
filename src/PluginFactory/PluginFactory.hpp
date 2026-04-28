@@ -74,7 +74,9 @@ namespace RayTracer
 
             void add(const std::string &, iPrimitiveCreateFunction);
             void add(const std::string &, iLightCreateFunction);
-            std::unique_ptr<IPrimitive> createPrimitive(const std::string &, const primitivePayload &);
+
+            std::unique_ptr<IPrimitive> create(const std::string &, const primitivePayload &);
+            std::unique_ptr<ILight> create(const std::string &, const lightPayload &);
 
 
             class PluginFactoryException : public std::exception
@@ -91,7 +93,7 @@ namespace RayTracer
 
             private:
                 std::map<std::string, iPrimitiveCreateFunction> _fPrimitives;
-                std::map<std::string, iLightCreateFunction> _fLight;
+                std::map<std::string, iLightCreateFunction> _fLights;
     };
 
 }
