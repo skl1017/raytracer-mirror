@@ -7,3 +7,11 @@
 
 #pragma once
 
+class IMaterial
+{
+private:
+    /* data */
+public:
+    IMaterial(/* args */) {};
+    ~IMaterial() = default;
+};

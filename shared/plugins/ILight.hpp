@@ -7,3 +7,11 @@
 
 #pragma once
 
+class ILight
+{
+private:
+    /* data */
+public:
+    ILight(/* args */) {};
+    ~ILight() = default;
+};
