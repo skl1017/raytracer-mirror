@@ -25,3 +25,35 @@ target_include_directories(sphere PRIVATE
 set_target_properties(sphere PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
 )
+
+# === PointLight ===
+
+set (POINTLIGHT 
+    ${CMAKE_SOURCE_DIR}/plugins/Lights/PointLight/PointLight.cpp)
+
+add_library(pointLight SHARED ${POINTLIGHT})
+
+target_include_directories(pointLight PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+)
+
+set_target_properties(pointLight PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Lights)
+
+# === DirectionaLight ===
+
+set (DIRECTIONALLIGHT 
+    ${CMAKE_SOURCE_DIR}/plugins/Lights/PointLight/PointLight.cpp)
+
+add_library(directionalLight SHARED ${DIRECTIONALLIGHT})
+
+target_include_directories(directionalLight PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+)
+
+set_target_properties(directionalLight PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Lights)
