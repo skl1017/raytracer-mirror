@@ -47,6 +47,8 @@ namespace RayTracer
 
             static void _parserGetPointLight(
                 PluginManager &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&);
+            static void _parserGetDirectionalLight(
+                PluginManager &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&);
 
             std::map<std::string, std::function<void (PluginManager &
                 ,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&)>> _primitivesParsingFns =
@@ -58,7 +60,7 @@ namespace RayTracer
                 ,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&)>> _lightsParsingFns =
                 {
                     {"point", _parserGetPointLight},
-                    // {"planes", _parserGetPlanes},
+                    {"directional", _parserGetDirectionalLight},
                 };
 
     };

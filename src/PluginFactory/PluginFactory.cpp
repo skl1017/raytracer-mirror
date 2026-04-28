@@ -6,7 +6,6 @@
 */
 
 #include "PluginFactory.hpp"
-
 namespace RayTracer
 {
     void PluginFactory::add(const std::string &primitive, iPrimitiveCreateFunction func)
@@ -15,9 +14,9 @@ namespace RayTracer
         return;
     }
 
-    void PluginFactory::add(const std::string &primitive, iLightCreateFunction func)
+    void PluginFactory::add(const std::string &light, iLightCreateFunction func)
     {
-        _fLights[primitive] = func;
+        _fLights[light] = func;
         return;
     }
 
@@ -31,6 +30,7 @@ namespace RayTracer
     }
     std::unique_ptr<ILight> PluginFactory::create(const std::string &name, const lightPayload &p)
     {
+
         auto func = _fLights.find(name);
         if (func == _fLights.end()){
             throw PluginFactoryException("No Plugin found for " + name);

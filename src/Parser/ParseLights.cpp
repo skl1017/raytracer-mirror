@@ -11,16 +11,16 @@ namespace RayTracer
 {
     std::vector<std::unique_ptr<ILight>> Parser::_parserGetLights(libconfig::Setting &p)
     {
-        std::vector<std::unique_ptr<ILight>> primitives;
+        std::vector<std::unique_ptr<ILight>> lights;
 
 
         for (auto it = p.begin(); it != p.end(); it++){
             auto primitiveFunc = _lightsParsingFns.find(it->getName());
             if (primitiveFunc != _lightsParsingFns.end()){
-                primitiveFunc->second(_pluginManager, _pluginFactory, *it, primitives);
+                primitiveFunc->second(_pluginManager, _pluginFactory, *it, lights);
             }
         }
-        return primitives;
+        return lights;
     }
 
     void Parser::_parserGetPointLight(PluginManager &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &pointLights, std::vector<std::unique_ptr<ILight>>& primitivesList)
@@ -50,6 +50,39 @@ namespace RayTracer
                 color, position
             };
             primitivesList.push_back(pluginFactory.create("pointLight", spherePayload));
+        }
+    }
+
+    void Parser::_parserGetDirectionalLight(PluginManager &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &pointLights, std::vector<std::unique_ptr<ILight>>& primitivesList)
+    {
+        pluginManager.primitiveLoader.open("libs/Lights/libdirectionalLight.so");
+        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.primitiveLoader.sym(
+            "libs/Lights/libdirectionalLight.so", "registerPlugin"
+        ));
+        reg(pluginFactory);
+
+        for (auto &s: pointLights)
+        {
+            auto &colorToParse = s.lookup("color");
+            auto color = Ameth::Color(
+                _parseDouble(colorToParse, "r"),
+                _parseDouble(colorToParse, "g"),
+                _parseDouble(colorToParse, "b")
+
+            );
+
+            auto &directionToParse = s.lookup("direction");
+
+            auto direction = Ameth::Vec3D(
+                _parseDouble(directionToParse, "x"),
+                _parseDouble(directionToParse, "y"),
+                _parseDouble(directionToParse, "z")
+            );
+
+            PluginFactory::directionlight_payload_t lightPayload = {
+                color, direction
+            };
+            primitivesList.push_back(pluginFactory.create("directionalLight", lightPayload));
         }
     }
 }
