@@ -13,25 +13,22 @@
 #include "PluginsManager/PluginManager.hpp"
 namespace RayTracer
 {
-    class Core {
+class Core {
+public:
 
-        public:
+    Core(const std::string &);
 
-            Core(const std::string &);
+private:
+    PluginManager _pluginManager;
+    Scene _scene;
 
-        private:
-            PluginManager _pluginManager;
-            Scene _scene;
-
-        public:
-            class CoreException : public std::exception {
-                private:
-                    std::string _m;
-                public:
-                    CoreException(const std::string &m):_m(m){}
-                    const char *what() const noexcept {
-                        return _m.c_str();
-                    }
-            };
+public:
+    class CoreException : public std::exception {
+    private:
+        std::string _m;
+    public:
+        CoreException(const std::string &m):_m(m){}
+        const char *what() const noexcept {return _m.c_str();}
     };
+};
 }
