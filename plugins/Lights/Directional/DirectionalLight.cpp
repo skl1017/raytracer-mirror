@@ -22,13 +22,12 @@ Ameth::Color RayTracer::DirectionalLight::getIllumination(Ray::HitRecord &hitRec
 extern "C" {
     void registerPlugin(RayTracer::PluginFactory &factory)
     {
-        RayTracer::PluginFactory::iLightCreateFunction const f = 
+        RayTracer::PluginFactory::iLightCreateFunction const f =
             [](RayTracer::PluginFactory::lightPayload const &p) -> std::unique_ptr<ILight> {
                 auto const payload = std::get<RayTracer::PluginFactory::directionlight_payload_t>(p);
                 return std::make_unique<RayTracer::DirectionalLight>(payload.direction, payload.color);
             };
-
-        factory.add("directionLight", f);
+        factory.add("directionalLight", f);
     }
 
     ILight *create()

@@ -65,7 +65,7 @@ set_target_properties(plane PROPERTIES
 # === DirectionaLight ===
 
 set (DIRECTIONALLIGHT
-    ${CMAKE_SOURCE_DIR}/plugins/Lights/PointLight/PointLight.cpp)
+    ${CMAKE_SOURCE_DIR}/plugins/Lights/Directional/DirectionalLight.cpp)
 
 add_library(directionalLight SHARED ${DIRECTIONALLIGHT})
 

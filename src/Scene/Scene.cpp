@@ -9,7 +9,9 @@
 
 namespace RayTracer
 {
-    Scene::Scene(std::vector<std::unique_ptr<IPrimitive>> primitives):_primitives(std::move(primitives))
+    Scene::Scene(std::vector<std::unique_ptr<IPrimitive>> primitives, std::vector<std::unique_ptr<ILight>> lights)
+    :_primitives(std::move(primitives))
+    , _lights(std::move(lights))
     {
 
     }
