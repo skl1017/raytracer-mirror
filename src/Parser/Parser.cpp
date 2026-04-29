@@ -21,7 +21,7 @@ namespace RayTracer
         auto primitives = _parserGetPrimitives(c.lookup("primitives"));
         auto lights = _parserGetLights(c.lookup("lights"));
 
-        return Scene(std::move(primitives), std::move(lights));
+        return Scene({},std::move(primitives), {}, std::move(lights));
     }
 
     double Parser::_parseDouble(libconfig::Setting &s, const std::string &key)
