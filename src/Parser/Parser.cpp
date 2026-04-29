@@ -50,14 +50,14 @@ namespace RayTracer
     }
 
 
-    Scene Parser::loadFile(const std::string &file)
-    {
-        libconfig::Config c = libconfig::Config();
-        c.readFile(file.c_str());
+    // Scene Parser::loadFile(const std::string &file)
+    // {
+    //     libconfig::Config c = libconfig::Config();
+    //     c.readFile(file.c_str());
 
-        auto primitives = _parserGetPrimitives(c.lookup("primitives"));
-        return Scene(std::move(primitives));
-    }
+    //     auto primitives = _parserGetPrimitives(c.lookup("primitives"));
+    //     return Scene(std::move(primitives));
+    // }
 
     double Parser::_parseDouble(libconfig::Setting &s, const std::string &key)
     {
