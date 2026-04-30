@@ -8,28 +8,23 @@
 #pragma once
 #include "plugins/IPrimitive.hpp"
 #include "plugins/ILight.hpp"
-#include "plugins/IMaterial.hpp"
-#include "Camera/Camera.hpp"
 #include <memory>
+#include <vector>
+
 namespace RayTracer
 {
     class Scene {
         public:
-            Scene(/* Camera &cam, */
-                std::vector<std::unique_ptr<IPrimitive>> primitives
-                // std::vector<std::unique_ptr<ILight>> &Lights,
-                // std::vector<std::unique_ptr<IMaterial>> &materials
-                );
-
-            std::vector<Ameth::Color> getScreen();
+            Scene(std::vector<std::unique_ptr<Camera>>,
+        std::vector<std::unique_ptr<IPrimitive>>,
+        std::vector<std::shared_ptr<IMaterial>>,
+        std::vector<std::unique_ptr<ILight>>);
 
         private:
-            Camera _camera;
+            std::vector<std::shared_ptr<IMaterial>> _materials;
+            std::vector<std::unique_ptr<Camera>> _cameras;
             std::vector<std::unique_ptr<IPrimitive>> _primitives;
             std::vector<std::unique_ptr<ILight>> _lights;
-            std::vector<std::unique_ptr<IMaterial>> _materials;
-
-            Ameth::Color _hitColor;
 
             bool rayHitPrimitive(Camera::Ray &ray);
     };

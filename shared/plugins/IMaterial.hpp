@@ -7,11 +7,7 @@
 
 #pragma once
 
-class IMaterial
-{
-private:
-    /* data */
+class IMaterial {
 public:
-    IMaterial(/* args */) {};
-    ~IMaterial() = default;
+    virtual ~IMaterial() = default;
 };

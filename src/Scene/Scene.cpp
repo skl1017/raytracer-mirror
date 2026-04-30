@@ -9,9 +9,15 @@
 
 namespace RayTracer
 {
-    Scene::Scene(std::vector<std::unique_ptr<IPrimitive>> primitives):
-        _camera(Camera(Ameth::Vec3D(0.0, 200, -350), Ameth::Quaternion::identity(), 2.0 * std::atan(0.5), 1920, 1080)),
-        _primitives(std::move(primitives))
+    Scene::Scene(std::vector<std::unique_ptr<Camera>> cameras,
+        std::vector<std::unique_ptr<IPrimitive>> primitives,
+        std::vector<std::shared_ptr<IMaterial>> materials,
+        std::vector<std::unique_ptr<ILight>> lights)
+
+    :_materials(materials),
+     _cameras(std::move(cameras)),
+    _primitives(std::move(primitives)),
+    _lights(std::move(lights))
     {
         
     }
