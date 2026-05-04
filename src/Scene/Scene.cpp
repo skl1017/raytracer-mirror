@@ -13,12 +13,10 @@ namespace RayTracer
         std::vector<std::unique_ptr<IPrimitive>> primitives,
         std::vector<std::shared_ptr<IMaterial>> materials,
         std::vector<std::unique_ptr<ILight>> lights)
-
-    :_materials(materials),
-     _cameras(std::move(cameras)),
-    _primitives(std::move(primitives)),
-    _lights(std::move(lights))
-    {
-
-    }
+    : _materials(std::move(materials)),
+        _cameras(std::move(cameras)),
+        _primitives(std::move(primitives)),
+        _lights(std::move(lights))
+{
+}
 }
