@@ -11,27 +11,22 @@
 #include "Math/Ameth.hpp"
 #include "plugins/IMaterial.hpp"
 #include "plugins/IPrimitive.hpp"
-
+#include "plugins/ILight.hpp"
 #include <memory>
 #include <vector>
 
 namespace RayTracer
 {
-    struct LightSource {
-        Ameth::Vec3D position;
-        Ameth::Color intensity;
-    };
-
     class Scene {
-    public:
-        Scene(std::vector<std::unique_ptr<Camera>> cameras,
-            std::vector<std::unique_ptr<IPrimitive>> primitives,
-            std::vector<std::shared_ptr<IMaterial>> materials = {},
-            std::vector<LightSource> lights = {});
+        public:
+            Scene(std::vector<std::unique_ptr<Camera>> cameras,
+                std::vector<std::unique_ptr<IPrimitive>> primitives,
+                std::vector<std::shared_ptr<IMaterial>> materials = {},
+                std::vector<std::unique_ptr<ILight>> lights = {});
 
-        std::vector<std::unique_ptr<Camera>> _cameras;
-        std::vector<std::unique_ptr<IPrimitive>> _primitives;
-        std::vector<std::shared_ptr<IMaterial>> _materials;
-        std::vector<LightSource> _lights;
+            std::vector<std::shared_ptr<IMaterial>> _materials;
+            std::vector<std::unique_ptr<Camera>> _cameras;
+            std::vector<std::unique_ptr<IPrimitive>> _primitives;
+            std::vector<std::unique_ptr<ILight>> _lights;
     };
 }

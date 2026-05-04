@@ -27,6 +27,8 @@ set(RAYTRACER
     ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
     ${PROJECT_SOURCE_DIR}/src/Core/Core.cpp
     ${PROJECT_SOURCE_DIR}/src/Parser/Parser.cpp
+    ${PROJECT_SOURCE_DIR}/src/Parser/ParsePrimitives.cpp
+    ${PROJECT_SOURCE_DIR}/src/Parser/ParseLights.cpp
     ${PROJECT_SOURCE_DIR}/src/PluginFactory/PluginFactory.cpp
 )
 

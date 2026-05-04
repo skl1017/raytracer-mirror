@@ -57,8 +57,7 @@ namespace RayTracer
         primitives.push_back(std::make_unique<RayTracer::Sphere>(Ameth::Vec3D(0.0, 255.0, -70.0), 24.0));
 
         std::vector<std::shared_ptr<IMaterial>> materials;
-        std::vector<LightSource> lights;
-        lights.push_back({Ameth::Vec3D(300.0, 400.0, -200.0), Ameth::Color(1.0, 1.0, 1.0)});
+        std::vector<std::unique_ptr<ILight>> lights;
 
         Scene scene(std::move(cameras), std::move(primitives), std::move(materials), std::move(lights));
         return Core(std::move(scene));

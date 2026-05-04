@@ -24,8 +24,10 @@ target_compile_options(test_binary PRIVATE
 
 find_package(SFML 2.5 COMPONENTS graphics window system audio REQUIRED)
 
-target_link_libraries(test_binary
+target_link_libraries(test_binary PRIVATE
     sfml-graphics sfml-window sfml-system sfml-audio
     config++.a
     criterion
+    sphere
 )
+target_link_options(test_binary PRIVATE -Wl,--export-dynamic)
