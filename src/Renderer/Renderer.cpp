@@ -11,6 +11,7 @@
 
 #include <cstddef>
 #include <limits>
+#include <iostream>
 
 Ameth::Color Renderer::normalToColor(Ameth::Vec3D const &n) noexcept
 {
@@ -19,6 +20,7 @@ Ameth::Color Renderer::normalToColor(Ameth::Vec3D const &n) noexcept
 
 void Renderer::renderNormals(RayTracer::Scene &scene)
 {
+
     std::unique_ptr<Camera> &cam = scene._cameras[0];
     unsigned const width = cam->imageWidth();
     unsigned const height = cam->imageHeight();
@@ -46,7 +48,6 @@ void Renderer::renderNormals(RayTracer::Scene &scene)
                     closestRec = rec;
                 }
             }
-
             if (hitAny)
                 hdr[i] = normalToColor(closestRec.normal);
             else

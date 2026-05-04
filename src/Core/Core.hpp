@@ -17,10 +17,10 @@ namespace RayTracer
 {
     class Core {
     public:
-        //explicit Core(const std::string &file);
-        Core(Scene scene);
+        explicit Core(const std::string &file);
+        // Core(Scene scene);
 
-        static Core createDemo();
+        // static Core createDemo();
         int run(std::string_view outputPath = "output.ppm");
 
         PluginManager _pluginManager;
