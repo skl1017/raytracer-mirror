@@ -17,6 +17,7 @@
 #include "plugins/ILight.hpp"
 #include "PluginFactory/PluginFactory.hpp"
 #include "PluginsManager/PluginManager.hpp"
+#include "Camera/Camera.hpp"
 #include <map>
 #include <functional>
 
@@ -37,7 +38,7 @@ namespace RayTracer
 
             std::vector<std::unique_ptr<IPrimitive>> _parserGetPrimitives(libconfig::Setting &s);
             std::vector<std::unique_ptr<ILight>> _parserGetLights(libconfig::Setting &s);
-
+            std::vector<std::unique_ptr<Camera>> _parserGetCameras(libconfig::Setting &s);
 
             static void _parserGetSpheres(
                 PluginManager &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&);
