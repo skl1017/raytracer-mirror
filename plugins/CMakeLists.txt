@@ -59,7 +59,7 @@ target_include_directories(plane PRIVATE
 
 
 set_target_properties(plane PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/libs/Primitives
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
 )
 
 # === DirectionaLight ===
