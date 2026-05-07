@@ -14,7 +14,6 @@
 #include <memory>
 #include "plugins/IPrimitive.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
-#include "PluginsManager/PluginManager.hpp"
 #include "plugins/ILight.hpp"
 
 namespace RayTracer
