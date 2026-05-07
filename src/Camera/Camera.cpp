@@ -17,7 +17,7 @@ Camera::Camera(Ameth::Vec3D pos, Ameth::Quaternion rot, double fov, unsigned wid
       _imageWidth(width),
       _imageHeight(height),
       _aspect(static_cast<double>(width) / static_cast<double>(height)),
-      _tanHalfVfov(std::tan(fov * 0.5)),
+      _tanHalfVfov(std::tan((fov * M_PI / 180) * 0.5)),
       _hdrImage(static_cast<std::size_t>(width) * height)
 {
 }
