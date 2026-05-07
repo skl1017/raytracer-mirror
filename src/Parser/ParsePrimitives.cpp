@@ -60,7 +60,13 @@ namespace RayTracer
 
         for (auto &s: spheres)
         {
+            auto &colorToParse = s.lookup("color");
+            auto color = Ameth::Color(
+                _parseDouble(colorToParse, "r"),
+                _parseDouble(colorToParse, "g"),
+                _parseDouble(colorToParse, "b")
 
+            );
             auto position = Ameth::Vec3D(
                 _parseDouble(s, "x"),
                 _parseDouble(s, "y"),
@@ -69,7 +75,7 @@ namespace RayTracer
             auto r = _parseDouble(s, "r");
 
             PluginFactory::sphere_payload_t spherePayload = {
-                {{0, 0, 0}}, position, r
+                color, position, r
             };
             primitivesList.push_back(pluginFactory.create("sphere", spherePayload));
         }
