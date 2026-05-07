@@ -22,18 +22,18 @@
 namespace RayTracer
 {
     Core::Core(const std::string &file)
-        : _pluginManager({
-              DLLoader<IPrimitive>(),
+        : _dlloader({
+              DLLoader(),
           }),
           _scene([&]() {
-              Parser parser(_pluginManager);
+              Parser parser(_dlloader);
               return parser.loadFile(file);
           }()){}
 
 
 
     // Core::Core(Scene scene)
-    //     : _pluginManager({
+    //     : _dlloader({
     //           DLLoader<IPrimitive>(),
     //       }),
     //       _scene(std::move(scene))

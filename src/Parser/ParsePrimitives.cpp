@@ -17,16 +17,16 @@ namespace RayTracer
         for (auto it = p.begin(); it != p.end(); it++){
             auto primitiveFunc = _primitivesParsingFns.find(it->getName());
             if (primitiveFunc != _primitivesParsingFns.end()){
-                primitiveFunc->second(_pluginManager, _pluginFactory, *it, primitives);
+                primitiveFunc->second(_dlloader, _pluginFactory, *it, primitives);
             }
         }
         return primitives;
     }
 
-    void Parser::_parserGetPlanes(PluginManager &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &planes, std::vector<std::unique_ptr<IPrimitive>>& primitivesList)
+    void Parser::_parserGetPlanes(DLLoader &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &planes, std::vector<std::unique_ptr<IPrimitive>>& primitivesList)
     {
-        pluginManager.primitiveLoader.open("libs/Primitives/libplane.so");
-        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.primitiveLoader.sym(
+        pluginManager.open("libs/Primitives/libplane.so");
+        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.sym(
                 "libs/Primitives/libplane.so", "registerPlugin"
             ));
         reg(pluginFactory);
@@ -50,10 +50,10 @@ namespace RayTracer
         }
     }
 
-    void Parser::_parserGetSpheres(PluginManager &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &spheres, std::vector<std::unique_ptr<IPrimitive>>& primitivesList)
+    void Parser::_parserGetSpheres(DLLoader &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &spheres, std::vector<std::unique_ptr<IPrimitive>>& primitivesList)
     {
-        pluginManager.primitiveLoader.open("libs/Primitives/libsphere.so");
-        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.primitiveLoader.sym(
+        pluginManager.open("libs/Primitives/libsphere.so");
+        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.sym(
                 "libs/Primitives/libsphere.so", "registerPlugin"
             ));
         reg(pluginFactory);

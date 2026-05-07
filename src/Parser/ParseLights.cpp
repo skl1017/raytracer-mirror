@@ -17,16 +17,16 @@ namespace RayTracer
         for (auto it = p.begin(); it != p.end(); it++){
             auto primitiveFunc = _lightsParsingFns.find(it->getName());
             if (primitiveFunc != _lightsParsingFns.end()){
-                primitiveFunc->second(_pluginManager, _pluginFactory, *it, lights);
+                primitiveFunc->second(_dlloader, _pluginFactory, *it, lights);
             }
         }
         return lights;
     }
 
-    void Parser::_parserGetPointLight(PluginManager &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &pointLights, std::vector<std::unique_ptr<ILight>>& primitivesList)
+    void Parser::_parserGetPointLight(DLLoader &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &pointLights, std::vector<std::unique_ptr<ILight>>& primitivesList)
     {
-        pluginManager.primitiveLoader.open("libs/Lights/libpointLight.so");
-        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.primitiveLoader.sym(
+        pluginManager.open("libs/Lights/libpointLight.so");
+        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.sym(
                 "libs/Lights/libpointLight.so", "registerPlugin"
             ));
         reg(pluginFactory);
@@ -53,10 +53,10 @@ namespace RayTracer
         }
     }
 
-    void Parser::_parserGetDirectionalLight(PluginManager &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &pointLights, std::vector<std::unique_ptr<ILight>>& primitivesList)
+    void Parser::_parserGetDirectionalLight(DLLoader &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &pointLights, std::vector<std::unique_ptr<ILight>>& primitivesList)
     {
-        pluginManager.primitiveLoader.open("libs/Lights/libdirectionalLight.so");
-        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.primitiveLoader.sym(
+        pluginManager.open("libs/Lights/libdirectionalLight.so");
+        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.sym(
             "libs/Lights/libdirectionalLight.so", "registerPlugin"
         ));
         reg(pluginFactory);
