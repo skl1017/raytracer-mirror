@@ -6,12 +6,12 @@
 */
 
 #include "Renderer/Renderer.hpp"
-#include "Ray/Ray.hpp"
 #include "Scene/Scene.hpp"
 
 #include <cstddef>
 #include <limits>
 #include <iostream>
+#include <algorithm>
 
 Ameth::Color Renderer::normalToColor(Ameth::Vec3D const &n) noexcept
 {
@@ -49,9 +49,24 @@ void Renderer::renderNormals(RayTracer::Scene &scene)
                 }
             }
             if (hitAny)
-                hdr[i] = normalToColor(closestRec.normal);
+                hdr[i] = computeLight(closestRec, scene);
             else
                 hdr[i] = Ameth::Color(0.0, 0.0, 0.2);
         }
     }
+}
+
+Ameth::Color Renderer::computeLight(Ray::HitRecord &hit, RayTracer::Scene &scene)
+{
+    Ameth::Color lightColor(0, 0, 0);
+    Ameth::Color finalColor(0, 0, 0);
+
+    for (size_t i = 0; i < scene._lights.size(); i++) {
+        lightColor = scene._lights[i]->getIllumination(hit);
+
+        finalColor.r = std::max(finalColor.r, lightColor.r);
+        finalColor.g = std::max(finalColor.g, lightColor.g);
+        finalColor.b = std::max(finalColor.b, lightColor.b);
+    }
+    return finalColor;
 }

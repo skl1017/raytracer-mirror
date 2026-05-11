@@ -14,6 +14,7 @@ namespace RayTracer
 
     Scene Parser::loadFile(const std::string &file)
     {
+<<<<<<< Updated upstream
         libconfig::Config c = libconfig::Config();
         c.readFile(file.c_str());
 
@@ -23,6 +24,19 @@ namespace RayTracer
         auto cameras = _parserGetCameras(c.lookup("cameras"));
 
         return Scene(std::move(cameras),std::move(primitives), {}, std::move(lights));
+=======
+        try {
+            libconfig::Config c = libconfig::Config();
+            c.readFile(file.c_str());
+            auto primitives = _parserGetPrimitives(c.lookup("primitives"));
+            auto lights = _parserGetLights(c.lookup("lights"));
+            auto cameras = _parserGetCameras(c.lookup("cameras"));
+            return Scene(std::move(cameras),std::move(primitives), {}, std::move(lights));
+        } catch (const libconfig::ParseException e){
+            std::cout << "error : " << e.getError() << std::endl << "line: " << e.getLine() << std::endl;
+        }
+
+>>>>>>> Stashed changes
     }
 
     double Parser::_parseDouble(libconfig::Setting &s, const std::string &key)
