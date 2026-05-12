@@ -8,7 +8,6 @@
 #include "Camera/Camera.hpp"
 #include "Display/Display.hpp"
 #include "Math/Ameth.hpp"
-#include "Renderer/Renderer.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
 
 #include <cmath>
