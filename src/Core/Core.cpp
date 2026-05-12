@@ -9,8 +9,11 @@
 #include "Camera/Camera.hpp"
 #include "Parser/Parser.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
+<<<<<<< HEAD
 #include "Renderer/ParallelImageScheduler.hpp"
 #include "Renderer/Renderer.hpp"
+=======
+>>>>>>> 2174568da48959c2e77572dc7dc907db9f8bb07e
 #include "plugins/IPrimitive.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
@@ -32,7 +35,11 @@ namespace RayTracer
           _scene([&]() {
               Parser parser(_dlloader);
               return parser.loadFile(file);
-          }()){}
+          }())
+        {
+            _renderers.push_back(std::make_unique<NormalRenderer>(Ameth::Color(0.2, 0.2, 0.2)));
+            _renderers.push_back(std::make_unique<RaytracingRender>(Ameth::Color(0, 0, 0)));
+        };
 
 
 
@@ -76,7 +83,8 @@ namespace RayTracer
                 display.getWindow().close();
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Key::Tab) {
-                    printf("switch renderer\n");
+                    _select_renderer = (_select_renderer + 1) % _renderers.size();
+                    _renderers[_select_renderer]->renderScreen(_scene, _scene._cameras[0]);
                 }
             }
         }
@@ -85,7 +93,7 @@ namespace RayTracer
     int Core::run(std::string_view outputPath)
     {
         ParallelImageScheduler scheduler;
-        Renderer::renderNormals(_scene, scheduler);
+        _renderers[_select_renderer]->renderScreen(_scene, _scene._cameras[0]);
 
         for (size_t index = 0; index < _scene._cameras.size(); ++index) {
             Display display(_scene._cameras[index]->imageWidth(), _scene._cameras[index]->imageHeight(), "raytracer");
