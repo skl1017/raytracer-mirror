@@ -21,10 +21,10 @@ namespace RayTracer
             auto lights = _parserGetLights(c.lookup("lights"));
             auto cameras = _parserGetCameras(c.lookup("cameras"));
             return Scene(std::move(cameras),std::move(primitives), {}, std::move(lights));
-        } catch (const libconfig::ParseException &e){
-            std::cerr << e.getFile() << ": Parsing error at line " << e.getLine() << ": " << e.getError() << std::endl;
-            throw e;
+        } catch (const libconfig::ParseException e){
+            std::cout << "error : " << e.getError() << std::endl << "line: " << e.getLine() << std::endl;
         }
+
     }
 
     double Parser::_parseDouble(libconfig::Setting &s, const std::string &key)
