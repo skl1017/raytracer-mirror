@@ -1,24 +1,25 @@
 /*
 ** EPITECH PROJECT, 2026
-** raytracer-mirror
+** RayTracer-mirror
 ** File description:
-** flatColor
+** RayTracer::flatColor
 */
 
 #include "flatColor.hpp"
 #include <iostream>
+#include "PluginFactory/PluginFactory.hpp"
 
-flatColor::flatColor(Ameth::Color color, int transparency):
+RayTracer::flatColor::flatColor(Ameth::Color color, int transparency):
     _surfaceColor(color),
     _transparency(transparency)
 {
 }
 
-flatColor::~flatColor()
+RayTracer::flatColor::~flatColor()
 {
 }
 
-Ameth::Color flatColor::getColor(Ameth::Color IncomingLightColor)
+Ameth::Color RayTracer::flatColor::getColor(Ameth::Color IncomingLightColor)
 {
     Ameth::Color finalColor;
 
@@ -32,13 +33,13 @@ Ameth::Color flatColor::getColor(Ameth::Color IncomingLightColor)
     return finalColor * (1.0 - (_transparency / 100));
 }
 
-bool flatColor::isTransparent()
+bool RayTracer::flatColor::isTransparent()
 {
     return _transparency != 0;
 }
 
 
-double flatColor::getTransparency()
+double RayTracer::flatColor::getTransparency()
 {
     return 1.0 - _transparency / 100;
 }
