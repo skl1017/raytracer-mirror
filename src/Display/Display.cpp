@@ -34,13 +34,9 @@ bool Display::create()
     return _window.isOpen();
 }
 
-void Display::pollEvents()
+void Display::pollEvents(sf::Event event)
 {
-    sf::Event event{};
-    while (_window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed)
-            _window.close();
-    }
+    _window.pollEvent(event);
 }
 
 void Display::update(const std::vector<Ameth::Color> hdrImage)

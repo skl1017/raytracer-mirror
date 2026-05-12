@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Display/Display.hpp"
 #include "Scene/Scene.hpp"
 #include "DLLoader/DLLoader.hpp"
 #include <exception>
@@ -22,6 +23,8 @@ namespace RayTracer
 
         // static Core createDemo();
         int run(std::string_view outputPath = "output.ppm");
+
+        void handleEnvents(Display &display);
 
         DLLoader _dlloader;
         Scene _scene;

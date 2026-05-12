@@ -7,14 +7,17 @@
 
 #include "Core.hpp"
 #include "Camera/Camera.hpp"
-#include "Display/Display.hpp"
 #include "Parser/Parser.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
 #include "Renderer/Renderer.hpp"
 #include "plugins/IPrimitive.hpp"
 
+#include <SFML/Window/Keyboard.hpp>
 #include <cmath>
+#include <cstddef>
+#include <cstdio>
 #include <memory>
+#include <queue>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -63,6 +66,21 @@ namespace RayTracer
     //     return Core("build/example.cfg");
     // }
 
+    void Core::handleEnvents(Display &display)
+    {
+        sf::RenderWindow &window = display.getWindow();
+        sf::Event event{};
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                display.getWindow().close();
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Key::Tab) {
+                    printf("switch renderer\n");
+                }
+            }
+        }
+    }
+
     int Core::run(std::string_view outputPath)
     {
         Renderer::renderNormals(_scene);
@@ -72,7 +90,7 @@ namespace RayTracer
             if (!display.create())
                 throw std::runtime_error("Failed to create SFML window or texture");
             while (display.isOpen()) {
-                display.pollEvents();
+                handleEnvents(display);
                 display.update(_scene._cameras[index]->getHDRImage());
             }
             if (!display.savePPM(std::string(outputPath)))
