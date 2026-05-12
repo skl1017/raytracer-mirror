@@ -9,13 +9,13 @@
 
 #include "Math/Ameth.hpp"
 #include "Renderer/ParallelImageScheduler.hpp"
-
-namespace RayTracer {
-    class Scene;
-}
+#include "Ray/Ray.hpp"
+#include "Scene/Scene.hpp"
 
 class Renderer {
 public:
     static Ameth::Color normalToColor(Ameth::Vec3D const &n) noexcept;
-    static void renderNormals(RayTracer::Scene &scene, ParallelImageScheduler &scheduler);
+    static void renderNormals(RayTracer::Scene &scene, ParallelImageScheduler& scheduler);
+private:
+    static Ameth::Color computeLight(Ray::HitRecord &hit, RayTracer::Scene &scene);
 };

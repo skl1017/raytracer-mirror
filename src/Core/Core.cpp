@@ -7,14 +7,18 @@
 
 #include "Core.hpp"
 #include "Camera/Camera.hpp"
-#include "Display/Display.hpp"
 #include "Parser/Parser.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
+#include "Renderer/ParallelImageScheduler.hpp"
 #include "Renderer/Renderer.hpp"
 #include "plugins/IPrimitive.hpp"
 
+#include <SFML/Window/Keyboard.hpp>
 #include <cmath>
+#include <cstddef>
+#include <cstdio>
 #include <memory>
+#include <queue>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -22,18 +26,18 @@
 namespace RayTracer
 {
     Core::Core(const std::string &file)
-        : _pluginManager({
-              DLLoader<IPrimitive>(),
+        : _dlloader({
+              DLLoader(),
           }),
           _scene([&]() {
-              Parser parser(_pluginManager);
+              Parser parser(_dlloader);
               return parser.loadFile(file);
           }()){}
 
 
 
     // Core::Core(Scene scene)
-    //     : _pluginManager({
+    //     : _dlloader({
     //           DLLoader<IPrimitive>(),
     //       }),
     //       _scene(std::move(scene))
@@ -63,16 +67,32 @@ namespace RayTracer
     //     return Core("build/example.cfg");
     // }
 
+    void Core::handleEnvents(Display &display)
+    {
+        sf::RenderWindow &window = display.getWindow();
+        sf::Event event{};
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                display.getWindow().close();
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Key::Tab) {
+                    printf("switch renderer\n");
+                }
+            }
+        }
+    }
+
     int Core::run(std::string_view outputPath)
     {
-        Renderer::renderNormals(_scene);
+        ParallelImageScheduler scheduler;
+        Renderer::renderNormals(_scene, scheduler);
 
         for (size_t index = 0; index < _scene._cameras.size(); ++index) {
             Display display(_scene._cameras[index]->imageWidth(), _scene._cameras[index]->imageHeight(), "raytracer");
             if (!display.create())
                 throw std::runtime_error("Failed to create SFML window or texture");
             while (display.isOpen()) {
-                display.pollEvents();
+                handleEnvents(display);
                 display.update(_scene._cameras[index]->getHDRImage());
             }
             if (!display.savePPM(std::string(outputPath)))

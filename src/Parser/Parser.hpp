@@ -15,8 +15,8 @@
 #include <memory>
 #include "plugins/IPrimitive.hpp"
 #include "plugins/ILight.hpp"
+#include "DLLoader/DLLoader.hpp"
 #include "PluginFactory/PluginFactory.hpp"
-#include "PluginsManager/PluginManager.hpp"
 #include "Camera/Camera.hpp"
 #include <map>
 #include <functional>
@@ -29,10 +29,10 @@ namespace RayTracer
             using RegisterPluginFn = void(*)(RayTracer::PluginFactory&);
 
 
-            Parser(PluginManager&);
+            Parser(DLLoader&);
             Scene loadFile(const std::string &);
         private:
-            PluginManager& _pluginManager;
+            DLLoader& _dlloader;
             PluginFactory _pluginFactory;
             static double _parseDouble(libconfig::Setting &s, const std::string &);
 
@@ -41,23 +41,23 @@ namespace RayTracer
             std::vector<std::unique_ptr<Camera>> _parserGetCameras(libconfig::Setting &s);
 
             static void _parserGetSpheres(
-                PluginManager &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&);
+                DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&);
             static void _parserGetPlanes(
-                PluginManager &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&);
+                DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&);
 
 
             static void _parserGetPointLight(
-                PluginManager &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&);
+                DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&);
             static void _parserGetDirectionalLight(
-                PluginManager &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&);
+                DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&);
 
-            std::map<std::string, std::function<void (PluginManager &
+            std::map<std::string, std::function<void (DLLoader &
                 ,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&)>> _primitivesParsingFns =
                 {
                     {"spheres", _parserGetSpheres},
                     {"planes", _parserGetPlanes},
                 };
-            std::map<std::string, std::function<void (PluginManager &
+            std::map<std::string, std::function<void (DLLoader &
                 ,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&)>> _lightsParsingFns =
                 {
                     {"point", _parserGetPointLight},

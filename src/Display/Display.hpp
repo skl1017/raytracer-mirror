@@ -26,7 +26,8 @@ public:
 
     bool create();
     bool isOpen() { return _window.isOpen(); }
-    void pollEvents();
+    sf::RenderWindow &getWindow() {return _window; }
+    void pollEvents(sf::Event event);
     void update(const std::vector<Ameth::Color> hdrImage);
     std::vector<Ameth::Color> loadHDRTestSample(double height, double width);
     bool savePPM(const std::string &path) const;

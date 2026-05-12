@@ -10,19 +10,21 @@
 
 namespace RayTracer
 {
-    Parser::Parser(PluginManager &pluginManager):_pluginManager(pluginManager){}
+    Parser::Parser(DLLoader &pluginManager):_dlloader(pluginManager){}
 
     Scene Parser::loadFile(const std::string &file)
     {
-        libconfig::Config c = libconfig::Config();
-        c.readFile(file.c_str());
+        try {
+            libconfig::Config c = libconfig::Config();
+            c.readFile(file.c_str());
+            auto primitives = _parserGetPrimitives(c.lookup("primitives"));
+            auto lights = _parserGetLights(c.lookup("lights"));
+            auto cameras = _parserGetCameras(c.lookup("cameras"));
+            return Scene(std::move(cameras),std::move(primitives), {}, std::move(lights));
+        } catch (const libconfig::ParseException e){
+            std::cout << "error : " << e.getError() << std::endl << "line: " << e.getLine() << std::endl;
+        }
 
-
-        auto primitives = _parserGetPrimitives(c.lookup("primitives"));
-        auto lights = _parserGetLights(c.lookup("lights"));
-        auto cameras = _parserGetCameras(c.lookup("cameras"));
-
-        return Scene(std::move(cameras),std::move(primitives), {}, std::move(lights));
     }
 
     double Parser::_parseDouble(libconfig::Setting &s, const std::string &key)

@@ -14,7 +14,6 @@
 #include <memory>
 #include "plugins/IPrimitive.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
-#include "PluginsManager/PluginManager.hpp"
 #include "plugins/ILight.hpp"
 
 namespace RayTracer
@@ -56,6 +55,11 @@ namespace RayTracer
                 Ameth::Vec3D direction;
             } directionlight_payload_t;
 
+            typedef struct flatColor_payload_s
+            {
+                Ameth::Color color;
+                int transparency;
+            } flatColor_payload_t;
 
             using lightPayload = std::variant<
                 pointlight_payload_t,
@@ -66,6 +70,11 @@ namespace RayTracer
                 primitive_payload_base_t,
                 sphere_payload_t,
                 plane_payload_t>;
+
+            using materialPayload = std::variant<
+                flatColor_payload_t>;
+
+            using iMaterialCreateFunction = std::function<std::unique_ptr<IMaterial> (const materialPayload& p)>;
 
             using iPrimitiveCreateFunction = std::function<std::unique_ptr<IPrimitive> (const primitivePayload& p)>;
 
@@ -94,6 +103,7 @@ namespace RayTracer
             private:
                 std::map<std::string, iPrimitiveCreateFunction> _fPrimitives;
                 std::map<std::string, iLightCreateFunction> _fLights;
+                std::map<std::string, iMaterialCreateFunction> _fMaterials;
     };
 
 }
