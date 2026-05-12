@@ -10,7 +10,7 @@
 
 namespace RayTracer
 {
-    Parser::Parser(PluginManager &pluginManager):_pluginManager(pluginManager){}
+    Parser::Parser(DLLoader &pluginManager):_dlloader(pluginManager){}
 
     Scene Parser::loadFile(const std::string &file)
     {

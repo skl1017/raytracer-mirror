@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Scene/Scene.hpp"
-#include "PluginsManager/PluginManager.hpp"
+#include "DLLoader/DLLoader.hpp"
 #include <exception>
 #include <string>
 #include <string_view>
@@ -23,7 +23,7 @@ namespace RayTracer
         // static Core createDemo();
         int run(std::string_view outputPath = "output.ppm");
 
-        PluginManager _pluginManager;
+        DLLoader _dlloader;
         Scene _scene;
 
         class CoreException : public std::exception {
