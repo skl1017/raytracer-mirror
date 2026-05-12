@@ -12,12 +12,14 @@
 #include "Camera/Camera.hpp"
 #include <optional>
 #include <string>
+#include <memory>
+
 namespace RayTracer
 {
     class Plane : public APrimitive
     {
         public:
-            Plane(char, double, const Ameth::Color &);
+            Plane(char, double, std::shared_ptr<IMaterial>);
 
             std::string getName() const override { return "Plane"; }
             Ameth::Vec3D pointAt(double u, double v) const override
@@ -46,8 +48,6 @@ namespace RayTracer
         private:
             char _axis;
             double _position;
-            Ameth::Color _color;
-
-
+            std::shared_ptr<IMaterial> _material;
     };
 }

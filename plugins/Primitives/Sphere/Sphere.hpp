@@ -32,7 +32,6 @@ protected:
     void fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const override;
     std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const;
 
-    std::shared_ptr<IMaterial> _material;
     std::string name{"Sphere"};
 };
 

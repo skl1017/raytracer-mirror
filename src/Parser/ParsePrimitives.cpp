@@ -44,7 +44,7 @@ namespace RayTracer
             auto position = _parseDouble(s, "position");
 
             PluginFactory::plane_payload_t planePayload = {
-                color, axis[0], position
+                nullptr, axis[0], position
             };
             primitivesList.push_back(pluginFactory.create("plane", planePayload));
         }
@@ -69,7 +69,7 @@ namespace RayTracer
             auto r = _parseDouble(s, "r");
 
             PluginFactory::sphere_payload_t spherePayload = {
-                {{0, 0, 0}}, position, r
+                nullptr, position, r
             };
             primitivesList.push_back(pluginFactory.create("sphere", spherePayload));
         }

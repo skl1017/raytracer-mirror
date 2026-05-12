@@ -9,7 +9,7 @@
 
 namespace RayTracer
 {
-    Plane::Plane(char axis, double position, const Ameth::Color& color):_axis(axis),_position(position),_color(color){}
+    Plane::Plane(char axis, double position, std::shared_ptr<IMaterial> material):APrimitive(material),_axis(axis),_position(position){}
 
     extern "C"
     {
@@ -17,7 +17,7 @@ namespace RayTracer
             PluginFactory::iPrimitiveCreateFunction f = [](const RayTracer::PluginFactory::primitivePayload &p)
             {
                 auto planePayload = std::get<PluginFactory::plane_payload_t>(p);
-                return std::make_unique<Plane>(planePayload.axis, planePayload.position, planePayload.color);
+                return std::make_unique<Plane>(planePayload.axis, planePayload.position, planePayload.material);
             };
             factory.add("plane", f);
             return;

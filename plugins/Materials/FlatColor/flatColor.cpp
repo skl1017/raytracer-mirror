@@ -43,3 +43,13 @@ double RayTracer::flatColor::getTransparency()
 {
     return 1.0 - _transparency / 100;
 }
+
+extern "C" void registerPlugin(RayTracer::PluginFactory &factory)
+{
+    RayTracer::PluginFactory::iMaterialCreateFunction const f
+        = [](RayTracer::PluginFactory::materialPayload const &p) -> std::shared_ptr<IMaterial> {
+        auto const materialPayload = std::get<RayTracer::PluginFactory::flatColor_payload_t>(p);
+        return std::make_shared<RayTracer::flatColor>(materialPayload.color, materialPayload.transparency);
+    };
+    factory.add("flatColor", f);
+}

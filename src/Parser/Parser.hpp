@@ -39,6 +39,7 @@ namespace RayTracer
             std::vector<std::unique_ptr<IPrimitive>> _parserGetPrimitives(libconfig::Setting &s);
             std::vector<std::unique_ptr<ILight>> _parserGetLights(libconfig::Setting &s);
             std::vector<std::unique_ptr<Camera>> _parserGetCameras(libconfig::Setting &s);
+            std::map<std::string, std::shared_ptr<IMaterial>> _parserGetMaterials(libconfig::Setting &s);
 
             static void _parserGetSpheres(
                 DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&);
@@ -50,6 +51,9 @@ namespace RayTracer
                 DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&);
             static void _parserGetDirectionalLight(
                 DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&);
+
+            static void _parserGetFlatColor(
+                DLLoader &,PluginFactory &,libconfig::Setting &s, std::map<std::string, std::shared_ptr<IMaterial>> &);
 
             std::map<std::string, std::function<void (DLLoader &
                 ,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&)>> _primitivesParsingFns =
@@ -63,6 +67,14 @@ namespace RayTracer
                     {"point", _parserGetPointLight},
                     {"directional", _parserGetDirectionalLight},
                 };
+
+            std::map<std::string, std::function<void (DLLoader &,PluginFactory &,libconfig::Setting &s
+                , std::map<std::string, std::shared_ptr<IMaterial>> &)>> _materialsParsingFns =
+                {
+                    {"flatColor", _parserGetFlatColor},
+                };
+
+
 
     };
 }

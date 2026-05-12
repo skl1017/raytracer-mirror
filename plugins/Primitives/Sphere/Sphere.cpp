@@ -16,12 +16,8 @@
 
 namespace RayTracer {
 
-Sphere::Sphere(Ameth::Vec3D c, double r, std::shared_ptr<IMaterial> material)
-    : center(c),
-      radius(std::max(0.0, r)),
-      _material(std::move(material))
-{
-}
+Sphere::Sphere(Ameth::Vec3D c, double r, std::shared_ptr<IMaterial> material): APrimitive(material), center(c),
+      radius(std::max(0.0, r)){}
 
 std::optional<std::pair<double, double>> Sphere::lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {
@@ -70,7 +66,7 @@ extern "C" void registerPlugin(RayTracer::PluginFactory &factory)
     RayTracer::PluginFactory::iPrimitiveCreateFunction const f
         = [](RayTracer::PluginFactory::primitivePayload const &p) -> std::unique_ptr<IPrimitive> {
         auto const spherePayload = std::get<RayTracer::PluginFactory::sphere_payload_t>(p);
-        return std::make_unique<RayTracer::Sphere>(spherePayload.position, spherePayload.r, nullptr);
+        return std::make_unique<RayTracer::Sphere>(spherePayload.position, spherePayload.r, std::move(spherePayload.material));
     };
     factory.add("sphere", f);
 }
