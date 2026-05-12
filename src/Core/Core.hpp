@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Display/Display.hpp"
+#include "Renderer/ParallelImageScheduler.hpp"
 #include "Scene/Scene.hpp"
 #include "DLLoader/DLLoader.hpp"
 #include <exception>
@@ -31,12 +32,14 @@ namespace RayTracer
         Scene _scene;
         std::size_t _select_renderer = 0;
         std::vector<std::unique_ptr<IRenderer>> _renderers;
+        ParallelImageScheduler _scheduler;
+
         class CoreException : public std::exception {
-        private:
-            std::string _m;
-        public:
-            CoreException(const std::string &m) : _m(m) {}
-            const char *what() const noexcept { return _m.c_str(); }
+            private:
+                std::string _m;
+            public:
+                CoreException(const std::string &m) : _m(m) {}
+                const char *what() const noexcept { return _m.c_str(); }
         };
     };
 }

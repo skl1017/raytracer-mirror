@@ -15,5 +15,5 @@ protected:
 public:
     ARenderer(Ameth::Color bgColor) : _bg(bgColor) {};
     ~ARenderer() {};
-    void renderScreen(RayTracer::Scene &scene, std::unique_ptr<Camera> &camera) override;
+    void renderScreen(RayTracer::Scene &scene, std::unique_ptr<Camera> &camera, ParallelImageScheduler &scheduler) override;
 };
