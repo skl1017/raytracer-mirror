@@ -9,7 +9,7 @@
 
 namespace RayTracer
 {
-    std::vector<std::unique_ptr<IPrimitive>> Parser::_parserGetPrimitives(libconfig::Setting &p)
+    std::vector<std::unique_ptr<IPrimitive>> Parser::_parserGetPrimitives(libconfig::Setting &p, std::map<std::string, std::shared_ptr<IMaterial>> materials)
     {
         std::vector<std::unique_ptr<IPrimitive>> primitives;
 
@@ -17,13 +17,14 @@ namespace RayTracer
         for (auto it = p.begin(); it != p.end(); it++){
             auto primitiveFunc = _primitivesParsingFns.find(it->getName());
             if (primitiveFunc != _primitivesParsingFns.end()){
-                primitiveFunc->second(_dlloader, _pluginFactory, *it, primitives);
+                primitiveFunc->second(_dlloader, _pluginFactory, *it, primitives, materials);
             }
         }
         return primitives;
     }
 
-    void Parser::_parserGetPlanes(DLLoader &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &planes, std::vector<std::unique_ptr<IPrimitive>>& primitivesList)
+    void Parser::_parserGetPlanes(DLLoader &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &planes
+        , std::vector<std::unique_ptr<IPrimitive>>& primitivesList, std::map<std::string, std::shared_ptr<IMaterial>> materials)
     {
         pluginManager.open("libs/Primitives/libplane.so");
         auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.sym(
@@ -33,24 +34,25 @@ namespace RayTracer
 
         for (auto &s: planes)
         {
-            auto &colorToParse = s.lookup("color");
-            auto color = Ameth::Color(
-                _parseDouble(colorToParse, "r"),
-                _parseDouble(colorToParse, "g"),
-                _parseDouble(colorToParse, "b")
+            std::string materialName = s.lookup("material");
+            auto primitiveMaterial = materials.find(materialName);
 
-            );
+            if (primitiveMaterial == materials.end()){
+                throw;
+            }
+
             std::string axis = s.lookup("axis");
             auto position = _parseDouble(s, "position");
 
             PluginFactory::plane_payload_t planePayload = {
-                color, axis[0], position
+                {primitiveMaterial->second}, axis[0], position
             };
             primitivesList.push_back(pluginFactory.create("plane", planePayload));
         }
     }
 
-    void Parser::_parserGetSpheres(DLLoader &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &spheres, std::vector<std::unique_ptr<IPrimitive>>& primitivesList)
+    void Parser::_parserGetSpheres(DLLoader &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &spheres
+        , std::vector<std::unique_ptr<IPrimitive>>& primitivesList, std::map<std::string, std::shared_ptr<IMaterial>> materials)
     {
         pluginManager.open("libs/Primitives/libsphere.so");
         auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.sym(
@@ -61,6 +63,13 @@ namespace RayTracer
         for (auto &s: spheres)
         {
 
+             std::string materialName = s.lookup("material");
+            auto primitiveMaterial = materials.find(materialName);
+
+            if (primitiveMaterial == materials.end()){
+                throw;
+            }
+
             auto position = Ameth::Vec3D(
                 _parseDouble(s, "x"),
                 _parseDouble(s, "y"),
@@ -69,7 +78,7 @@ namespace RayTracer
             auto r = _parseDouble(s, "r");
 
             PluginFactory::sphere_payload_t spherePayload = {
-                {{0, 0, 0}}, position, r
+                {primitiveMaterial->second}, position, r
             };
             primitivesList.push_back(pluginFactory.create("sphere", spherePayload));
         }

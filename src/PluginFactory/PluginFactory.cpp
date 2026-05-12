@@ -20,6 +20,12 @@ namespace RayTracer
         return;
     }
 
+    void PluginFactory::add(const std::string &material, iMaterialCreateFunction func)
+    {
+        _fMaterials[material] = func;
+        return;
+    }
+
     std::unique_ptr<IPrimitive> PluginFactory::create(const std::string &name, const primitivePayload &p)
     {
         auto func = _fPrimitives.find(name);
@@ -33,6 +39,15 @@ namespace RayTracer
 
         auto func = _fLights.find(name);
         if (func == _fLights.end()){
+            throw PluginFactoryException("No Plugin found for " + name);
+        }
+        return func->second(p);
+    }
+    std::shared_ptr<IMaterial> PluginFactory::create(const std::string &name, const materialPayload &p)
+    {
+
+        auto func = _fMaterials.find(name);
+        if (func == _fMaterials.end()){
             throw PluginFactoryException("No Plugin found for " + name);
         }
         return func->second(p);

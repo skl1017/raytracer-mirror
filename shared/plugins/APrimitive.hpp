@@ -14,6 +14,8 @@
 
 class APrimitive : public IPrimitive {
 public:
+    APrimitive(std::shared_ptr<IMaterial> material):_material(std::move(material)){}
+
     bool hit(Ray const &ray, Ray::HitRecord &rec) const final
     {
         auto ts = lineTValues(ray.origin, ray.direction);
@@ -42,4 +44,5 @@ protected:
     }
     virtual std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const = 0;
     virtual void fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const = 0;
+    std::shared_ptr<IMaterial> _material;
 };

@@ -12,42 +12,23 @@
 #include "Camera/Camera.hpp"
 #include <optional>
 #include <string>
+
 namespace RayTracer
 {
-    class Plane : public APrimitive
-    {
-        public:
-            Plane(char, double, const Ameth::Color &);
 
-            std::string getName() const override { return "Plane"; }
-            Ameth::Vec3D pointAt(double u, double v) const override
-            {
-                (void)u;
-                (void)v;
-                return {0.0, 0.0, 0.0};
-            }
+class Plane : public APrimitive {
+public:
+    Plane(char, double, std::shared_ptr<IMaterial> material = nullptr);
+    std::string getName() const override { return "Plane"; }
+    Ameth::Vec3D pointAt(double u, double v) const override {(void)u; (void)v; return {};};
 
-        protected:
-            void fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const override
-            {
-                (void)ray;
-                (void)t;
-                (void)rec;
-            }
-            std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const override
-            {
-                (void)origin;
-                (void)dir;
-                return std::nullopt;
-            }
+    char _axis;
+    double _position;
 
+protected:
+    std::string name{"Plane"};
+    void fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const override;
+    std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const override;
+};
 
-
-        private:
-            char _axis;
-            double _position;
-            Ameth::Color _color;
-
-
-    };
 }

@@ -11,7 +11,7 @@ namespace RayTracer
 {
     Scene::Scene(std::vector<std::unique_ptr<Camera>> cameras,
         std::vector<std::unique_ptr<IPrimitive>> primitives,
-        std::vector<std::shared_ptr<IMaterial>> materials,
+        std::map<std::string, std::shared_ptr<IMaterial>> materials,
         std::vector<std::unique_ptr<ILight>> lights)
     : _materials(std::move(materials)),
         _cameras(std::move(cameras)),
