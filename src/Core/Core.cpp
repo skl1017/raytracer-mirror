@@ -9,11 +9,7 @@
 #include "Camera/Camera.hpp"
 #include "Parser/Parser.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
-<<<<<<< HEAD
 #include "Renderer/ParallelImageScheduler.hpp"
-#include "Renderer/Renderer.hpp"
-=======
->>>>>>> 2174568da48959c2e77572dc7dc907db9f8bb07e
 #include "plugins/IPrimitive.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
