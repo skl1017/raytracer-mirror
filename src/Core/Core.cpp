@@ -7,14 +7,16 @@
 
 #include "Core.hpp"
 #include "Camera/Camera.hpp"
-#include "Display/Display.hpp"
 #include "Parser/Parser.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
-#include "Renderer/Renderer.hpp"
 #include "plugins/IPrimitive.hpp"
 
+#include <SFML/Window/Keyboard.hpp>
 #include <cmath>
+#include <cstddef>
+#include <cstdio>
 #include <memory>
+#include <queue>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -28,9 +30,12 @@ namespace RayTracer
           _scene([&]() {
               Parser parser(_dlloader);
               return parser.loadFile(file);
-          }()){}
-
-
+          }()),
+          _scheduler()
+        {
+            _renderers.push_back(std::make_unique<NormalRenderer>(Ameth::Color(0.2, 0.2, 0.2)));
+            _renderers.push_back(std::make_unique<RaytracingRender>(Ameth::Color(0, 0, 0)));
+        };
 
     // Core::Core(Scene scene)
     //     : _dlloader({
@@ -63,16 +68,32 @@ namespace RayTracer
     //     return Core("build/example.cfg");
     // }
 
+    void Core::handleEnvents(Display &display)
+    {
+        sf::RenderWindow &window = display.getWindow();
+        sf::Event event{};
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                display.getWindow().close();
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Key::Tab) {
+                    _select_renderer = (_select_renderer + 1) % _renderers.size();
+                    _renderers[_select_renderer]->renderScreen(_scene, _scene._cameras[0], _scheduler);
+                }
+            }
+        }
+    }
+
     int Core::run(std::string_view outputPath)
     {
-        Renderer::renderNormals(_scene);
+        _renderers[_select_renderer]->renderScreen(_scene, _scene._cameras[0], _scheduler);
 
         for (size_t index = 0; index < _scene._cameras.size(); ++index) {
             Display display(_scene._cameras[index]->imageWidth(), _scene._cameras[index]->imageHeight(), "raytracer");
             if (!display.create())
                 throw std::runtime_error("Failed to create SFML window or texture");
             while (display.isOpen()) {
-                display.pollEvents();
+                handleEnvents(display);
                 display.update(_scene._cameras[index]->getHDRImage());
             }
             if (!display.savePPM(std::string(outputPath)))
