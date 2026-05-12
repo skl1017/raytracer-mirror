@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2026
 ** raytracing render
 ** File description:
-** 
+**
 */
 
 #include "RaytracingRender.hpp"
@@ -25,7 +25,7 @@ Ameth::Color RaytracingRender::computeLight(Ray::HitRecord &hit, RayTracer::Scen
     if (hit.material->isTransparent()){
         Ameth::Color tmp = hit.material->getColor(finalColor);
         double t = (1 - hit.material->getTransparency());
-        
+
         finalColor.r = std::max(tmp.r, _bg.r * t);
         finalColor.g = std::max(tmp.g, _bg.g * t);
         finalColor.b = std::max(tmp.b, _bg.b * t);

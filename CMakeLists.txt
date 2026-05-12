@@ -33,6 +33,7 @@ set(RAYTRACER
     ${PROJECT_SOURCE_DIR}/src/Parser/ParseLights.cpp
     ${PROJECT_SOURCE_DIR}/src/Parser/ParseCameras.cpp
     ${PROJECT_SOURCE_DIR}/src/PluginFactory/PluginFactory.cpp
+    ${PROJECT_SOURCE_DIR}/src/Renderer/ParallelImageScheduler.cpp
 )
 
 add_executable(raytracer ${RAYTRACER} src/main.cpp)

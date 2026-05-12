@@ -30,13 +30,12 @@ namespace RayTracer
           _scene([&]() {
               Parser parser(_dlloader);
               return parser.loadFile(file);
-          }())
+          }()),
+          _scheduler()
         {
             _renderers.push_back(std::make_unique<NormalRenderer>(Ameth::Color(0.2, 0.2, 0.2)));
             _renderers.push_back(std::make_unique<RaytracingRender>(Ameth::Color(0, 0, 0)));
         };
-
-
 
     // Core::Core(Scene scene)
     //     : _dlloader({
@@ -79,7 +78,7 @@ namespace RayTracer
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Key::Tab) {
                     _select_renderer = (_select_renderer + 1) % _renderers.size();
-                    _renderers[_select_renderer]->renderScreen(_scene, _scene._cameras[0]);
+                    _renderers[_select_renderer]->renderScreen(_scene, _scene._cameras[0], _scheduler);
                 }
             }
         }
@@ -87,7 +86,7 @@ namespace RayTracer
 
     int Core::run(std::string_view outputPath)
     {
-        _renderers[_select_renderer]->renderScreen(_scene, _scene._cameras[0]);
+        _renderers[_select_renderer]->renderScreen(_scene, _scene._cameras[0], _scheduler);
 
         for (size_t index = 0; index < _scene._cameras.size(); ++index) {
             Display display(_scene._cameras[index]->imageWidth(), _scene._cameras[index]->imageHeight(), "raytracer");
