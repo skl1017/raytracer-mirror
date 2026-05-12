@@ -17,9 +17,8 @@ namespace RayTracer
         try {
             libconfig::Config c = libconfig::Config();
             c.readFile(file.c_str());
-            // c.lookup("materials");
             auto materials = _parserGetMaterials(c.lookup("materials"));
-            auto primitives = _parserGetPrimitives(c.lookup("primitives"));
+            auto primitives = _parserGetPrimitives(c.lookup("primitives"), std::move(materials));
             auto lights = _parserGetLights(c.lookup("lights"));
             auto cameras = _parserGetCameras(c.lookup("cameras"));
 
