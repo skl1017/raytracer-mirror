@@ -20,10 +20,12 @@ class Plane : public APrimitive {
 public:
     Plane(char, double, std::shared_ptr<IMaterial> material = nullptr);
     std::string getName() const override { return "Plane"; }
+    Ameth::Vec3D getNormal() const;
     Ameth::Vec3D pointAt(double u, double v) const override {(void)u; (void)v; return {};};
 
     char _axis;
     double _position;
+    Ameth::Vec3D _point;
 
 protected:
     std::string name{"Plane"};

@@ -34,6 +34,7 @@ protected:
         double const t0 = ts->first;
         double const t1 = ts->second;
         double tHit = -1.0;
+    
         if (t0 > 0.0)
             tHit = t0;
         if (t1 > 0.0 && (tHit < 0.0 || t1 < tHit))
