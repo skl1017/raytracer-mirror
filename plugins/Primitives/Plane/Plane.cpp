@@ -68,6 +68,7 @@ void Plane::fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const
 
     if (ray.direction.dot(rec.normal) > 0)
         rec.normal = rec.normal * -1;
+    rec.material = _material;
 }
 
 }
