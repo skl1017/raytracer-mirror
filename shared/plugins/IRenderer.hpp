@@ -14,5 +14,5 @@ class IRenderer
 private:
 public:
     virtual void renderScreen(RayTracer::Scene &scene, std::unique_ptr<Camera> &camera, ParallelImageScheduler &scheduler) = 0;
-    virtual Ameth::Color computeLight(Ray::HitRecord &hit, RayTracer::Scene &scene) = 0;
+    virtual Ameth::Color computeLight(Ray::HitRecord &hit, Ray const &raycast, RayTracer::Scene &scene) = 0;
 };

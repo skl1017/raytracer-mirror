@@ -14,5 +14,7 @@ public:
     RaytracingRender(Ameth::Color bgColor) : ARenderer(bgColor) {};
     ~RaytracingRender() {};
 
-    Ameth::Color computeLight(Ray::HitRecord &hit, RayTracer::Scene &scene) override;
+    Ameth::Color computeLight(Ray::HitRecord &hit, Ray const &raycast, RayTracer::Scene &scene) override;
+private:
+    Ameth::Color ComputeTransparency(Ray::HitRecord &oldRec, Ray const &raycast, RayTracer::Scene &scene);
 };

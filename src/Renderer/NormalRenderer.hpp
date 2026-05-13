@@ -21,5 +21,5 @@ class NormalRenderer : public ARenderer
 public:
     NormalRenderer(Ameth::Color bgColor) : ARenderer(bgColor) {};
     ~NormalRenderer() = default;
-    Ameth::Color computeLight(Ray::HitRecord &hit, RayTracer::Scene &scene) override;
+    Ameth::Color computeLight(Ray::HitRecord &hit, Ray const &raycast, RayTracer::Scene &scene) override;
 };
