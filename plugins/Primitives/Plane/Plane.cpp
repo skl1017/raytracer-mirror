@@ -54,7 +54,7 @@ std::optional<std::pair<double, double>> Plane::lineTValues(Ameth::Vec3D const &
 
     if (std::abs(denom) < 1e-6)
         return std::nullopt;
-    t = (_point - origin).dot(getNormal()) / denom;
+    t = (_point - origin).dot(normal) / denom;
     if (t < 0)
         return std::nullopt;
     return std::make_pair(t, 0);
