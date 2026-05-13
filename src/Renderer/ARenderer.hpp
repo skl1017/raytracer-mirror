@@ -7,11 +7,14 @@
 
 #pragma once
 #include "plugins/IRenderer.hpp"
+#define EPSILON 1e-4
 
 class ARenderer : public IRenderer
 {
 protected:
     Ameth::Color _bg;
+    bool isRayHitting(RayTracer::Scene &scene, Ray const &raycast, Ray::HitRecord &rec);
+    bool isRayHitting(RayTracer::Scene &scene, Ray const &raycast, Ray::HitRecord &rec, std::size_t depth);
 public:
     ARenderer(Ameth::Color bgColor) : _bg(bgColor) {};
     ~ARenderer() {};
