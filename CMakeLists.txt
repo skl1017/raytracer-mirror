@@ -32,6 +32,7 @@ set(RAYTRACER
     ${PROJECT_SOURCE_DIR}/src/Parser/ParsePrimitives.cpp
     ${PROJECT_SOURCE_DIR}/src/Parser/ParseLights.cpp
     ${PROJECT_SOURCE_DIR}/src/Parser/ParseCameras.cpp
+    ${PROJECT_SOURCE_DIR}/src/Parser/ParseMaterials.cpp
     ${PROJECT_SOURCE_DIR}/src/PluginFactory/PluginFactory.cpp
     ${PROJECT_SOURCE_DIR}/src/Renderer/ParallelImageScheduler.cpp
 )

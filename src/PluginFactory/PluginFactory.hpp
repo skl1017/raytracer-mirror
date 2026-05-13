@@ -15,6 +15,7 @@
 #include "plugins/IPrimitive.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
 #include "plugins/ILight.hpp"
+#include "plugins/IMaterial.hpp"
 
 namespace RayTracer
 {
@@ -24,7 +25,7 @@ namespace RayTracer
 
             typedef struct primitive_payload_base_s
             {
-                Ameth::Color color;
+                std::shared_ptr<IMaterial> material;
             } primitive_payload_base_t;
 
             typedef struct sphere_payload_s : primitive_payload_base_t
@@ -38,6 +39,7 @@ namespace RayTracer
                 char axis;
                 double position;
             } plane_payload_t;
+
 
             typedef struct light_payload_s
             {
@@ -74,7 +76,7 @@ namespace RayTracer
             using materialPayload = std::variant<
                 flatColor_payload_t>;
 
-            using iMaterialCreateFunction = std::function<std::unique_ptr<IMaterial> (const materialPayload& p)>;
+            using iMaterialCreateFunction = std::function<std::shared_ptr<IMaterial> (const materialPayload& p)>;
 
             using iPrimitiveCreateFunction = std::function<std::unique_ptr<IPrimitive> (const primitivePayload& p)>;
 
@@ -83,9 +85,13 @@ namespace RayTracer
 
             void add(const std::string &, iPrimitiveCreateFunction);
             void add(const std::string &, iLightCreateFunction);
+            void add(const std::string &, iMaterialCreateFunction);
+
 
             std::unique_ptr<IPrimitive> create(const std::string &, const primitivePayload &);
             std::unique_ptr<ILight> create(const std::string &, const lightPayload &);
+            std::shared_ptr<IMaterial> create(const std::string &, const materialPayload &);
+
 
 
             class PluginFactoryException : public std::exception

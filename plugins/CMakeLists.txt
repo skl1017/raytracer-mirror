@@ -79,3 +79,20 @@ set_target_properties(directionalLight PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Lights)
 
 
+# === FlatColor ===
+
+set (FLATCOLOR
+    ${CMAKE_SOURCE_DIR}/plugins/Materials/FlatColor/flatColor.cpp)
+
+add_library(flatColor SHARED ${FLATCOLOR})
+
+target_include_directories(flatColor PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+)
+
+set_target_properties(flatColor PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Materials)
+
+

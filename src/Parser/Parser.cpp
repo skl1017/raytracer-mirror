@@ -17,11 +17,13 @@ namespace RayTracer
         try {
             libconfig::Config c = libconfig::Config();
             c.readFile(file.c_str());
-            auto primitives = _parserGetPrimitives(c.lookup("primitives"));
+            auto materials = _parserGetMaterials(c.lookup("materials"));
+            auto primitives = _parserGetPrimitives(c.lookup("primitives"), std::move(materials));
             auto lights = _parserGetLights(c.lookup("lights"));
             auto cameras = _parserGetCameras(c.lookup("cameras"));
-            return Scene(std::move(cameras),std::move(primitives), {}, std::move(lights));
-        } catch (const libconfig::ParseException e){
+
+            return Scene(std::move(cameras),std::move(primitives), std::move(materials), std::move(lights));
+        } catch (const libconfig::ParseException &e){
             std::cout << "error : " << e.getError() << std::endl << "line: " << e.getLine() << std::endl;
         }
 
