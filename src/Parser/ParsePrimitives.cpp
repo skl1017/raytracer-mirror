@@ -109,15 +109,15 @@ namespace RayTracer
                 _parseDouble(s, "y"),
                 _parseDouble(s, "z")
             );
-            auto &axisToParse = s.lookup("axis");
-            auto axis = Ameth::Vec3D(
-                _parseDouble(axisToParse, "x"),
-                _parseDouble(axisToParse, "y"),
-                _parseDouble(axisToParse, "z")
+            auto &rotationToParse = s.lookup("axis");
+            auto rotation = Ameth::Vec3D(
+                _parseDouble(rotationToParse, "x"),
+                _parseDouble(rotationToParse, "y"),
+                _parseDouble(rotationToParse, "z")
             );
             auto r = _parseDouble(s, "r");
             PluginFactory::cylinder_payload_t cylinderPayload = {
-                {primitiveMaterial->second}, position, r, axis
+                {primitiveMaterial->second}, position, r, rotation
             };
             primitivesList.push_back(pluginFactory.create("cylinder", cylinderPayload));
         }
@@ -146,8 +146,15 @@ namespace RayTracer
                 _parseDouble(s, "z")
             );
 
+            auto &rotationToParse = s.lookup("axis");
+            auto rotation = Ameth::Vec3D(
+                _parseDouble(rotationToParse, "x"),
+                _parseDouble(rotationToParse, "y"),
+                _parseDouble(rotationToParse, "z")
+            );
+
             PluginFactory::cone_payload_t conePayload = {
-                {primitiveMaterial->second}, position
+                {primitiveMaterial->second}, position, rotation
             };
             primitivesList.push_back(pluginFactory.create("cone", conePayload));
         }

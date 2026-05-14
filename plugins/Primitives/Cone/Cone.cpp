@@ -18,8 +18,8 @@
 
 namespace RayTracer {
 
-Cone::Cone(Ameth::Vec3D c, Ameth::Vec3D axis, std::shared_ptr<IMaterial> material): APrimitive(material), center(c),
-      _axis(axis) {}
+Cone::Cone(Ameth::Vec3D c, Ameth::Vec3D rotation, std::shared_ptr<IMaterial> material): APrimitive(material), center(c),
+      rotation(rotation) {}
 
 Ameth::Vec3D getProjection(Ameth::Vec3D vecteur, Ameth::Vec3D axis)
 {
@@ -76,7 +76,7 @@ extern "C" void registerPlugin(RayTracer::PluginFactory &factory)
     RayTracer::PluginFactory::iPrimitiveCreateFunction const f
         = [](RayTracer::PluginFactory::primitivePayload const &p) -> std::unique_ptr<IPrimitive> {
         auto const conePayload = std::get<RayTracer::PluginFactory::cone_payload_t>(p);
-        return std::make_unique<RayTracer::Cone>(conePayload.position, conePayload.axis, std::move(conePayload.material));
+        return std::make_unique<RayTracer::Cone>(conePayload.position, conePayload.rotation, std::move(conePayload.material));
     };
     factory.add("cone", f);
 }

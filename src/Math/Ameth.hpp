@@ -1,6 +1,10 @@
 #pragma once
 
 #include <cmath>
+#include <array>
+#include <cstddef>
+#include <cstdio>
+#include <iostream>
 
 namespace Ameth {
 
@@ -331,6 +335,61 @@ public:
     Color pow(double e) const
     {
         return {std::pow(r, e), std::pow(g, e), std::pow(b, e)};
+    }
+};
+
+template <typename T, int rows, int columns>
+struct Matrix
+{
+    using MatrixContainer = std::array<std::array<T, columns>, rows>;
+    MatrixContainer matrix;
+
+    Matrix(const MatrixContainer &m) : matrix(m) {};
+
+    Matrix() : matrix({}) {};
+
+    const std::array<T, columns> &operator[](int i) const
+    {
+        return matrix[i];
+    }
+
+    std::array<T, columns> &operator[](int i)
+    {
+        return matrix[i];
+    }
+
+    Matrix operator+(const Matrix& m) const
+    {
+        Matrix newMatrix;
+    
+        for (size_t y = 0; y < rows; y++)
+            for (size_t x = 0; x < columns; x++)
+                newMatrix[y][x] = matrix[y][x] + m[y][x];
+        return newMatrix;
+    }
+
+    Matrix operator*(const Matrix &m) const
+    {
+        Matrix newMatrix;
+
+        for (size_t i = 0; i < rows; i++) {
+            for (size_t j = 0; j < columns; j++) {
+                for (size_t a = 0; a < columns; a++) {
+                    newMatrix[i][a] += (matrix[i][j] * m[j][a]);
+                }
+            }
+        }
+        return newMatrix;
+    }
+
+    friend std::ostream& operator << (std::ostream& os, const Matrix &m) {
+        for (size_t y = 0; y < rows; y++){
+            for (size_t x = 0; x < columns; x++){
+                os << m[y][x] << " ";
+            }
+            os << std::endl;
+        }
+        return os;
     }
 };
 

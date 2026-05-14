@@ -24,6 +24,7 @@ public:
     std::string getName() const override;
     Ameth::Vec3D pointAt(double u, double v) const override;
 
+    Ameth::Vec3D rotation;
     Ameth::Vec3D center;
 
 protected:

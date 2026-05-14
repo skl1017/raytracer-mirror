@@ -16,8 +16,8 @@
 
 namespace RayTracer {
 
-Cylinder::Cylinder(Ameth::Vec3D c, double r, Ameth::Vec3D axis, std::shared_ptr<IMaterial> material): APrimitive(material), center(c),
-      radius(std::max(0.0, r)), _axis(axis) {}
+Cylinder::Cylinder(Ameth::Vec3D c, double r, Ameth::Vec3D rotation, std::shared_ptr<IMaterial> material): APrimitive(material), center(c),
+      radius(std::max(0.0, r)), rotation(rotation) {}
 
 Ameth::Vec3D getProjection(Ameth::Vec3D vecteur, Ameth::Vec3D axis)
 {
@@ -69,7 +69,7 @@ extern "C" void registerPlugin(RayTracer::PluginFactory &factory)
     RayTracer::PluginFactory::iPrimitiveCreateFunction const f
         = [](RayTracer::PluginFactory::primitivePayload const &p) -> std::unique_ptr<IPrimitive> {
         auto const cylinderPayload = std::get<RayTracer::PluginFactory::cylinder_payload_t>(p);
-        return std::make_unique<RayTracer::Cylinder>(cylinderPayload.position, cylinderPayload.r, cylinderPayload.axis, std::move(cylinderPayload.material));
+        return std::make_unique<RayTracer::Cylinder>(cylinderPayload.position, cylinderPayload.r, cylinderPayload.rotation, std::move(cylinderPayload.material));
     };
     factory.add("cylinder", f);
 }

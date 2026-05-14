@@ -44,14 +44,14 @@ namespace RayTracer
             {
                 Ameth::Vec3D position;
                 double r;
-                Ameth::Vec3D axis;
+                Ameth::Vec3D rotation;
             } cylinder_payload_t;
 
 
             typedef struct cone_payload_s : primitive_payload_base_t
             {
                 Ameth::Vec3D position;
-                Ameth::Vec3D axis;
+                Ameth::Vec3D rotation;
             } cone_payload_t;
         
             typedef struct light_payload_s
