@@ -34,7 +34,7 @@ namespace RayTracer
           _scheduler()
         {
             _renderers.push_back(std::make_unique<NormalRenderer>(Ameth::Color(0.2, 0.2, 0.2)));
-            _renderers.push_back(std::make_unique<RaytracingRender>(Ameth::Color(0, 0, 0)));
+            _renderers.push_back(std::make_unique<RaytracingRender>(Ameth::Color(0.2, 0.3, 0.9)));
         };
 
     // Core::Core(Scene scene)

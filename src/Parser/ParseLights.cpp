@@ -47,7 +47,7 @@ namespace RayTracer
             );
 
             PluginFactory::pointlight_payload_t spherePayload = {
-                color, position
+                {color, {0, 0, 0}, 0}, position
             };
             primitivesList.push_back(pluginFactory.create("pointLight", spherePayload));
         }
@@ -80,7 +80,7 @@ namespace RayTracer
             );
 
             PluginFactory::directionlight_payload_t lightPayload = {
-                color, direction
+                {color, {0, 0, 0}, 0}, direction
             };
             primitivesList.push_back(pluginFactory.create("directionalLight", lightPayload));
         }
