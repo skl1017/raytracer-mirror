@@ -29,7 +29,7 @@ Ameth::Color RayTracer::PointLight::getIllumination(Ray::HitRecord &hitRecord, R
 
 Ameth::Vec3D RayTracer::PointLight::getDirectVector(Ray::HitRecord &hitRecord)
 {
-    return (_position - hitRecord.point) * -1;
+    return (_position - hitRecord.point);
 }
 
 
