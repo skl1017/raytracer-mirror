@@ -15,7 +15,7 @@ namespace RayTracer
 class AMaterial : public IMaterial
 {
 protected:
-    std::size_t _transparency;
+    double _transparency;
     double _refraction;
     double _reflection;
 public:
@@ -31,7 +31,7 @@ public:
     };
 
     double getTransparency() override {
-        return 1.0 - _transparency / 100;
+        return _transparency / 100.0;
     };
 
     double getRefraction() override {

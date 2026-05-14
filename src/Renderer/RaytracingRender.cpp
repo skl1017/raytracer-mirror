@@ -45,20 +45,35 @@ Ameth::Color RaytracingRender::ComputeTransparency(Ray::HitRecord &oldRec,
         return _bg;
 }
 
-Ameth::Color RaytracingRender::computeLight(Ray::HitRecord &hit, Ray const &raycast, RayTracer::Scene &scene)
+Ameth::Color RaytracingRender::handleLight(RayTracer::Scene &scene, Ray::HitRecord &hit, Ray const &raycast)
 {
+    Ray::HitRecord lightRecord = {};
     Ameth::Color lightColor(0, 0, 0);
     Ameth::Color finalColor(0, 0, 0);
+    Ray lightRay;
 
     for (size_t i = 0; i < scene._lights.size(); i++) {
         lightColor = scene._lights[i]->getIllumination(hit, raycast);
+        lightRay.origin = hit.point;
+        lightRay.direction = scene._lights[i]->getDirectVector(hit);
+        if (isRayHitting(scene, lightRay, lightRecord)) {
+            lightColor = {0, 0, 0};
+        }
         finalColor.r = std::max(finalColor.r, lightColor.r);
         finalColor.g = std::max(finalColor.g, lightColor.g);
         finalColor.b = std::max(finalColor.b, lightColor.b);
     }
+    return finalColor;
+}
+
+Ameth::Color RaytracingRender::computeLight(Ray::HitRecord &hit, Ray const &raycast, RayTracer::Scene &scene)
+{
+    Ameth::Color finalColor(0, 0, 0);
+
     if (!hit.material){
         return finalColor;
     }
+    finalColor = handleLight(scene, hit, raycast);
     if (hit.material->isTransparent()){
         Ameth::Color tmp = hit.material->getColor(finalColor);
         Ameth::Color refractLight = ComputeTransparency(hit, raycast,scene);

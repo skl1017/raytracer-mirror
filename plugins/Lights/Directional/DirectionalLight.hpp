@@ -16,6 +16,7 @@ public:
         _direction(direction), _LightColor(lightColor) {};
     ~DirectionalLight() = default;
     Ameth::Color getIllumination(Ray::HitRecord &hitRecord, Ray raycast) override;
+    Ameth::Vec3D getDirectVector(Ray::HitRecord &hitRecord) override;
 protected:
     Ameth::Vec3D _direction;
     Ameth::Color _LightColor;

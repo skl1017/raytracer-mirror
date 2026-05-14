@@ -15,6 +15,7 @@ Ameth::Color RayTracer::DirectionalLight::getIllumination(Ray::HitRecord &hitRec
     double ambient = 0.1;
     double angle = hitRecord.normal.dot(incidentLight.normalized());
     double intensity = ambient + std::max(0.0, angle);
+
     Ameth::Vec3D rayDir = (raycast.direction * - 1).normalized();
     Ameth::Vec3D R =  hitRecord.normal * 2.0 * hitRecord.normal.dot(incidentLight) - incidentLight;
 
@@ -23,6 +24,12 @@ Ameth::Color RayTracer::DirectionalLight::getIllumination(Ray::HitRecord &hitRec
     illumination += _LightColor * spec;
     return illumination * intensity;
 }
+
+Ameth::Vec3D RayTracer::DirectionalLight::getDirectVector(Ray::HitRecord &hitRecord)
+{
+    return Ameth::Vec3D(0, 0, 0) - _direction;
+}
+
 
 extern "C" {
     void registerPlugin(RayTracer::PluginFactory &factory)

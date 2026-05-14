@@ -17,7 +17,8 @@ public:
     _position(position), _LightColor(lightColor) {};
     ~PointLight() = default;
     Ameth::Color getIllumination(Ray::HitRecord &hitRecord, Ray raycast) override;
-    protected:
+    Ameth::Vec3D getDirectVector(Ray::HitRecord &hitRecord) override;
+protected:
     Ameth::Vec3D _position;
     Ameth::Color _LightColor;
 };

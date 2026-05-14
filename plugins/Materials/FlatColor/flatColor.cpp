@@ -23,14 +23,11 @@ Ameth::Color RayTracer::flatColor::getColor(Ameth::Color IncomingLightColor)
 {
     Ameth::Color finalColor;
 
-    finalColor.r = std::min(_surfaceColor.r, IncomingLightColor.r);
-    finalColor.g = std::min(_surfaceColor.g, IncomingLightColor.g);
-    finalColor.b = std::min(_surfaceColor.b, IncomingLightColor.b);
+    finalColor.r = _surfaceColor.r * IncomingLightColor.r;
+    finalColor.g = _surfaceColor.g * IncomingLightColor.g;
+    finalColor.b = _surfaceColor.b * IncomingLightColor.b;
 
-    if (_transparency == 0) {
-        return finalColor;
-    }
-    return finalColor * (1.0 - (_transparency / 100));
+    return finalColor;
 }
 
 extern "C" void registerPlugin(RayTracer::PluginFactory &factory)
