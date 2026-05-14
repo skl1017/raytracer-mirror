@@ -61,6 +61,8 @@ namespace RayTracer
             {
                 Ameth::Color color;
                 int transparency;
+                double refraction;
+                double reflection;
             } flatColor_payload_t;
 
             using lightPayload = std::variant<

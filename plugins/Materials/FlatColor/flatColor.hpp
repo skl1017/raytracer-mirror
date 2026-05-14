@@ -6,22 +6,18 @@
 */
 
 #pragma once
-#include "plugins/IMaterial.hpp"
-
+#include "plugins/AMaterial.hpp"
 
 namespace RayTracer
 {
-    class flatColor : public IMaterial
+    class flatColor : public AMaterial
     {
 public:
-    flatColor(Ameth::Color color, int transparency = 0);
+    flatColor(Ameth::Color color, int transparency = 0, double refraction = 0, double reflection = 0);
     ~flatColor() override;
     
     Ameth::Color getColor(Ameth::Color IncomingLightColor) override;
-    bool isTransparent() override;
-    double getTransparency() override;
-    private:
-    double _transparency;
+private:
     Ameth::Color _surfaceColor;
 };
 

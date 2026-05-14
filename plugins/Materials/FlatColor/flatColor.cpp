@@ -9,9 +9,9 @@
 #include <iostream>
 #include "PluginFactory/PluginFactory.hpp"
 
-RayTracer::flatColor::flatColor(Ameth::Color color, int transparency):
-    _surfaceColor(color),
-    _transparency(transparency)
+RayTracer::flatColor::flatColor(Ameth::Color color, int transparency, double refraction, double reflection):
+    AMaterial(transparency, refraction, reflection),
+    _surfaceColor(color)
 {
 }
 
@@ -33,23 +33,13 @@ Ameth::Color RayTracer::flatColor::getColor(Ameth::Color IncomingLightColor)
     return finalColor * (1.0 - (_transparency / 100));
 }
 
-bool RayTracer::flatColor::isTransparent()
-{
-    return _transparency != 0;
-}
-
-
-double RayTracer::flatColor::getTransparency()
-{
-    return 1.0 - _transparency / 100;
-}
-
 extern "C" void registerPlugin(RayTracer::PluginFactory &factory)
 {
     RayTracer::PluginFactory::iMaterialCreateFunction const f
         = [](RayTracer::PluginFactory::materialPayload const &p) -> std::shared_ptr<IMaterial> {
         auto const materialPayload = std::get<RayTracer::PluginFactory::flatColor_payload_t>(p);
-        return std::make_shared<RayTracer::flatColor>(materialPayload.color, materialPayload.transparency);
+        return std::make_shared<RayTracer::flatColor>(materialPayload.color,
+            materialPayload.transparency, materialPayload.reflection, materialPayload.refraction);
     };
     factory.add("flatColor", f);
 }
