@@ -24,14 +24,26 @@ Ameth::Vec3D getProjection(Ameth::Vec3D vecteur, Ameth::Vec3D axis)
    return vecteur - axis * vecteur.dot(axis);
 }
 
+/*
+a = (D - (D·V)V) · (D - (D·V)V)
+b = 2 * ((D - (D·V)V) · (CO - (CO·V)V))
+c = (CO - (CO·V)V) · (CO - (CO·V)V) - r²
+*/
+
 std::optional<std::pair<double, double>> Cylinder::lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {
     if (dir.length() < 1e-12)
         return std::nullopt;
     Ameth::Vec3D const originToCenter = origin - center;
-    double const quadA = std::pow(dir.x, 2) + std::pow(dir.y, 2);
-    double const quadB = 2 * ((originToCenter.x * dir.x) + (originToCenter.y * dir.y));
-    double const quadC = std::pow(originToCenter.x, 2) + std::pow(originToCenter.y, 2) - std::pow(radius, 2);
+    double const DirDotAxis = dir.dot(axis);
+    double const OcDotAxis = originToCenter.dot(axis);
+    Ameth::Vec3D const dirProjection = dir - axis * DirDotAxis;
+    Ameth::Vec3D const ocProjection = originToCenter - axis * OcDotAxis;
+    double const quadA = dirProjection.dot(dirProjection);
+    double const quadB = 2 * dirProjection.dot(ocProjection);
+    double const quadC = ocProjection.dot(ocProjection) - std::pow(radius, 2);
+    if (std::abs(quadA) < 1e-12)
+        return std::nullopt;
     double const discriminant = std::pow(quadB, 2) - (4 * quadA * quadC);
     if (discriminant < 0.0)
         return std::nullopt;
@@ -45,8 +57,10 @@ void Cylinder::fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) cons
 {
     rec.t = t;
     rec.point = ray.at((t));
-    Ameth::Vec3D normal(rec.point.x - center.x,rec.point.y - center.y,0);
+    Ameth::Vec3D const tipToPoint = rec.point - center;
+    Ameth::Vec3D normal = tipToPoint - axis * tipToPoint.dot(axis);
     rec.normal = normal.normalized();
+    rec.material = _material;
     if (ray.direction.dot(rec.normal) > 0)
         rec.normal = rec.normal * -1;
 }
