@@ -5,7 +5,6 @@
 ** ParsePrimitives
 */
 
-#include "Math/Ameth.hpp"
 #include "Parser/Parser.hpp"
 
 namespace RayTracer
@@ -41,12 +40,10 @@ namespace RayTracer
             if (primitiveMaterial == materials.end()){
                 throw;
             }
-
-            std::string axis = s.lookup("axis");
             auto position = _parseDouble(s, "position");
-
+            auto rotation = _parseVec3D(s, "rotation");
             PluginFactory::plane_payload_t planePayload = {
-                {primitiveMaterial->second}, axis[0], position
+                {primitiveMaterial->second, rotation}, position
             };
             primitivesList.push_back(pluginFactory.create("plane", planePayload));
         }
@@ -64,22 +61,16 @@ namespace RayTracer
         for (auto &s: spheres)
         {
 
-             std::string materialName = s.lookup("material");
+            std::string materialName = s.lookup("material");
             auto primitiveMaterial = materials.find(materialName);
 
             if (primitiveMaterial == materials.end()){
                 throw;
             }
-
-            auto position = Ameth::Vec3D(
-                _parseDouble(s, "x"),
-                _parseDouble(s, "y"),
-                _parseDouble(s, "z")
-            );
+            auto position = _parseVec3D(s, "position");
             auto r = _parseDouble(s, "r");
-
             PluginFactory::sphere_payload_t spherePayload = {
-                {primitiveMaterial->second}, position, r
+                {primitiveMaterial->second, {0, 0, 0}}, position, r
             };
             primitivesList.push_back(pluginFactory.create("sphere", spherePayload));
         }
@@ -96,28 +87,18 @@ namespace RayTracer
 
         for (auto &s: cylinders)
         {
-
+            std::cout << "Cylinder" << std::endl;
             std::string materialName = s.lookup("material");
             auto primitiveMaterial = materials.find(materialName);
 
-            if (primitiveMaterial == materials.end()){
+            if (primitiveMaterial == materials.end())
                 throw;
-            }
-
-            auto position = Ameth::Vec3D(
-                _parseDouble(s, "x"),
-                _parseDouble(s, "y"),
-                _parseDouble(s, "z")
-            );
-            auto &rotationToParse = s.lookup("rotation");
-            auto rotation = Ameth::Vec3D(
-                _parseDouble(rotationToParse, "Rx"),
-                _parseDouble(rotationToParse, "Ry"),
-                _parseDouble(rotationToParse, "Rz")
-            );
+            auto position = _parseVec3D(s, "position");
+            auto rotation = _parseVec3D(s, "rotation");
+            std::cout << position.x << std::endl;
             auto r = _parseDouble(s, "r");
             PluginFactory::cylinder_payload_t cylinderPayload = {
-                {primitiveMaterial->second}, position, r, rotation
+                {primitiveMaterial->second, rotation}, position, r
             };
             primitivesList.push_back(pluginFactory.create("cylinder", cylinderPayload));
         }
@@ -141,21 +122,10 @@ namespace RayTracer
             }
             double angle = _parseDouble(s, "angle");
 
-            auto position = Ameth::Vec3D(
-                _parseDouble(s, "x"),
-                _parseDouble(s, "y"),
-                _parseDouble(s, "z")
-            );
-
-            auto &rotationToParse = s.lookup("rotation");
-            auto rotation = Ameth::Vec3D(
-                _parseDouble(rotationToParse, "Rx"),
-                _parseDouble(rotationToParse, "Ry"),
-                _parseDouble(rotationToParse, "Rz")
-            );
-
+            auto position = _parseVec3D(s, "position");
+            auto rotation = _parseVec3D(s, "rotation");
             PluginFactory::cone_payload_t conePayload = {
-                {primitiveMaterial->second}, position, rotation, angle
+                {primitiveMaterial->second, rotation}, position, angle
             };
             primitivesList.push_back(pluginFactory.create("cone", conePayload));
         }

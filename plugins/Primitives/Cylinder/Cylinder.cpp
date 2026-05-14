@@ -16,29 +16,20 @@
 
 namespace RayTracer {
 
-Cylinder::Cylinder(Ameth::Vec3D c, double r, Ameth::Vec3D rotation, std::shared_ptr<IMaterial> material): APrimitive(material), center(c),
-      radius(std::max(0.0, r)), rotation(rotation) {}
-
-Ameth::Vec3D getProjection(Ameth::Vec3D vecteur, Ameth::Vec3D axis)
-{
-   return vecteur - axis * vecteur.dot(axis);
-}
-
-/*
-a = (D - (D·V)V) · (D - (D·V)V)
-b = 2 * ((D - (D·V)V) · (CO - (CO·V)V))
-c = (CO - (CO·V)V) · (CO - (CO·V)V) - r²
-*/
+Cylinder::Cylinder(Ameth::Vec3D c, double r, Ameth::Vec3D rotation, std::shared_ptr<IMaterial> material): APrimitive(material, rotation), center(c),
+      radius(std::max(0.0, r)), rotation(rotation) {
+        _axis = rotation.normalized();
+      }
 
 std::optional<std::pair<double, double>> Cylinder::lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {
     if (dir.length() < 1e-12)
         return std::nullopt;
     Ameth::Vec3D const originToCenter = origin - center;
-    double const DirDotAxis = dir.dot(axis);
-    double const OcDotAxis = originToCenter.dot(axis);
-    Ameth::Vec3D const dirProjection = dir - axis * DirDotAxis;
-    Ameth::Vec3D const ocProjection = originToCenter - axis * OcDotAxis;
+    double const DirDotAxis = dir.dot(_axis);
+    double const OcDotAxis = originToCenter.dot(_axis);
+    Ameth::Vec3D const dirProjection = dir - _axis * DirDotAxis;
+    Ameth::Vec3D const ocProjection = originToCenter - _axis * OcDotAxis;
     double const quadA = dirProjection.dot(dirProjection);
     double const quadB = 2 * dirProjection.dot(ocProjection);
     double const quadC = ocProjection.dot(ocProjection) - std::pow(radius, 2);
@@ -58,7 +49,7 @@ void Cylinder::fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) cons
     rec.t = t;
     rec.point = ray.at((t));
     Ameth::Vec3D const tipToPoint = rec.point - center;
-    Ameth::Vec3D normal = tipToPoint - axis * tipToPoint.dot(axis);
+    Ameth::Vec3D normal = tipToPoint - _axis * tipToPoint.dot(_axis);
     rec.normal = normal.normalized();
     rec.material = _material;
     if (ray.direction.dot(rec.normal) > 0)

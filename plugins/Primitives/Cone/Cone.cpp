@@ -9,16 +9,13 @@
 #include "Math/Ameth.hpp"
 #include "plugins/IPrimitive.hpp"
 #include "PluginFactory/PluginFactory.hpp"
-#include <algorithm>
 #include <cmath>
 #include <memory>
-#include <iostream>
-#include <numbers>
 #include <utility>
 
 namespace RayTracer {
 
-Cone::Cone(Ameth::Vec3D c, Ameth::Vec3D rotation, double angle, std::shared_ptr<IMaterial> material): APrimitive(material), center(c),
+Cone::Cone(Ameth::Vec3D c, Ameth::Vec3D rotation, double angle, std::shared_ptr<IMaterial> material): APrimitive(material, rotation), center(c),
       rotation(rotation), angle(angle) {};
 
 Ameth::Vec3D getProjection(Ameth::Vec3D vecteur, Ameth::Vec3D axis)
