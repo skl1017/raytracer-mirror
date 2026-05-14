@@ -82,6 +82,24 @@ set_target_properties(cylinder PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
 )
 
+# === Cone ===
+
+set(CONE
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Cone/Cone.cpp
+)
+
+add_library("cone" SHARED ${CONE})
+
+target_include_directories(cone PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Cone
+)
+
+set_target_properties(cone PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
+)
 
 # === DirectionaLight ===
 
