@@ -32,7 +32,6 @@ public:
 protected:
     void fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const override;
     std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const override;
-    Ameth::Vec3D _axis;
     std::string name{"Cone"};
 };
 

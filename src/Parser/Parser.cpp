@@ -6,6 +6,7 @@
 */
 
 #include "Parser/Parser.hpp"
+#include "Math/Ameth.hpp"
 #include <iostream>
 
 namespace RayTracer
@@ -40,4 +41,13 @@ namespace RayTracer
         return x;
     }
 
+    Ameth::Vec3D Parser::_parseVec3D(libconfig::Setting &s, const std::string &key)
+    {
+        auto &vecToParse = s.lookup(key);
+        return Ameth::Vec3D(
+            _parseDouble(vecToParse, "x"),
+            _parseDouble(vecToParse, "y"),
+            _parseDouble(vecToParse, "z")
+        );
+    }
 }

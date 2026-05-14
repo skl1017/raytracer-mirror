@@ -368,12 +368,13 @@ struct Matrix
         return newMatrix;
     }
 
-    Matrix operator*(const Matrix &m) const
+    template<int otherColumns>
+    Matrix<T, rows, otherColumns> operator*(const Matrix<T, columns, otherColumns> &m) const
     {
-        Matrix newMatrix;
+        Matrix<T, rows, otherColumns> newMatrix;
 
         for (size_t i = 0; i < rows; i++) {
-            for (size_t j = 0; j < columns; j++) {
+            for (size_t j = 0; j < otherColumns; j++) {
                 for (size_t a = 0; a < columns; a++) {
                     newMatrix[i][a] += (matrix[i][j] * m[j][a]);
                 }

@@ -26,6 +26,7 @@ namespace RayTracer
             typedef struct primitive_payload_base_s
             {
                 std::shared_ptr<IMaterial> material;
+                Ameth::Vec3D rotation;
             } primitive_payload_base_t;
 
             typedef struct sphere_payload_s : primitive_payload_base_t
@@ -36,7 +37,6 @@ namespace RayTracer
 
             typedef struct plane_payload_s : primitive_payload_base_t
             {
-                char axis;
                 double position;
             } plane_payload_t;
 
@@ -44,14 +44,11 @@ namespace RayTracer
             {
                 Ameth::Vec3D position;
                 double r;
-                Ameth::Vec3D rotation;
             } cylinder_payload_t;
-
 
             typedef struct cone_payload_s : primitive_payload_base_t
             {
                 Ameth::Vec3D position;
-                Ameth::Vec3D rotation;
                 double angle;
             } cone_payload_t;
         

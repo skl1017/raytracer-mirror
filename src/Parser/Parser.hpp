@@ -35,7 +35,7 @@ namespace RayTracer
             DLLoader& _dlloader;
             PluginFactory _pluginFactory;
             static double _parseDouble(libconfig::Setting &s, const std::string &);
-
+            static Ameth::Vec3D _parseVec3D(libconfig::Setting &s, const std::string &key);
             std::vector<std::unique_ptr<IPrimitive>> _parserGetPrimitives(libconfig::Setting &s, std::map<std::string, std::shared_ptr<IMaterial>>);
             std::vector<std::unique_ptr<ILight>> _parserGetLights(libconfig::Setting &s);
             std::vector<std::unique_ptr<Camera>> _parserGetCameras(libconfig::Setting &s);
