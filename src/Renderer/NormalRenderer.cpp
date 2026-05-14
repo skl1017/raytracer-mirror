@@ -17,6 +17,7 @@
 Ameth::Color NormalRenderer::computeLight(Ray::HitRecord &hit, Ray const &raycast, RayTracer::Scene &scene)
 {
     (void)scene;
+    (void)raycast;
     Ameth::Vec3D n = hit.normal;
     return Ameth::Color(0.5 * (n.x + 1.0), 0.5 * (n.y + 1.0), 0.5 * (n.z + 1.0));
 }

@@ -40,11 +40,26 @@ namespace RayTracer
                 double position;
             } plane_payload_t;
 
+            typedef struct cylinder_payload_s : primitive_payload_base_t
+            {
+                Ameth::Vec3D position;
+                double r;
+                Ameth::Vec3D rotation;
+            } cylinder_payload_t;
 
+
+            typedef struct cone_payload_s : primitive_payload_base_t
+            {
+                Ameth::Vec3D position;
+                Ameth::Vec3D rotation;
+                double angle;
+            } cone_payload_t;
+        
             typedef struct light_payload_s
             {
                 Ameth::Color color;
-
+                Ameth::Vec3D position;
+                double r;
             } light_payload_base_t;
 
             typedef struct pointlight_payload_s: light_payload_base_t
@@ -61,8 +76,7 @@ namespace RayTracer
             {
                 Ameth::Color color;
                 int transparency;
-                double refraction;
-                double reflection;
+                int reflection;
             } flatColor_payload_t;
 
             using lightPayload = std::variant<
@@ -73,7 +87,9 @@ namespace RayTracer
             using primitivePayload = std::variant<
                 primitive_payload_base_t,
                 sphere_payload_t,
-                plane_payload_t>;
+                plane_payload_t,
+                cylinder_payload_t,
+                cone_payload_t>;
 
             using materialPayload = std::variant<
                 flatColor_payload_t>;

@@ -26,7 +26,6 @@ namespace RayTracer
         } catch (const libconfig::ParseException &e){
             std::cout << "error : " << e.getError() << std::endl << "line: " << e.getLine() << std::endl;
         }
-
     }
 
     double Parser::_parseDouble(libconfig::Setting &s, const std::string &key)
