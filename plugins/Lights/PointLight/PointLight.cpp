@@ -39,7 +39,7 @@ extern "C" {
         RayTracer::PluginFactory::iLightCreateFunction const f = 
             [](RayTracer::PluginFactory::lightPayload const &p) -> std::unique_ptr<ILight> {
                 auto const payload = std::get<RayTracer::PluginFactory::pointlight_payload_t>(p);
-                return std::make_unique<RayTracer::PointLight>(payload.pos, payload.color);
+                return std::make_unique<RayTracer::PointLight>(payload.position, payload.color);
             };
 
         factory.add("pointLight", f);

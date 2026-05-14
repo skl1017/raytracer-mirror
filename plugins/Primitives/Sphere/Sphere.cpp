@@ -16,8 +16,12 @@
 
 namespace RayTracer {
 
-Sphere::Sphere(Ameth::Vec3D c, Ameth::Vec3D rotation, double r, std::shared_ptr<IMaterial> material): APrimitive(material, rotation), center(c),
-      radius(std::max(0.0, r)){}
+Sphere::Sphere(Ameth::Vec3D c, Ameth::Vec3D rotation, double r, std::shared_ptr<IMaterial> material)
+    : APrimitive(material, rotation),
+      center(c),
+      radius(std::max(0.0, r))
+{
+}
 
 std::optional<std::pair<double, double>> Sphere::lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {

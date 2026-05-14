@@ -36,7 +36,7 @@ extern "C" void registerPlugin(RayTracer::PluginFactory &factory)
         = [](RayTracer::PluginFactory::materialPayload const &p) -> std::shared_ptr<IMaterial> {
         auto const materialPayload = std::get<RayTracer::PluginFactory::flatColor_payload_t>(p);
         return std::make_shared<RayTracer::flatColor>(materialPayload.color,
-            materialPayload.transparency, materialPayload.reflection, materialPayload.refraction);
+            materialPayload.transparency, materialPayload.refraction, materialPayload.reflection);
     };
     factory.add("flatColor", f);
 }
