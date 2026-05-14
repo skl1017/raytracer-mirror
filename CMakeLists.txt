@@ -57,7 +57,6 @@ target_link_libraries(raytracer PRIVATE
     sfml-graphics
     sfml-window
     sfml-system
-    sphere
 )
 
 if(DEBUG)

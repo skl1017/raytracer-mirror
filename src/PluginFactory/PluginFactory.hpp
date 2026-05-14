@@ -52,6 +52,7 @@ namespace RayTracer
             {
                 Ameth::Vec3D position;
                 Ameth::Vec3D rotation;
+                double angle;
             } cone_payload_t;
         
             typedef struct light_payload_s
