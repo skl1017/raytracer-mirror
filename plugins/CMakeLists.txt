@@ -62,6 +62,27 @@ set_target_properties(plane PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
 )
 
+# === Cylinder ===
+
+set(CYLINDER
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Cylinder/Cylinder.cpp
+)
+
+add_library("cylinder" SHARED ${CYLINDER})
+
+target_include_directories(cylinder PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Cylinder
+)
+
+
+set_target_properties(cylinder PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
+)
+
+
 # === DirectionaLight ===
 
 set (DIRECTIONALLIGHT

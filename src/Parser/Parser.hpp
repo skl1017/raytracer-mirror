@@ -41,16 +41,18 @@ namespace RayTracer
             std::vector<std::unique_ptr<Camera>> _parserGetCameras(libconfig::Setting &s);
             std::map<std::string, std::shared_ptr<IMaterial>> _parserGetMaterials(libconfig::Setting &s);
 
-
-
             static void _parserGetSpheres(
                 DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&
                     , std::map<std::string, std::shared_ptr<IMaterial>>);
             static void _parserGetPlanes(
                 DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&
                     , std::map<std::string, std::shared_ptr<IMaterial>>);
-
-
+            static void _parserGetCylinders(
+                DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&
+                    , std::map<std::string, std::shared_ptr<IMaterial>>);
+            static void _parserGetCones(
+                DLLoader &,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<IPrimitive>>&
+                    , std::map<std::string, std::shared_ptr<IMaterial>>);
 
 
             static void _parserGetPointLight(
@@ -69,6 +71,8 @@ namespace RayTracer
                 {
                     {"spheres", _parserGetSpheres},
                     {"planes", _parserGetPlanes},
+                    {"cylinders", _parserGetCylinders},
+                    {"cones", _parserGetCones}
                 };
             std::map<std::string, std::function<void (DLLoader &
                 ,PluginFactory &,libconfig::Setting &s, std::vector<std::unique_ptr<ILight>>&)>> _lightsParsingFns =

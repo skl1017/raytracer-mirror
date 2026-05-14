@@ -83,4 +83,68 @@ namespace RayTracer
             primitivesList.push_back(pluginFactory.create("sphere", spherePayload));
         }
     }
+
+    void Parser::_parserGetCylinders(DLLoader &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &cylinders
+        , std::vector<std::unique_ptr<IPrimitive>>& primitivesList, std::map<std::string, std::shared_ptr<IMaterial>> materials)
+    {
+        pluginManager.open("libs/Primitives/libcylinder.so");
+        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.sym(
+                "libs/Primitives/libcylinder.so", "registerPlugin"
+            ));
+        reg(pluginFactory);
+
+        for (auto &s: cylinders)
+        {
+
+             std::string materialName = s.lookup("material");
+            auto primitiveMaterial = materials.find(materialName);
+
+            if (primitiveMaterial == materials.end()){
+                throw;
+            }
+
+            auto position = Ameth::Vec3D(
+                _parseDouble(s, "x"),
+                _parseDouble(s, "y"),
+                _parseDouble(s, "z")
+            );
+            auto r = _parseDouble(s, "r");
+
+            PluginFactory::cylinder_payload_t cylinderPayload = {
+                {primitiveMaterial->second}, position, r
+            };
+            primitivesList.push_back(pluginFactory.create("cylinder", cylinderPayload));
+        }
+    }
+    void Parser::_parserGetCones(DLLoader &pluginManager, PluginFactory & pluginFactory,libconfig::Setting &cones
+        , std::vector<std::unique_ptr<IPrimitive>>& primitivesList, std::map<std::string, std::shared_ptr<IMaterial>> materials)
+    {
+        pluginManager.open("libs/Primitives/libcone.so");
+        auto reg = reinterpret_cast<RegisterPluginFn>(pluginManager.sym(
+                "libs/Primitives/libcone.so", "registerPlugin"
+            ));
+        reg(pluginFactory);
+
+        for (auto &s: cones)
+        {
+            std::string materialName = s.lookup("material");
+            auto primitiveMaterial = materials.find(materialName);
+
+            if (primitiveMaterial == materials.end()){
+                throw;
+            }
+
+            auto position = Ameth::Vec3D(
+                _parseDouble(s, "x"),
+                _parseDouble(s, "y"),
+                _parseDouble(s, "z")
+            );
+            auto r = _parseDouble(s, "r");
+
+            PluginFactory::sphere_payload_t spherePayload = {
+                {primitiveMaterial->second}, position, r
+            };
+            primitivesList.push_back(pluginFactory.create("cone", spherePayload));
+        }
+    }
 }
