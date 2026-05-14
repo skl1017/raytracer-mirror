@@ -17,7 +17,7 @@ cmake --build path/build/dir/
 ```
 
 ## Usage
-Once build, you can launch the program by specifying one of the preset config file or [create your own config file]().  
+Once build, you can launch the program by specifying one of the preset [config file](configFile/) or [create your own config file]().  
 ```
 ./path/build/dir/raytracer configFile/scene1.cfg
 ```
