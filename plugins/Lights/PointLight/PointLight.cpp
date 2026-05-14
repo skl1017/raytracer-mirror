@@ -10,7 +10,7 @@
 #include <iostream>
 #include <memory>
 
-Ameth::Color RayTracer::PointLight::getIllumination(Ray::HitRecord &hitRecord)
+Ameth::Color RayTracer::PointLight::getIllumination(Ray::HitRecord &hitRecord, Ray raycast)
 {
     Ameth::Color illumination = _LightColor;
     Ameth::Vec3D incidentLight = (_position - hitRecord.point).normalized();
@@ -18,10 +18,20 @@ Ameth::Color RayTracer::PointLight::getIllumination(Ray::HitRecord &hitRecord)
     double ambient = 0.1;
     double angle = hitRecord.normal.dot(incidentLight);
     double intensity = ambient + std::max(0.0, angle);
-    
+    Ameth::Vec3D rayDir = (raycast.direction * - 1).normalized();
+    Ameth::Vec3D R =  hitRecord.normal * 2.0 * hitRecord.normal.dot(incidentLight) - incidentLight;
+
+    double spec = pow(std::max(0.0, rayDir.dot(R)), 32);
     illumination *= intensity;
+    illumination += _LightColor * spec;
     return illumination;
 }
+
+Ameth::Vec3D RayTracer::PointLight::getDirectVector(Ray::HitRecord &hitRecord)
+{
+    return (_position - hitRecord.point);
+}
+
 
 extern "C" {
     void registerPlugin(RayTracer::PluginFactory &factory)

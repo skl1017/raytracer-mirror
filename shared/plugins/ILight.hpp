@@ -14,5 +14,7 @@
 class ILight
 {
 public:
-    virtual Ameth::Color getIllumination(Ray::HitRecord &hitRecord) = 0;
+    virtual Ameth::Color getIllumination(Ray::HitRecord &hitRecord,
+        Ray raycast) = 0;
+    virtual Ameth::Vec3D getDirectVector(Ray::HitRecord &hitRecord) = 0;
 };
