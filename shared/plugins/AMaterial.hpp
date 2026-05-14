@@ -43,7 +43,7 @@ public:
     };
 
     double getReflection() override {
-        return _reflection;
+        return _reflection / 100;
     }
 ;
 };

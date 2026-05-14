@@ -30,6 +30,14 @@
 //     return I * eta + N * (eta * cosi - std::sqrt(internal));
 // }
 
+Ameth::Vec3D reflect(const Ameth::Vec3D &I_in, const Ameth::Vec3D &N_in)
+{
+    Ameth::Vec3D I = I_in.normalized();
+    Ameth::Vec3D N = N_in.normalized();
+
+    return I - N * 2.0 * I.dot(N);
+}
+
 
 Ameth::Color RaytracingRender::ComputeTransparency(Ray::HitRecord &oldRec,
     Ray const &raycast, RayTracer::Scene &scene)
@@ -74,7 +82,7 @@ Ameth::Color RaytracingRender::computeLight(Ray::HitRecord &hit, Ray const &rayc
         return finalColor;
     }
     finalColor = handleLight(scene, hit, raycast);
-    if (hit.material->isTransparent()){
+    if (hit.material->isTransparent()) {
         Ameth::Color tmp = hit.material->getColor(finalColor);
         Ameth::Color refractLight = ComputeTransparency(hit, raycast,scene);
         double t = hit.material->getTransparency();
@@ -85,6 +93,18 @@ Ameth::Color RaytracingRender::computeLight(Ray::HitRecord &hit, Ray const &rayc
         finalColor.g = tmp.g + refractLight.g;
         finalColor.b = tmp.b + refractLight.b;
         return finalColor;
+    }
+    if (hit.material->isReflecting()) {
+        Ray reflected;
+        reflected.direction = reflect(raycast.direction, hit.normal);
+        reflected.origin = hit.point + hit.normal * EPSILON;
+        Ray::HitRecord reflectRecord;
+        double r = hit.material->getReflection();
+
+        if (!isRayHitting(scene, reflected, reflectRecord)){
+            return hit.material->getColor(finalColor) * (1 - r) + _bg * r;
+        }
+        return hit.material->getColor(finalColor) * (1 - r) + computeLight(reflectRecord, reflected, scene) * r;
     }
     return hit.material->getColor(finalColor);
 }
