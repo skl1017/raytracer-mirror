@@ -16,7 +16,7 @@ public:
     PointLight(Ameth::Vec3D position, Ameth::Color lightColor) :
     _position(position), _LightColor(lightColor) {};
     ~PointLight() = default;
-    Ameth::Color getIllumination(Ray::HitRecord &hitRecord) override;
+    Ameth::Color getIllumination(Ray::HitRecord &hitRecord, Ray raycast) override;
     protected:
     Ameth::Vec3D _position;
     Ameth::Color _LightColor;
