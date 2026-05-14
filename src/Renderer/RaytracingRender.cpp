@@ -62,14 +62,14 @@ Ameth::Color RaytracingRender::handleLight(RayTracer::Scene &scene, Ray::HitReco
 
     for (size_t i = 0; i < scene._lights.size(); i++) {
         lightColor = scene._lights[i]->getIllumination(hit, raycast);
-        lightRay.origin = hit.point;
         lightRay.direction = scene._lights[i]->getDirectVector(hit);
+        lightRay.origin = hit.point + hit.normal * EPSILON;
         if (isRayHitting(scene, lightRay, lightRecord)) {
-            lightColor = {0, 0, 0};
+            if (lightRay.direction.length() > (lightRecord.point - hit.point).length()) {
+                lightColor = {0, 0, 0};
+            }
         }
-        finalColor.r = std::max(finalColor.r, lightColor.r);
-        finalColor.g = std::max(finalColor.g, lightColor.g);
-        finalColor.b = std::max(finalColor.b, lightColor.b);
+        finalColor += lightColor;
     }
     return finalColor;
 }
