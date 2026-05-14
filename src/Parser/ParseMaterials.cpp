@@ -42,9 +42,10 @@ namespace RayTracer
             );
             auto &name = s.lookup("name");
             int transparency = s.lookup("transparency");
+            int reflection = s.lookup("reflection");
 
             PluginFactory::flatColor_payload_t flatColorPayload = {
-                color, transparency
+                color, transparency, reflection
             };
             materialList.insert({name, pluginFactory.create("flatColor", flatColorPayload)});
         }
