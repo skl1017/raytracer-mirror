@@ -27,7 +27,7 @@ Ameth::Color RayTracer::DirectionalLight::getIllumination(Ray::HitRecord &hitRec
 
 Ameth::Vec3D RayTracer::DirectionalLight::getDirectVector(Ray::HitRecord &hitRecord)
 {
-    return Ameth::Vec3D(0, 0, 0) - _direction;
+    return (Ameth::Vec3D(0, 0, 0) - _direction) * 1000000;
 }
 
 
