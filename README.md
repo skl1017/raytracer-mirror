@@ -2,6 +2,9 @@
 The goal of this project is to recreate a raytracer renderer that produces **realistic images**  
 by following the **path of light** rays and their interactions with objects.
 
+![](screenshot/scene4.png)
+![](screenshot/scene3.png)
+
 ## Contributors
 [skl1017](https://github.com/skl1017)
 [aludnier](https://github.com/aludnier)
