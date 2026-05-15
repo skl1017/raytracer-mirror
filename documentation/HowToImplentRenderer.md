@@ -1,6 +1,6 @@
 # Implement a Renderer
   
-In the [Core file](src/Core/Core.cpp), the renderers are specifed and can be customized, ornew ones can be added.
+In the [Core file](../src/Core/Core.cpp), the renderers are specifed and can be customized, ornew ones can be added.
 
 ### Personalize Renderers
 
@@ -19,7 +19,7 @@ _renderers.push_back(std::make_unique<NEW_RENDERER>());
 ### Implement a New Renderer
 
 You can add new Renderer with your own logic.  
-To do so, the new Renderer must inherit from [**IRenderer**](shared/plugins/IRenderer.hpp).
+To do so, the new Renderer must inherit from [**IRenderer**](../shared/plugins/IRenderer.hpp).
 
 ```cpp
 class IRenderer
@@ -33,5 +33,5 @@ public:
 - **computeLight** : handle light physics as you wish.
 
 
-An Abstract [**ARenderer Class**](src/Renderer/ARenderer.cpp) is implemented with the function _renderScreen_ function implemented  
+An Abstract [**ARenderer Class**](../src/Renderer/ARenderer.cpp) is implemented with the function _renderScreen_ function implemented  
 and some utils functions. 

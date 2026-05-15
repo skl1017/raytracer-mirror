@@ -1,7 +1,7 @@
 # Implement new Light
 
 ### Create Class
-To Impelent a new Light, your new must inherit from the [**ILight Class**](shared/plugins/ILight.hpp).  
+To Impelent a new Light, your new must inherit from the [**ILight Class**](../shared/plugins/ILight.hpp).  
 ```cpp
 class ILight
 {
@@ -16,4 +16,4 @@ and Implement :
  - **getDirectVector** : return the vector **from** point in the `hitRecord` **to** the light.
 
 ### implement plugin
-Once the Class is create, you need to [implement the plugin]() to the pluginsFactory and to the parser.
+Once the Class is create, you need to [implement the plugin](ImplementPlugins.md) to the pluginsFactory and to the parser.
