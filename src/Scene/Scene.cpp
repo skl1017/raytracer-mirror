@@ -18,5 +18,6 @@ namespace RayTracer
         _primitives(std::move(primitives)),
         _lights(std::move(lights))
 {
+    _bvh.build(_primitives);
 }
 }

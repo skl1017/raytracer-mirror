@@ -35,6 +35,7 @@ set(RAYTRACER
     ${PROJECT_SOURCE_DIR}/src/Parser/ParseMaterials.cpp
     ${PROJECT_SOURCE_DIR}/src/PluginFactory/PluginFactory.cpp
     ${PROJECT_SOURCE_DIR}/src/Renderer/ParallelImageScheduler.cpp
+    ${PROJECT_SOURCE_DIR}/src/Bvh/Bvh.cpp
 )
 
 add_executable(raytracer ${RAYTRACER} src/main.cpp)

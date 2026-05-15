@@ -10,40 +10,20 @@
 bool ARenderer::isRayHitting(RayTracer::Scene &scene, Ray const &raycast,
     Ray::HitRecord &rec, std::size_t depth)
 {
-    double closestT = std::numeric_limits<double>::infinity();
-    bool hitAny = false;
-    auto const &primitives = scene._primitives;
-
-    if (depth <= 0) {
+    if (depth <= 0)
         return false;
-    }
-    for (auto const &prim : primitives) {
-        Ray::HitRecord hitrec{};
-        if (prim->hit(raycast, hitrec) && hitrec.t > EPSILON && hitrec.t < closestT) {
-            hitAny = true;
-            closestT = hitrec.t;
-            rec = hitrec;
-        }
-    }
-    return hitAny;
+    if (scene._bvh.empty())
+        return false;
+    rec.t = std::numeric_limits<double>::infinity();
+    return scene._bvh.hit(raycast, rec);
 }
-
 
 bool ARenderer::isRayHitting(RayTracer::Scene &scene, Ray const &raycast, Ray::HitRecord &rec)
 {
-    double closestT = std::numeric_limits<double>::infinity();
-    bool hitAny = false;
-    auto const &primitives = scene._primitives;
-
-    for (auto const &prim : primitives) {
-        Ray::HitRecord hitrec{};
-        if (prim->hit(raycast, hitrec) && hitrec.t > EPSILON && hitrec.t < closestT) {
-            hitAny = true;
-            closestT = hitrec.t;
-            rec = hitrec;
-        }
-    }
-    return hitAny;
+    if (scene._bvh.empty())
+        return false;
+    rec.t = std::numeric_limits<double>::infinity();
+    return scene._bvh.hit(raycast, rec);
 }
 
 void ARenderer::renderScreen(RayTracer::Scene &scene, std::unique_ptr<Camera> &camera, ParallelImageScheduler &scheduler)

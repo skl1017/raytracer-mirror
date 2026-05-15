@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Bvh/Bvh.hpp"
 #include "Camera/Camera.hpp"
 #include "Math/Ameth.hpp"
 #include "plugins/IMaterial.hpp"
@@ -29,5 +30,6 @@ namespace RayTracer
             std::vector<std::unique_ptr<Camera>> _cameras;
             std::vector<std::unique_ptr<IPrimitive>> _primitives;
             std::vector<std::unique_ptr<ILight>> _lights;
+            Bvh _bvh;
     };
 }

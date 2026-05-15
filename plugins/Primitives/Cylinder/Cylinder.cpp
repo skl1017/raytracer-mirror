@@ -23,6 +23,13 @@ Cylinder::Cylinder(Ameth::Vec3D c, double radius, double height, Ameth::Vec3D ro
 {
 }
 
+Ameth::Aabb Cylinder::boundingBox() const
+{
+    double const extent = radius + height;
+    Ameth::Vec3D const half(extent, extent, extent);
+    return {center - half, center + half};
+}
+
 std::optional<std::pair<double, double>> Cylinder::lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {
     Ameth::Vec3D const u = _axis.normalized();

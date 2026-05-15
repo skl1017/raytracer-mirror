@@ -22,10 +22,13 @@ class Cone : public APrimitive {
 public:
     Cone(Ameth::Vec3D c, Ameth::Vec3D rotation, double height, double baseRadius, std::shared_ptr<IMaterial> material = nullptr);
     std::string getName() const override;
+    Ameth::Aabb boundingBox() const override;
     Ameth::Vec3D pointAt(double u, double v) const override;
 
     Ameth::Vec3D center;
     double angle;
+    double _height{};
+    double _baseRadius{};
 
 protected:
     bool onForwardCone(double t, double ocDotAxis, double dirDotAxis) const;
