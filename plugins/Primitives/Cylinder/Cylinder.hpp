@@ -22,6 +22,7 @@ class Cylinder : public APrimitive {
 public:
     Cylinder(Ameth::Vec3D c, double radius, double height, Ameth::Vec3D rotation, std::shared_ptr<IMaterial> material = nullptr);
     std::string getName() const override;
+    Ameth::Aabb boundingBox() const override;
     Ameth::Vec3D pointAt(double u, double v) const override;
 
     Ameth::Vec3D center;

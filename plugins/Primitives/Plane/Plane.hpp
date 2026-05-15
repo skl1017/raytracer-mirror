@@ -20,6 +20,7 @@ class Plane : public APrimitive {
 public:
     Plane(double position, Ameth::Vec3D rotation, std::shared_ptr<IMaterial> material = nullptr);
     std::string getName() const override { return "Plane"; }
+    Ameth::Aabb boundingBox() const override;
     Ameth::Vec3D getNormal() const;
     Ameth::Vec3D pointAt(double u, double v) const override {(void)u; (void)v; return {};};
 

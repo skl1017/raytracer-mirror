@@ -18,8 +18,17 @@ namespace RayTracer {
 Cone::Cone(Ameth::Vec3D c, Ameth::Vec3D rotation, double height, double baseRadius, std::shared_ptr<IMaterial> material)
     : APrimitive(material, rotation),
       center(c),
-      angle(height > 0.0 ? std::atan2(std::max(0.0, baseRadius), height) : 0.0)
+      angle(height > 0.0 ? std::atan2(std::max(0.0, baseRadius), height) : 0.0),
+      _height(height),
+      _baseRadius(std::max(0.0, baseRadius))
 {
+}
+
+Ameth::Aabb Cone::boundingBox() const
+{
+    double const extent = _baseRadius + _height;
+    Ameth::Vec3D const half(extent, extent, extent);
+    return {center - half, center + half};
 }
 
 bool Cone::onForwardCone(double t, double ocDotAxis, double dirDotAxis) const

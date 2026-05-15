@@ -23,6 +23,12 @@ Sphere::Sphere(Ameth::Vec3D c, Ameth::Vec3D rotation, double r, std::shared_ptr<
 {
 }
 
+Ameth::Aabb Sphere::boundingBox() const
+{
+    Ameth::Vec3D const r(radius, radius, radius);
+    return {center - r, center + r};
+}
+
 std::optional<std::pair<double, double>> Sphere::lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {
     if (dir.length() < 1e-12)

@@ -21,6 +21,13 @@ namespace RayTracer
     {
     }
 
+Ameth::Aabb Plane::boundingBox() const
+{
+    constexpr double big = 1e6;
+    Ameth::Vec3D const half(big, big, big);
+    return {_point - half, _point + half};
+}
+
 Ameth::Vec3D Plane::getNormal() const
 {
     return _axis.normalized();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <array>
 #include <cstddef>
@@ -16,6 +17,24 @@ public:
 
     Vec3D() : x(0.0), y(0.0), z(0.0) {}
     Vec3D(double x, double y, double z) : x(x), y(y), z(z) {}
+
+    double &operator[](int i)
+    {
+        if (i == 0)
+            return x;
+        if (i == 1)
+            return y;
+        return z;
+    }
+
+    double operator[](int i) const
+    {
+        if (i == 0)
+            return x;
+        if (i == 1)
+            return y;
+        return z;
+    }
 
     double length() const
     {
@@ -147,6 +166,24 @@ public:
     Vec3D pow(double e) const
     {
         return {std::pow(x, e), std::pow(y, e), std::pow(z, e)};
+    }
+};
+
+class Aabb {
+public:
+    Vec3D min{};
+    Vec3D max{};
+
+    static Aabb fromPoint(Vec3D const &p) { return {p, p}; }
+
+    void expand(Aabb const &other)
+    {
+        min.x = std::min(min.x, other.min.x);
+        min.y = std::min(min.y, other.min.y);
+        min.z = std::min(min.z, other.min.z);
+        max.x = std::max(max.x, other.max.x);
+        max.y = std::max(max.y, other.max.y);
+        max.z = std::max(max.z, other.max.z);
     }
 };
 
