@@ -12,7 +12,7 @@
 
 Camera::Camera(Ameth::Vec3D pos, Ameth::Quaternion rot, double fov, unsigned width, unsigned height)
     : _position(pos),
-      _orientation(rot),
+      _orientation(rot.normalized()),
       _vfov(fov),
       _imageWidth(width),
       _imageHeight(height),
@@ -20,27 +20,36 @@ Camera::Camera(Ameth::Vec3D pos, Ameth::Quaternion rot, double fov, unsigned wid
       _tanHalfVfov(std::tan((fov * M_PI / 180.0) * 0.5)),
       _hdrImage(static_cast<std::size_t>(width) * height)
 {
+    syncEulerFromOrientation();
 }
 
-void Camera::applyYaw(double yawDelta)
+void Camera::syncEulerFromOrientation()
 {
-    Ameth::Vec3D const y = _orientation.rotate({0.0, 1.0, 0.0});
-    Ameth::Quaternion const yawQ = Ameth::Quaternion::angleAxis(yawDelta, y);
-    _orientation = (yawQ * _orientation).normalized();
+    Ameth::Vec3D f = _orientation.rotate({0.0, 0.0, 1.0});
+    _yaw = std::atan2(f.x, f.z);
+    _pitch = std::asin(std::clamp(f.y, -1.0, 1.0));
+    rebuildOrientationFromEuler();
 }
 
-void Camera::applyPitch(double pitchDelta)
+void Camera::rebuildOrientationFromEuler()
 {
-    Ameth::Vec3D const x = _orientation.rotate({1.0, 0.0, 0.0});
-    Ameth::Quaternion const pitchQ = Ameth::Quaternion::angleAxis(pitchDelta, x);
-    _orientation = (pitchQ * _orientation).normalized();
+    Ameth::Quaternion yawQ = Ameth::Quaternion::angleAxis(_yaw, {0.0, 1.0, 0.0});
+    Ameth::Quaternion pitchQ = Ameth::Quaternion::angleAxis(_pitch, {1.0, 0.0, 0.0});
+    _orientation = (yawQ * pitchQ).normalized();
 }
 
-void Camera::applyRoll(double rollDelta)
+void Camera::rotateView(double deltaYaw, double deltaPitch)
 {
-    Ameth::Vec3D const f = _orientation.rotate({0.0, 0.0, 1.0});
-    Ameth::Quaternion const rollQ = Ameth::Quaternion::angleAxis(rollDelta, f);
-    _orientation = (rollQ * _orientation).normalized();
+    _yaw += deltaYaw;
+    _pitch = std::clamp(_pitch + deltaPitch, -kMaxPitch, kMaxPitch);
+    rebuildOrientationFromEuler();
+}
+
+void Camera::handleMouseLook(int deltaX, int deltaY, double sensitivity)
+{
+    if (deltaX == 0 && deltaY == 0)
+        return;
+    rotateView(static_cast<double>(deltaX) * sensitivity, static_cast<double>(deltaY) * sensitivity);
 }
 
 void Camera::moveForward(double speed)
@@ -61,6 +70,11 @@ Ameth::Vec3D Camera::forward() const
 Ameth::Vec3D Camera::right() const
 {
     return _orientation.rotate({1.0, 0.0, 0.0});
+}
+
+Ameth::Vec3D Camera::up() const
+{
+    return _orientation.rotate({0.0, 1.0, 0.0});
 }
 
 Ameth::Vec3D Camera::getGlobalPosition() const

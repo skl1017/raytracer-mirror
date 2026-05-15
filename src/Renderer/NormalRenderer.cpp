@@ -14,10 +14,11 @@
 #include <iostream>
 #include <algorithm>
 
-Ameth::Color NormalRenderer::computeLight(Ray::HitRecord &hit, Ray const &raycast, RayTracer::Scene &scene)
+Ameth::Color NormalRenderer::computeLight(Ray::HitRecord &hit, Ray const &raycast, RayTracer::Scene &scene, std::size_t depth)
 {
     (void)scene;
     (void)raycast;
+    (void)depth;
     Ameth::Vec3D n = hit.normal;
     return Ameth::Color(0.5 * (n.x + 1.0), 0.5 * (n.y + 1.0), 0.5 * (n.z + 1.0));
 }
