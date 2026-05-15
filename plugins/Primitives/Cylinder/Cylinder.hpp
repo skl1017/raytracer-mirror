@@ -25,7 +25,6 @@ public:
     Ameth::Vec3D pointAt(double u, double v) const override;
 
     Ameth::Vec3D center;
-    Ameth::Vec3D axis = {1, 0, 0};
     Ameth::Vec3D rotation;
     double radius{};
 

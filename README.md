@@ -38,3 +38,31 @@ The project load the differents objects using plugins and so new plugin that fol
  - [Materials]() : Each object in the scene contain a material that define it color / reflection / etc...   
  - [Primitive]() : The differents forms for the objects of the scene.
 
+## Doxygen
+
+### Install Doxygen
+
+```bash
+sudo apt update && sudo apt upgrade
+sudo apt install doxygen
+```
+
+### Generate the html
+
+```bash
+doxygen doxygen_config
+```
+
+### Run the Doxygen
+
+```bash
+cd html
+python3 -m html/http.server [PORT]
+```
+
+### Example
+
+```bash
+cd html
+python3 -m html/http.server 8080
+```
