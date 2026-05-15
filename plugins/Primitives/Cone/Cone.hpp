@@ -28,6 +28,12 @@ public:
     double angle;
 
 protected:
+    bool onForwardCone(double t, double ocDotAxis, double dirDotAxis) const;
+    double toRayT(double t, double invDirLen) const;
+    std::optional<std::pair<double, double>> handleNoise(double quadA, double quadB, double ocDotAxis, double dirDotAxis,
+        double invDirLen) const;
+    std::optional<std::pair<double, double>> handleMirrorCone(double tMinusSqrt, double tPlusSqrt, double ocDotAxis,
+        double dirDotAxis, double invDirLen) const;
     void fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const override;
     std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const override;
     std::string name{"Cone"};

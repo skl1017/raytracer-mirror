@@ -9,7 +9,6 @@
 #include "Math/Ameth.hpp"
 #include "plugins/IPrimitive.hpp"
 #include "PluginFactory/PluginFactory.hpp"
-#include <algorithm>
 #include <cmath>
 #include <memory>
 #include <utility>
@@ -23,20 +22,54 @@ Cone::Cone(Ameth::Vec3D c, Ameth::Vec3D rotation, double height, double baseRadi
 {
 }
 
-Ameth::Vec3D getProjection(Ameth::Vec3D vecteur, Ameth::Vec3D axis)
+bool Cone::onForwardCone(double t, double ocDotAxis, double dirDotAxis) const
 {
-   return vecteur - axis * vecteur.dot(axis);
+    if (t <= 0.0)
+        return false;
+    return ocDotAxis + t * dirDotAxis > 0.0;
+}
+
+double Cone::toRayT(double t, double invDirLen) const
+{
+    return t * invDirLen;
+}
+
+std::optional<std::pair<double, double>> Cone::handleNoise(double quadA, double quadB, double ocDotAxis, double dirDotAxis,
+    double invDirLen) const
+{
+    if (std::abs(quadA) < 1e-12)
+        return std::nullopt;
+    double const t = -quadB / (2.0 * quadA);
+    if (!onForwardCone(t, ocDotAxis, dirDotAxis))
+        return std::nullopt;
+    return std::make_pair(toRayT(t, invDirLen), -1.0);
+}
+
+std::optional<std::pair<double, double>> Cone::handleMirrorCone(double tMinusSqrt, double tPlusSqrt, double ocDotAxis,
+    double dirDotAxis, double invDirLen) const
+{
+    bool const okMinus = onForwardCone(tMinusSqrt, ocDotAxis, dirDotAxis);
+    bool const okPlus = onForwardCone(tPlusSqrt, ocDotAxis, dirDotAxis);
+    if (!okMinus && !okPlus)
+        return std::nullopt;
+    if (okMinus && okPlus)
+        return std::make_pair(toRayT(tMinusSqrt, invDirLen), toRayT(tPlusSqrt, invDirLen));
+    double const t = okMinus ? tMinusSqrt : tPlusSqrt;
+    return std::make_pair(toRayT(t, invDirLen), -1.0);
 }
 
 std::optional<std::pair<double, double>> Cone::lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {
-    if (dir.length() < 1e-12)
+    double const dirLen = dir.length();
+    if (dirLen < 1e-12)
         return std::nullopt;
+    double const invDirLen = 1.0 / dirLen;
+
     Ameth::Vec3D const axis = _axis.normalized();
     Ameth::Vec3D const originToCenter = origin - center;
-    double const dirDotAxis = dir.dot(axis);
+    double const dirDotAxis = dir.dot(axis) * invDirLen;
     double const ocDotAxis = originToCenter.dot(axis);
-    double const dirDotOc = dir.dot(originToCenter);
+    double const dirDotOc = dir.dot(originToCenter) * invDirLen;
     double const OcDotOC = originToCenter.dot(originToCenter);
     double const cosAngleSquare = std::pow(std::cos(angle), 2);
     double const quadA = std::pow(dirDotAxis, 2) - cosAngleSquare;
@@ -45,20 +78,22 @@ std::optional<std::pair<double, double>> Cone::lineTValues(Ameth::Vec3D const &o
     double const discriminant = std::pow(quadB, 2) - (4 * quadA * quadC);
     if (discriminant < 0.0)
         return std::nullopt;
+    if (discriminant < 1e-12)
+        return handleNoise(quadA, quadB, ocDotAxis, dirDotAxis, invDirLen);
     double const sqrtDisc = std::sqrt(discriminant);
     double const tMinusSqrt = (-quadB - sqrtDisc) / (2.0 * quadA);
     double const tPlusSqrt = (-quadB + sqrtDisc) / (2.0 * quadA);
-    return std::make_pair(tMinusSqrt, tPlusSqrt);
+    return handleMirrorCone(tMinusSqrt, tPlusSqrt, ocDotAxis, dirDotAxis, invDirLen);
 }
 
 void Cone::fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const
 {
     rec.t = t;
-    rec.point = ray.at((t));
-    Ameth::Vec3D const ax = _axis.length() > 1e-12 ? _axis.normalized() : Ameth::Vec3D(0.0, 1.0, 0.0);
+    rec.point = ray.at(t);
+    Ameth::Vec3D const axis = _axis.normalized();
     Ameth::Vec3D const tipToPoint = rec.point - center;
     double const cosAngleSquare = std::pow(std::cos(angle), 2);
-    Ameth::Vec3D normal = ax * tipToPoint.dot(ax) - tipToPoint * cosAngleSquare;
+    Ameth::Vec3D normal = axis * tipToPoint.dot(axis) - tipToPoint * cosAngleSquare;
     rec.normal = normal.normalized();
     if (ray.direction.dot(rec.normal) > 0)
         rec.normal = rec.normal * -1;

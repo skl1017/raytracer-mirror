@@ -9,7 +9,6 @@
 #include "Math/Ameth.hpp"
 #include "plugins/IPrimitive.hpp"
 #include "PluginFactory/PluginFactory.hpp"
-#include <algorithm>
 #include <cmath>
 #include <memory>
 #include <utility>
@@ -26,22 +25,20 @@ Cylinder::Cylinder(Ameth::Vec3D c, double radius, double height, Ameth::Vec3D ro
 
 std::optional<std::pair<double, double>> Cylinder::lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {
-    if (dir.length() < 1e-12)
-        return std::nullopt;
-    Ameth::Vec3D const axis = _axis.normalized();
+    Ameth::Vec3D const u = _axis.normalized();
     Ameth::Vec3D const originToCenter = origin - center;
-    double const DirDotAxis = dir.dot(axis);
-    double const OcDotAxis = originToCenter.dot(axis);
-    Ameth::Vec3D const dirProjection = dir - axis * DirDotAxis;
-    Ameth::Vec3D const ocProjection = originToCenter - axis * OcDotAxis;
+    double const DirDotAxis = dir.dot(u);
+    double const OcDotAxis = originToCenter.dot(u);
+    Ameth::Vec3D const dirProjection = dir - u * DirDotAxis;
+    Ameth::Vec3D const ocProjection = originToCenter - u * OcDotAxis;
     double const quadA = dirProjection.dot(dirProjection);
     double const quadB = 2 * dirProjection.dot(ocProjection);
     double const quadC = ocProjection.dot(ocProjection) - std::pow(radius, 2);
-    if (std::abs(quadA) < 1e-12)
-        return std::nullopt;
+
     double const discriminant = std::pow(quadB, 2) - (4 * quadA * quadC);
     if (discriminant < 0.0)
         return std::nullopt;
+
     double const sqrtDisc = std::sqrt(discriminant);
     double const tMinusSqrt = (-quadB - sqrtDisc) / (2.0 * quadA);
     double const tPlusSqrt = (-quadB + sqrtDisc) / (2.0 * quadA);
@@ -52,10 +49,9 @@ void Cylinder::fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) cons
 {
     rec.t = t;
     rec.point = ray.at(t);
-    Ameth::Vec3D const ax = _axis.length() > 1e-12 ? _axis.normalized() : Ameth::Vec3D(0.0, 1.0, 0.0);
-    Ameth::Vec3D const tipToPoint = rec.point - center;
-    Ameth::Vec3D normal = tipToPoint - ax * tipToPoint.dot(ax);
-    rec.normal = normal.normalized();
+    Ameth::Vec3D const u = _axis.normalized();
+    Ameth::Vec3D const v = rec.point - center;
+    rec.normal = (v - u * v.dot(u)).normalized();
     rec.material = _material;
     if (ray.direction.dot(rec.normal) > 0)
         rec.normal = rec.normal * -1;
