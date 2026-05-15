@@ -6,7 +6,6 @@
 */
 
 #include "PluginFactory.hpp"
-
 namespace RayTracer
 {
     void PluginFactory::add(const std::string &primitive, iPrimitiveCreateFunction func)
@@ -14,10 +13,41 @@ namespace RayTracer
         _fPrimitives[primitive] = func;
         return;
     }
-    std::unique_ptr<IPrimitive> PluginFactory::createPrimitive(const std::string &name, const primitivePayload &p)
+
+    void PluginFactory::add(const std::string &light, iLightCreateFunction func)
+    {
+        _fLights[light] = func;
+        return;
+    }
+
+    void PluginFactory::add(const std::string &material, iMaterialCreateFunction func)
+    {
+        _fMaterials[material] = func;
+        return;
+    }
+
+    std::unique_ptr<IPrimitive> PluginFactory::create(const std::string &name, const primitivePayload &p)
     {
         auto func = _fPrimitives.find(name);
         if (func == _fPrimitives.end()){
+            throw PluginFactoryException("No Plugin found for " + name);
+        }
+        return func->second(p);
+    }
+    std::unique_ptr<ILight> PluginFactory::create(const std::string &name, const lightPayload &p)
+    {
+
+        auto func = _fLights.find(name);
+        if (func == _fLights.end()){
+            throw PluginFactoryException("No Plugin found for " + name);
+        }
+        return func->second(p);
+    }
+    std::shared_ptr<IMaterial> PluginFactory::create(const std::string &name, const materialPayload &p)
+    {
+
+        auto func = _fMaterials.find(name);
+        if (func == _fMaterials.end()){
             throw PluginFactoryException("No Plugin found for " + name);
         }
         return func->second(p);

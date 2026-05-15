@@ -1,6 +1,10 @@
 #pragma once
 
 #include <cmath>
+#include <array>
+#include <cstddef>
+#include <cstdio>
+#include <iostream>
 
 namespace Ameth {
 
@@ -331,6 +335,64 @@ public:
     Color pow(double e) const
     {
         return {std::pow(r, e), std::pow(g, e), std::pow(b, e)};
+    }
+};
+
+template <typename T, int rows, int columns>
+struct Matrix
+{
+    using MatrixContainer = std::array<std::array<T, columns>, rows>;
+    MatrixContainer matrix;
+
+    Matrix(const MatrixContainer &m) : matrix(m) {};
+
+    Matrix() : matrix({}) {};
+
+    const std::array<T, columns> &operator[](int i) const
+    {
+        return matrix[i];
+    }
+
+    std::array<T, columns> &operator[](int i)
+    {
+        return matrix[i];
+    }
+
+    Matrix operator+(const Matrix& m) const
+    {
+        Matrix newMatrix;
+    
+        for (size_t y = 0; y < rows; y++)
+            for (size_t x = 0; x < columns; x++)
+                newMatrix[y][x] = matrix[y][x] + m[y][x];
+        return newMatrix;
+    }
+
+    template<int otherColumns>
+    Matrix<T, rows, otherColumns> operator*(const Matrix<T, columns, otherColumns> &m) const
+    {
+        Matrix<T, rows, otherColumns> newMatrix{};
+
+        for (size_t i = 0; i < static_cast<size_t>(rows); i++) {
+            for (size_t k = 0; k < static_cast<size_t>(otherColumns); k++) {
+                T sum{};
+                for (size_t j = 0; j < static_cast<size_t>(columns); j++) {
+                    sum += matrix[i][j] * m[j][k];
+                }
+                newMatrix[i][k] = sum;
+            }
+        }
+        return newMatrix;
+    }
+
+    friend std::ostream& operator << (std::ostream& os, const Matrix &m) {
+        for (size_t y = 0; y < rows; y++){
+            for (size_t x = 0; x < columns; x++){
+                os << m[y][x] << " ";
+            }
+            os << std::endl;
+        }
+        return os;
     }
 };
 

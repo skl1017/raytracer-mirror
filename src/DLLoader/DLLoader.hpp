@@ -14,14 +14,13 @@
 #include <map>
 #include <iostream>
 
-template<typename T>
 class DLLoader {
 public:
     DLLoader() {}
 
     void open(const std::string &path)
     {
-        if (_libs.contains(path))
+        if (_libs.find(path) != _libs.end())
             return;
         _libs.emplace(path, std::unique_ptr<void, decltype(&close_handle)>(dlopen(path.c_str(), RTLD_LAZY), &close_handle));
         if (!_libs.at(path))
@@ -30,7 +29,7 @@ public:
 
     void *sym(const std::string &path, const std::string &symbol) const
     {
-        if (!_libs.contains(path)){
+        if (_libs.find(path) == _libs.end()){
             throw DLLoaderException();
         }
 
@@ -38,15 +37,6 @@ public:
         if (!result)
             throw DLLoaderException();
         return result;
-    }
-
-    std::unique_ptr<T> getInstance(const std::string &path, const std::string& create)
-    {
-        std::function<T*()> func = reinterpret_cast<T*(*)()>(this->sym(path, create));
-
-        if (!func)
-            throw DLLoaderException();
-        return std::unique_ptr<T>(func());
     }
 
     class DLLoaderException : public std::exception {

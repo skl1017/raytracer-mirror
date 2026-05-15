@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2026
 ** raytracer-mirror
 ** File description:
-** Sphere
+** Cylinder
 */
 
 #pragma once
@@ -18,20 +18,20 @@
 
 namespace RayTracer {
 
-class Sphere : public APrimitive {
+class Cylinder : public APrimitive {
 public:
-    Sphere(Ameth::Vec3D c, Ameth::Vec3D rotation, double r, std::shared_ptr<IMaterial> material = nullptr);
+    Cylinder(Ameth::Vec3D c, double radius, double height, Ameth::Vec3D rotation, std::shared_ptr<IMaterial> material = nullptr);
     std::string getName() const override;
     Ameth::Vec3D pointAt(double u, double v) const override;
 
     Ameth::Vec3D center;
     double radius{};
+    double height{};
 
 protected:
     void fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const override;
     std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const override;
-
-    std::string name{"Sphere"};
+    std::string name{"Cylinder"};
 };
 
 } // namespace RayTracer

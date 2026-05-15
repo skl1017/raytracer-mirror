@@ -7,3 +7,14 @@
 
 #pragma once
 
+#include "Math/Ameth.hpp"
+#include "Camera/Camera.hpp"
+#include "Ray/Ray.hpp"
+
+class ILight
+{
+public:
+    virtual Ameth::Color getIllumination(Ray::HitRecord &hitRecord,
+        Ray raycast) = 0;
+    virtual Ameth::Vec3D getDirectVector(Ray::HitRecord &hitRecord) = 0;
+};

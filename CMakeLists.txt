@@ -23,11 +23,18 @@ add_subdirectory(plugins)
 set(RAYTRACER
     ${PROJECT_SOURCE_DIR}/src/Camera/Camera.cpp
     ${PROJECT_SOURCE_DIR}/src/Display/Display.cpp
-    ${PROJECT_SOURCE_DIR}/src/Renderer/Renderer.cpp
+    ${PROJECT_SOURCE_DIR}/src/Renderer/ARenderer.cpp
+    ${PROJECT_SOURCE_DIR}/src/Renderer/NormalRenderer.cpp
+    ${PROJECT_SOURCE_DIR}/src/Renderer/RaytracingRender.cpp
     ${PROJECT_SOURCE_DIR}/src/Scene/Scene.cpp
     ${PROJECT_SOURCE_DIR}/src/Core/Core.cpp
     ${PROJECT_SOURCE_DIR}/src/Parser/Parser.cpp
+    ${PROJECT_SOURCE_DIR}/src/Parser/ParsePrimitives.cpp
+    ${PROJECT_SOURCE_DIR}/src/Parser/ParseLights.cpp
+    ${PROJECT_SOURCE_DIR}/src/Parser/ParseCameras.cpp
+    ${PROJECT_SOURCE_DIR}/src/Parser/ParseMaterials.cpp
     ${PROJECT_SOURCE_DIR}/src/PluginFactory/PluginFactory.cpp
+    ${PROJECT_SOURCE_DIR}/src/Renderer/ParallelImageScheduler.cpp
 )
 
 add_executable(raytracer ${RAYTRACER} src/main.cpp)
@@ -50,7 +57,6 @@ target_link_libraries(raytracer PRIVATE
     sfml-graphics
     sfml-window
     sfml-system
-    sphere
 )
 
 if(DEBUG)

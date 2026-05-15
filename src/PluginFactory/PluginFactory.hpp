@@ -14,7 +14,8 @@
 #include <memory>
 #include "plugins/IPrimitive.hpp"
 #include "Primitives/Sphere/Sphere.hpp"
-#include "PluginsManager/PluginManager.hpp"
+#include "plugins/ILight.hpp"
+#include "plugins/IMaterial.hpp"
 
 namespace RayTracer
 {
@@ -24,7 +25,8 @@ namespace RayTracer
 
             typedef struct primitive_payload_base_s
             {
-                Ameth::Vec3D color;
+                std::shared_ptr<IMaterial> material;
+                Ameth::Vec3D rotation;
             } primitive_payload_base_t;
 
             typedef struct sphere_payload_s : primitive_payload_base_t
@@ -35,20 +37,74 @@ namespace RayTracer
 
             typedef struct plane_payload_s : primitive_payload_base_t
             {
-                char axis;
                 double position;
             } plane_payload_t;
+
+            typedef struct cylinder_payload_s : primitive_payload_base_t
+            {
+                Ameth::Vec3D position;
+                double radius;
+                double height;
+            } cylinder_payload_t;
+
+            typedef struct cone_payload_s : primitive_payload_base_t
+            {
+                Ameth::Vec3D position;
+                double height;
+                double radius;
+            } cone_payload_t;
+        
+            typedef struct pointlight_payload_s
+            {
+                Ameth::Color color;
+                Ameth::Vec3D position;
+            } pointlight_payload_t;
+
+            typedef struct directionlight_payload_s
+            {
+                Ameth::Color color;
+                Ameth::Vec3D direction;
+            } directionlight_payload_t;
+
+            typedef struct flatColor_payload_s
+            {
+                Ameth::Color color;
+                int transparency;
+                double refraction;
+                double reflection;
+            } flatColor_payload_t;
+
+            using lightPayload = std::variant<
+                pointlight_payload_t,
+                directionlight_payload_t
+                >;
 
             using primitivePayload = std::variant<
                 primitive_payload_base_t,
                 sphere_payload_t,
-                plane_payload_t>;
+                plane_payload_t,
+                cylinder_payload_t,
+                cone_payload_t>;
+
+            using materialPayload = std::variant<
+                flatColor_payload_t>;
+
+            using iMaterialCreateFunction = std::function<std::shared_ptr<IMaterial> (const materialPayload& p)>;
 
             using iPrimitiveCreateFunction = std::function<std::unique_ptr<IPrimitive> (const primitivePayload& p)>;
 
+            using iLightCreateFunction = std::function<std::unique_ptr<ILight> (const lightPayload& p)>;
+
 
             void add(const std::string &, iPrimitiveCreateFunction);
-            std::unique_ptr<IPrimitive> createPrimitive(const std::string &, const primitivePayload &);
+            void add(const std::string &, iLightCreateFunction);
+            void add(const std::string &, iMaterialCreateFunction);
+
+
+            std::unique_ptr<IPrimitive> create(const std::string &, const primitivePayload &);
+            std::unique_ptr<ILight> create(const std::string &, const lightPayload &);
+            std::shared_ptr<IMaterial> create(const std::string &, const materialPayload &);
+
 
 
             class PluginFactoryException : public std::exception
@@ -65,6 +121,8 @@ namespace RayTracer
 
             private:
                 std::map<std::string, iPrimitiveCreateFunction> _fPrimitives;
+                std::map<std::string, iLightCreateFunction> _fLights;
+                std::map<std::string, iMaterialCreateFunction> _fMaterials;
     };
 
 }

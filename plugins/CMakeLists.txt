@@ -25,3 +25,113 @@ target_include_directories(sphere PRIVATE
 set_target_properties(sphere PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
 )
+
+# === PointLight ===
+
+set (POINTLIGHT
+    ${CMAKE_SOURCE_DIR}/plugins/Lights/PointLight/PointLight.cpp)
+
+add_library(pointLight SHARED ${POINTLIGHT})
+
+target_include_directories(pointLight PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+)
+
+set_target_properties(pointLight PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Lights)
+
+# === Plane ===
+
+set(PLANE
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Plane/Plane.cpp
+)
+
+add_library("plane" SHARED ${PLANE})
+
+target_include_directories(plane PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Plane
+)
+
+
+set_target_properties(plane PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
+)
+
+# === Cylinder ===
+
+set(CYLINDER
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Cylinder/Cylinder.cpp
+)
+
+add_library("cylinder" SHARED ${CYLINDER})
+
+target_include_directories(cylinder PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Cylinder
+)
+
+
+set_target_properties(cylinder PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
+)
+
+# === Cone ===
+
+set(CONE
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Cone/Cone.cpp
+)
+
+add_library("cone" SHARED ${CONE})
+
+target_include_directories(cone PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+    ${CMAKE_SOURCE_DIR}/plugins/Primitives/Cone
+)
+
+set_target_properties(cone PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Primitives
+)
+
+# === DirectionaLight ===
+
+set (DIRECTIONALLIGHT
+    ${CMAKE_SOURCE_DIR}/plugins/Lights/Directional/DirectionalLight.cpp)
+
+add_library(directionalLight SHARED ${DIRECTIONALLIGHT})
+
+target_include_directories(directionalLight PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+)
+
+set_target_properties(directionalLight PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Lights)
+
+
+# === FlatColor ===
+
+set (FLATCOLOR
+    ${CMAKE_SOURCE_DIR}/plugins/Materials/FlatColor/flatColor.cpp)
+
+add_library(flatColor SHARED ${FLATCOLOR})
+
+target_include_directories(flatColor PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/shared
+    ${CMAKE_SOURCE_DIR}/plugins
+)
+
+set_target_properties(flatColor PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/Materials)
+
+
