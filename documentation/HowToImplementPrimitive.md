@@ -17,3 +17,6 @@ and Implement :
  - **pointAt** : take two coordinate and return a point on the primitive.
 
 An Abstract [APrimitive Class](src/plugins/APrimitive.hpp) is implemented that implement a `hit` function take the closest hit point if the `ray ` hit the object more than one time
+
+### implement plugin
+Once the Class is create, you need to [implement the plugin]() to the pluginsFactory and to the parser.
