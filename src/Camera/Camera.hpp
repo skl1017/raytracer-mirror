@@ -22,13 +22,13 @@ public:
     Ameth::Vec3D getGlobalPosition() const;
     Ameth::Quaternion getGlobalOrientation() const;
 
-    void applyYaw(double yawDelta);
-    void applyPitch(double pitchDelta);
-    void applyRoll(double rollDelta);
+    void rotateView(double deltaYaw, double deltaPitch);
+    void handleMouseLook(int deltaX, int deltaY, double sensitivity);
     void moveForward(double speed);
     void strafeRight(double strafe);
     Ameth::Vec3D forward() const;
     Ameth::Vec3D right() const;
+    Ameth::Vec3D up() const;
 
     std::vector<Ameth::Color> &getHDRImage() { return _hdrImage; }
     std::vector<Ameth::Color> const &getHDRImage() const { return _hdrImage; }
@@ -36,8 +36,15 @@ public:
     unsigned imageHeight() const { return _imageHeight; }
 
 private:
+    static constexpr double kMaxPitch = 89.0 * M_PI / 180.0;
+
+    void syncEulerFromOrientation();
+    void rebuildOrientationFromEuler();
+
     Ameth::Vec3D _position{};
     Ameth::Quaternion _orientation{Ameth::Quaternion::identity()};
+    double _yaw = 0.0;
+    double _pitch = 0.0;
 
     double _vfov{};
     unsigned _imageWidth{};

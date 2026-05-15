@@ -6,17 +6,12 @@
 */
 
 #include "Core.hpp"
-#include "Camera/Camera.hpp"
 #include "Parser/Parser.hpp"
-#include "Primitives/Sphere/Sphere.hpp"
-#include "plugins/IPrimitive.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
-#include <cmath>
+#include <SFML/Window/Mouse.hpp>
 #include <cstddef>
-#include <cstdio>
 #include <memory>
-#include <queue>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -37,63 +32,91 @@ namespace RayTracer
             _renderers.push_back(std::make_unique<RaytracingRender>(Ameth::Color(0.2, 0.3, 0.9)));
         };
 
-    // Core::Core(Scene scene)
-    //     : _dlloader({
-    //           DLLoader<IPrimitive>(),
-    //       }),
-    //       _scene(std::move(scene))
-    // {
-    // }
+    bool Core::handleKeys(sf::Event &event, std::unique_ptr<Camera> &camera)
+    {
+        if (event.type != sf::Event::KeyPressed)
+            return false;
+        if (event.key.code == sf::Keyboard::Key::Tab) {
+            _select_renderer = (_select_renderer + 1) % _renderers.size();
+            return true;
+        }
+        if (event.key.code == sf::Keyboard::Key::Z || event.key.code == sf::Keyboard::Key::Up) {
+            camera->moveForward(_moveSpeed);
+            return true;
+        }
+        if (event.key.code == sf::Keyboard::Key::S || event.key.code == sf::Keyboard::Key::Down) {
+            camera->moveForward(-_moveSpeed);
+            return true;
+        }
+        if (event.key.code == sf::Keyboard::Key::Q || event.key.code == sf::Keyboard::Key::Left) {
+            camera->strafeRight(-_moveSpeed);
+            return true;
+        }
+        if (event.key.code == sf::Keyboard::Key::D || event.key.code == sf::Keyboard::Key::Right) {
+            camera->strafeRight(_moveSpeed);
+            return true;
+        }
+        return false;
+    }
 
-    // Core Core::createDemo()
-    // {
-    //     constexpr double fovV = 2.0 * std::atan(0.5);
-    //     constexpr unsigned width = 1920;
-    //     constexpr unsigned height = 1080;
+    bool Core::handleMouse(sf::Event &event, std::unique_ptr<Camera> &camera)
+    {
+        if (event.type == sf::Event::MouseButtonPressed
+            && event.mouseButton.button == sf::Mouse::Right) {
+            _mouseLookActive = true;
+            _mouseLookInitialized = false;
+            _lastMouseX = event.mouseButton.x;
+            _lastMouseY = event.mouseButton.y;
+            return false;
+        }
+        if (event.type == sf::Event::MouseButtonReleased
+            && event.mouseButton.button == sf::Mouse::Right) {
+            _mouseLookActive = false;
+            return false;
+        }
+        if (event.type != sf::Event::MouseMoved || !_mouseLookActive)
+            return false;
+        if (!_mouseLookInitialized) {
+            _lastMouseX = event.mouseMove.x;
+            _lastMouseY = event.mouseMove.y;
+            _mouseLookInitialized = true;
+            return false;
+        }
+        int deltaX = event.mouseMove.x - _lastMouseX;
+        int deltaY = event.mouseMove.y - _lastMouseY;
+        _lastMouseX = event.mouseMove.x;
+        _lastMouseY = event.mouseMove.y;
+        if (deltaX == 0 && deltaY == 0)
+            return false;
+        camera->handleMouseLook(deltaX, deltaY, _rotationSpeed);
+        return true;
+    }
 
-    //     std::vector<std::unique_ptr<Camera>> cameras;
-    //     cameras.push_back(std::make_unique<Camera>(Ameth::Vec3D(0.0, 200, -350), Ameth::Quaternion::identity(), fovV, width, height));
-    //     std::vector<std::unique_ptr<IPrimitive>> primitives;
-    //     primitives.push_back(std::make_unique<RayTracer::Sphere>(Ameth::Vec3D(0.0, 200.0, 0.0), 39.9));
-    //     primitives.push_back(std::make_unique<RayTracer::Sphere>(Ameth::Vec3D(-130.0, 190.0, 50.0), 28.0));
-    //     primitives.push_back(std::make_unique<RayTracer::Sphere>(Ameth::Vec3D(125.0, 210.0, 35.0), 32.0));
-    //     primitives.push_back(std::make_unique<RayTracer::Sphere>(Ameth::Vec3D(-55.0, 175.0, 95.0), 18.0));
-    //     primitives.push_back(std::make_unique<RayTracer::Sphere>(Ameth::Vec3D(70.0, 230.0, 75.0), 22.0));
-    //     primitives.push_back(std::make_unique<RayTracer::Sphere>(Ameth::Vec3D(0.0, 255.0, -70.0), 24.0));
-
-    //     std::vector<std::shared_ptr<IMaterial>> materials;
-    //     std::vector<std::unique_ptr<ILight>> lights;
-
-    //     Scene scene(std::move(cameras), std::move(primitives), std::move(materials), std::move(lights));
-    //     return Core("build/example.cfg");
-    // }
-
-    void Core::handleEnvents(Display &display)
+    void Core::handleEnvents(Display &display, std::unique_ptr<Camera> &camera)
     {
         sf::RenderWindow &window = display.getWindow();
+        bool needsRender = false;
+
         sf::Event event{};
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 display.getWindow().close();
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Key::Tab) {
-                    _select_renderer = (_select_renderer + 1) % _renderers.size();
-                    _renderers[_select_renderer]->renderScreen(_scene, _scene._cameras[0], _scheduler);
-                }
-            }
+            needsRender |= handleMouse(event, camera);
+            needsRender |= handleKeys(event, camera);
         }
+        if (needsRender)
+            _renderers[_select_renderer]->renderScreen(_scene, camera, _scheduler);
     }
 
     int Core::run(std::string_view outputPath)
     {
         _renderers[_select_renderer]->renderScreen(_scene, _scene._cameras[0], _scheduler);
-
         for (size_t index = 0; index < _scene._cameras.size(); ++index) {
             Display display(_scene._cameras[index]->imageWidth(), _scene._cameras[index]->imageHeight(), "raytracer");
             if (!display.create())
                 throw std::runtime_error("Failed to create SFML window or texture");
             while (display.isOpen()) {
-                handleEnvents(display);
+                handleEnvents(display, _scene._cameras[index]);
                 display.update(_scene._cameras[index]->getHDRImage());
             }
             if (!display.savePPM(std::string(outputPath)))
