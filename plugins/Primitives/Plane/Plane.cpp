@@ -15,14 +15,22 @@
 namespace RayTracer
 {
     Plane::Plane(double position, Ameth::Vec3D rotation, std::shared_ptr<IMaterial> material) :
-    APrimitive(material, rotation), _position(position)
-    {};
+        APrimitive(material, rotation),
+        _position(position),
+        _point(_axis.normalized() * position)
+    {
+    }
+
+Ameth::Vec3D Plane::getNormal() const
+{
+    return _axis.normalized();
+}
 
 std::optional<std::pair<double, double>> Plane::lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const
 {
     if (dir.length() < 1e-12)
         return std::nullopt;
-    Ameth::Vec3D normal = _axis.normalized();
+    Ameth::Vec3D const normal = _axis.normalized();
     double denom = dir.dot(normal);
     double t = 0;
 
@@ -56,4 +64,3 @@ extern "C" void registerPlugin(RayTracer::PluginFactory &factory)
     };
     factory.add("plane", f);
 }
-

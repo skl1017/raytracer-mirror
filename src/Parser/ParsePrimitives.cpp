@@ -7,6 +7,9 @@
 
 #include "Parser/Parser.hpp"
 
+#include <stdexcept>
+#include <string>
+
 namespace RayTracer
 {
     std::vector<std::unique_ptr<IPrimitive>> Parser::_parserGetPrimitives(libconfig::Setting &p, std::map<std::string, std::shared_ptr<IMaterial>> materials)
@@ -34,11 +37,11 @@ namespace RayTracer
 
         for (auto &s: planes)
         {
-            std::string materialName = s.lookup("material");
+            std::string const materialName = static_cast<const char *>(s.lookup("material"));
             auto primitiveMaterial = materials.find(materialName);
 
             if (primitiveMaterial == materials.end()){
-                throw;
+                throw std::runtime_error("unknown material for plane: " + materialName);
             }
             auto position = _parseDouble(s, "position");
             auto rotation = _parseVec3D(s, "rotation");
@@ -61,11 +64,11 @@ namespace RayTracer
         for (auto &s: spheres)
         {
 
-            std::string materialName = s.lookup("material");
+            std::string const materialName = static_cast<const char *>(s.lookup("material"));
             auto primitiveMaterial = materials.find(materialName);
 
             if (primitiveMaterial == materials.end()){
-                throw;
+                throw std::runtime_error("unknown material for sphere: " + materialName);
             }
             auto position = _parseVec3D(s, "position");
             auto r = _parseDouble(s, "r");
@@ -87,18 +90,17 @@ namespace RayTracer
 
         for (auto &s: cylinders)
         {
-            std::cout << "Cylinder" << std::endl;
-            std::string materialName = s.lookup("material");
+            std::string const materialName = static_cast<const char *>(s.lookup("material"));
             auto primitiveMaterial = materials.find(materialName);
 
             if (primitiveMaterial == materials.end())
-                throw;
+                throw std::runtime_error("unknown material for cylinder: " + materialName);
             auto position = _parseVec3D(s, "position");
             auto rotation = _parseVec3D(s, "rotation");
-            std::cout << position.x << std::endl;
-            auto r = _parseDouble(s, "r");
+            double const radius = _parseDouble(s, "radius");
+            double const height = _parseDouble(s, "height");
             PluginFactory::cylinder_payload_t cylinderPayload = {
-                {primitiveMaterial->second, rotation}, position, r
+                {primitiveMaterial->second, rotation}, position, radius, height
             };
             primitivesList.push_back(pluginFactory.create("cylinder", cylinderPayload));
         }
@@ -114,18 +116,19 @@ namespace RayTracer
 
         for (auto &s: cones)
         {
-            std::string materialName = s.lookup("material");
+            std::string const materialName = static_cast<const char *>(s.lookup("material"));
             auto primitiveMaterial = materials.find(materialName);
 
             if (primitiveMaterial == materials.end()){
-                throw;
+                throw std::runtime_error("unknown material for cone: " + materialName);
             }
-            double angle = _parseDouble(s, "angle");
+            double const height = _parseDouble(s, "height");
+            double const radius = _parseDouble(s, "radius");
 
             auto position = _parseVec3D(s, "position");
             auto rotation = _parseVec3D(s, "rotation");
             PluginFactory::cone_payload_t conePayload = {
-                {primitiveMaterial->second, rotation}, position, angle
+                {primitiveMaterial->second, rotation}, position, height, radius
             };
             primitivesList.push_back(pluginFactory.create("cone", conePayload));
         }

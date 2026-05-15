@@ -43,29 +43,26 @@ namespace RayTracer
             typedef struct cylinder_payload_s : primitive_payload_base_t
             {
                 Ameth::Vec3D position;
-                double r;
+                double radius;
+                double height;
             } cylinder_payload_t;
 
             typedef struct cone_payload_s : primitive_payload_base_t
             {
                 Ameth::Vec3D position;
-                double angle;
+                double height;
+                double radius;
             } cone_payload_t;
         
-            typedef struct light_payload_s
+            typedef struct pointlight_payload_s
             {
                 Ameth::Color color;
                 Ameth::Vec3D position;
-                double r;
-            } light_payload_base_t;
-
-            typedef struct pointlight_payload_s: light_payload_base_t
-            {
-                Ameth::Vec3D pos;
             } pointlight_payload_t;
 
-            typedef struct directionlight_payload_s: light_payload_base_t
+            typedef struct directionlight_payload_s
             {
+                Ameth::Color color;
                 Ameth::Vec3D direction;
             } directionlight_payload_t;
 

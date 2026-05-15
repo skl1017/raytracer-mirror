@@ -16,18 +16,19 @@
 
 class APrimitive : public IPrimitive {
 public:
-    APrimitive(std::shared_ptr<IMaterial> material, Ameth::Vec3D rotation): _material(std::move(material))
+    APrimitive(std::shared_ptr<IMaterial> material, Ameth::Vec3D rotation)
+        : _material(std::move(material))
     {
         Ameth::Matrix<double, 4, 1> axisMatrix = {{
-            {{_axis.x}, 
-            {_axis.y}, 
-            {_axis.z}, 
+            {{_axis.x},
+            {_axis.y},
+            {_axis.z},
             {0}}
         }};
         Ameth::Matrix<double, 4, 4> rotationMatrix =
-        TransformationFactory::getXRotation(rotation.x) *
-        TransformationFactory::getYRotation(rotation.y) *
-        TransformationFactory::getZRotation(rotation.z);
+            TransformationFactory::getXRotation(rotation.x) *
+            TransformationFactory::getYRotation(rotation.y) *
+            TransformationFactory::getZRotation(rotation.z);
         axisMatrix = rotationMatrix * axisMatrix;
         _axis = {axisMatrix[0][0], axisMatrix[1][0], axisMatrix[2][0]};
     }
@@ -59,8 +60,8 @@ protected:
             return std::nullopt;
         return tHit;
     }
-    Ameth::Vec3D _axis = {0, 1, 0};
     virtual std::optional<std::pair<double, double>> lineTValues(Ameth::Vec3D const &origin, Ameth::Vec3D const &dir) const = 0;
     virtual void fillHitRecord(Ray const &ray, double t, Ray::HitRecord &rec) const = 0;
     std::shared_ptr<IMaterial> _material;
+    Ameth::Vec3D _axis{0.0, 1.0, 0.0};
 };

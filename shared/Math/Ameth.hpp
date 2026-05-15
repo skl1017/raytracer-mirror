@@ -371,13 +371,15 @@ struct Matrix
     template<int otherColumns>
     Matrix<T, rows, otherColumns> operator*(const Matrix<T, columns, otherColumns> &m) const
     {
-        Matrix<T, rows, otherColumns> newMatrix;
+        Matrix<T, rows, otherColumns> newMatrix{};
 
-        for (size_t i = 0; i < rows; i++) {
-            for (size_t j = 0; j < otherColumns; j++) {
-                for (size_t a = 0; a < columns; a++) {
-                    newMatrix[i][a] += (matrix[i][j] * m[j][a]);
+        for (size_t i = 0; i < static_cast<size_t>(rows); i++) {
+            for (size_t k = 0; k < static_cast<size_t>(otherColumns); k++) {
+                T sum{};
+                for (size_t j = 0; j < static_cast<size_t>(columns); j++) {
+                    sum += matrix[i][j] * m[j][k];
                 }
+                newMatrix[i][k] = sum;
             }
         }
         return newMatrix;

@@ -7,6 +7,8 @@
 
 #include "Parser/Parser.hpp"
 
+#include <string>
+
 namespace RayTracer
 {
     std::map<std::string, std::shared_ptr<IMaterial>> Parser::_parserGetMaterials(libconfig::Setting &s)
@@ -40,17 +42,15 @@ namespace RayTracer
                 _parseDouble(colorToParse, "b")
 
             );
-            auto &name = s.lookup("name");
-            int transparency = s.lookup("transparency");
-            int reflection = s.lookup("reflection");
+            std::string const matName = static_cast<const char *>(s.lookup("name"));
+            int const transparency = static_cast<int>(_parseDouble(s, "transparency"));
+            double const refraction = s.exists("refraction") ? _parseDouble(s, "refraction") : 1.0;
+            double const reflection = s.exists("reflection") ? _parseDouble(s, "reflection") : 0.0;
 
             PluginFactory::flatColor_payload_t flatColorPayload = {
-                color, transparency, reflection
+                color, transparency, refraction, reflection
             };
-            materialList.insert({name, pluginFactory.create("flatColor", flatColorPayload)});
+            materialList.insert({matName, pluginFactory.create("flatColor", flatColorPayload)});
         }
-}
-
-
-
+    }
 }
