@@ -27,16 +27,16 @@ By default two Renderers are already implemented and use :
   - _the normal Renderer_ : display the normal on the object surface.
   - _the raytraicing Renderer_ : follow path of light.
 
-New Renderers can be added to the program as you please([how to implement a Renderer]()).  
+New Renderers can be added to the program as you please([how to implement a Renderer](documentation/HowToImplentRenderer.md)).  
 
 ## New feature Implementation
 This project handle new feature arrival via Interface Class.  
 The project load the differents objects using plugins and so new plugin that follow the norms can be loaded by it.  
 
 **plugins**: 
- - [Lights]() : Define the behavior of light.
- - [Materials]() : Each object in the scene contain a material that define it color / reflection / etc...   
- - [Primitive]() : The differents forms for the objects of the scene.
+ - [Lights](documentation/HowToImplentLight.md) : Define the behavior of light.
+ - [Materials](documentation/HowToImpementMaterial.md) : Each object in the scene contain a material that define it color / reflection / etc...   
+ - [Primitive](documentation/HowToImplementPrimitive.md) : The differents forms for the objects of the scene.
 
 ## Doxygen Documentation
 
