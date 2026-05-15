@@ -44,11 +44,10 @@ namespace RayTracer
             );
             std::string const matName = static_cast<const char *>(s.lookup("name"));
             int const transparency = static_cast<int>(_parseDouble(s, "transparency"));
-            double const refraction = s.exists("refraction") ? _parseDouble(s, "refraction") : 1.0;
-            double const reflection = s.exists("reflection") ? _parseDouble(s, "reflection") : 0.0;
+            int const reflection = s.exists("reflection") ? _parseDouble(s, "reflection") : 0.0;
 
             PluginFactory::flatColor_payload_t flatColorPayload = {
-                color, transparency, refraction, reflection
+                color, transparency, reflection
             };
             materialList.insert({matName, pluginFactory.create("flatColor", flatColorPayload)});
         }
